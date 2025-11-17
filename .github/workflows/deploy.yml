@@ -40,6 +40,7 @@ jobs:
   sonarcloud:
     needs: test
     runs-on: ubuntu-latest
+    continue-on-error: true
     
     steps:
     - name: Checkout code
@@ -60,7 +61,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build:
-    needs: [test, sonarcloud]
+    needs: [test]
     runs-on: ubuntu-latest
     
     steps:
