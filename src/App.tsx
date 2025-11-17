@@ -55,18 +55,16 @@ function App() {
     setCurrentScreen('quiz');
   };
 
-  const handleQuizComplete = (correctCount: number, totalCount: number) => {
-    if (!currentProfile || !selectedDomain) return;
-
-    const updatedProfile = { ...currentProfile };
-    const domainProgress = updatedProfile.progress[selectedDomain.level][selectedDomain.domain];
-    
+  const updateProgressWithStars = (
+    domainProgress: UserProfile['progress'][GradeLevel][MathDomain],
+    correctCount: number,
+    totalCount: number
+  ): number => {
     domainProgress.questionsAnswered += totalCount;
     domainProgress.correctAnswers += correctCount;
     
     const successRate = domainProgress.correctAnswers / domainProgress.questionsAnswered;
     
-    // Attribution des étoiles
     if (successRate >= 0.75 && domainProgress.questionsAnswered >= 15) {
       domainProgress.stars = 3;
     } else if (successRate >= 0.6 && domainProgress.questionsAnswered >= 10) {
@@ -74,39 +72,84 @@ function App() {
     } else if (successRate >= 0.5 && domainProgress.questionsAnswered >= 5) {
       domainProgress.stars = 1;
     }
+    
+    return domainProgress.stars;
+  };
 
-    // Déblocage du domaine suivant si conditions remplies
+  const unlockNextDomain = (
+    updatedProfile: UserProfile,
+    selectedDomain: { level: GradeLevel; domain: MathDomain },
+    stars: number
+  ): void => {
     const DOMAINS_ORDER = ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'];
     const currentDomainIndex = DOMAINS_ORDER.indexOf(selectedDomain.domain);
     
-    // Si au moins 1 étoile, débloquer le domaine suivant
-    if (domainProgress.stars >= 1 && currentDomainIndex < DOMAINS_ORDER.length - 1) {
-      const nextDomain = DOMAINS_ORDER[currentDomainIndex + 1];
-      updatedProfile.progress[selectedDomain.level][nextDomain].unlocked = true;
-    }
-
-    // Vérifier si tous les domaines du niveau actuel ont au moins 2 étoiles
-    const currentLevelProgress = updatedProfile.progress[selectedDomain.level];
-    const allDomainsCompleted = DOMAINS_ORDER.every(domain => 
-      currentLevelProgress[domain].stars >= 2
-    );
-
-    // Si tous les domaines sont complétés, débloquer le niveau suivant
-    if (allDomainsCompleted) {
-      const LEVELS_ORDER = ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème'];
-      const currentLevelIndex = LEVELS_ORDER.indexOf(selectedDomain.level);
-      
-      if (currentLevelIndex < LEVELS_ORDER.length - 1) {
-        const nextLevel = LEVELS_ORDER[currentLevelIndex + 1];
-        // Débloquer le premier domaine du niveau suivant
-        updatedProfile.progress[nextLevel]['Calcul mental'].unlocked = true;
-        updatedProfile.currentLevel = nextLevel as GradeLevel;
+    if (stars >= 1 && currentDomainIndex >= 0 && currentDomainIndex < DOMAINS_ORDER.length - 1) {
+      const nextDomain = DOMAINS_ORDER[currentDomainIndex + 1] as MathDomain;
+      const nextDomainProgress = updatedProfile.progress[selectedDomain.level]?.[nextDomain];
+      if (nextDomainProgress) {
+        nextDomainProgress.unlocked = true;
       }
     }
+  };
+
+  const unlockNextLevel = (
+    updatedProfile: UserProfile,
+    selectedDomain: { level: GradeLevel; domain: MathDomain }
+  ): void => {
+    const DOMAINS_ORDER = ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'];
+    const LEVELS_ORDER: GradeLevel[] = ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème'];
+    
+    const currentLevelProgress = updatedProfile.progress[selectedDomain.level];
+    if (!currentLevelProgress) return;
+
+    const allDomainsCompleted = DOMAINS_ORDER.every(domain => 
+      currentLevelProgress[domain as MathDomain]?.stars >= 2
+    );
+
+    if (allDomainsCompleted) {
+      const currentLevelIndex = LEVELS_ORDER.indexOf(selectedDomain.level);
+      
+      if (currentLevelIndex >= 0 && currentLevelIndex < LEVELS_ORDER.length - 1) {
+        const nextLevel = LEVELS_ORDER[currentLevelIndex + 1];
+        const nextLevelProgress = updatedProfile.progress[nextLevel];
+        if (nextLevelProgress) {
+          const calcMentalProgress = nextLevelProgress['Calcul mental'];
+          if (calcMentalProgress) {
+            calcMentalProgress.unlocked = true;
+            updatedProfile.currentLevel = nextLevel;
+          }
+        }
+      }
+    }
+  };
+
+  const handleQuizComplete = (correctCount: number, totalCount: number) => {
+    if (!currentProfile || !selectedDomain) {
+      console.warn('Quiz complete called without profile or domain');
+      return;
+    }
+
+    const updatedProfile = { ...currentProfile };
+    const domainProgress = updatedProfile.progress[selectedDomain.level]?.[selectedDomain.domain];
+    
+    if (!domainProgress) {
+      console.error('Domain progress not found');
+      return;
+    }
+    
+    if (totalCount === 0) {
+      console.warn('No questions in quiz');
+      return;
+    }
+    
+    const stars = updateProgressWithStars(domainProgress, correctCount, totalCount);
+    unlockNextDomain(updatedProfile, selectedDomain, stars);
+    unlockNextLevel(updatedProfile, selectedDomain);
 
     updatedProfile.totalStars = Object.values(updatedProfile.progress)
-      .flatMap(level => Object.values(level))
-      .reduce((sum, domain) => sum + domain.stars, 0);
+      .flatMap(level => Object.values(level || {}))
+      .reduce((sum, domain) => sum + (domain?.stars || 0), 0);
 
     saveProfile(updatedProfile);
     setCurrentProfile(updatedProfile);
