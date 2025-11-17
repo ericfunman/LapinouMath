@@ -1,0 +1,163 @@
+import { UserProfile, GradeLevel, MathDomain } from '../types';
+import { MATH_DOMAINS } from '../data/constants';
+
+interface Props {
+  profile: UserProfile;
+  onStartQuiz: (level: GradeLevel, domain: MathDomain) => void;
+  onLogout: () => void;
+}
+
+export default function Dashboard({ profile, onStartQuiz, onLogout }: Props) {
+  const currentLevelProgress = profile.progress[profile.currentLevel];
+
+  return (
+    <div className="min-h-screen p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-3xl shadow-xl p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <span className="text-6xl">{profile.avatar}</span>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">
+                  Bonjour {profile.name} ! 👋
+                </h1>
+                <p className="text-gray-600">Niveau: {profile.currentLevel}</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-bold text-accent">
+                ⭐ {profile.totalStars}
+              </div>
+              <button
+                onClick={onLogout}
+                className="mt-2 text-sm text-gray-500 hover:text-gray-700 underline"
+              >
+                Changer de profil
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* CalcuLapin mascotte */}
+        <div className="bg-white rounded-3xl shadow-xl p-6 mb-6">
+          <div className="flex items-center gap-4">
+            <div className="text-7xl">🐰</div>
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-primary mb-2">
+                CalcuLapin dit :
+              </h2>
+              <p className="text-lg text-gray-700">
+                "Bravo pour ton travail ! Choisis un domaine pour continuer à apprendre 🌟"
+              </p>
+              <p className="text-sm text-gray-600 mt-2">
+                💡 Astuce : Obtiens au moins <strong>1 étoile</strong> (50% de réussite sur 5 questions) 
+                pour débloquer le domaine suivant !
+              </p>
+              <p className="text-sm text-primary font-semibold mt-1">
+                🎓 Obtiens <strong>2 étoiles dans tous les domaines</strong> pour passer au niveau supérieur !
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Domaines de mathématiques */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {MATH_DOMAINS.map(domain => {
+            const domainProgress = currentLevelProgress[domain];
+            const isUnlocked = domainProgress.unlocked;
+            const stars = domainProgress.stars;
+            const successRate = domainProgress.questionsAnswered > 0
+              ? Math.round((domainProgress.correctAnswers / domainProgress.questionsAnswered) * 100)
+              : 0;
+
+            return (
+              <div
+                key={domain}
+                className={`bg-white rounded-2xl shadow-lg p-6 transition-all ${
+                  isUnlocked 
+                    ? 'hover:shadow-2xl hover:scale-105 cursor-pointer' 
+                    : 'opacity-50 cursor-not-allowed'
+                }`}
+                onClick={() => isUnlocked && onStartQuiz(profile.currentLevel, domain)}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-xl font-bold text-gray-800">{domain}</h3>
+                  {!isUnlocked && <span className="text-2xl">🔒</span>}
+                </div>
+
+                {isUnlocked ? (
+                  <>
+                    <div className="flex gap-1 mb-3">
+                      {[1, 2, 3].map(i => (
+                        <span key={i} className="text-2xl">
+                          {i <= stars ? '⭐' : '☆'}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <p>Questions répondues: {domainProgress.questionsAnswered}</p>
+                      <p>Taux de réussite: {successRate}%</p>
+                      {stars === 0 && domainProgress.questionsAnswered > 0 && (
+                        <p className="text-primary font-semibold mt-2">
+                          🎯 Continue pour obtenir 1 étoile !
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="mt-4">
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all"
+                          style={{ width: `${Math.min(successRate, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-sm text-gray-500 text-center py-4">
+                    <p>🔒 Débloque-moi en obtenant</p>
+                    <p className="font-semibold">au moins 1 étoile</p>
+                    <p>dans le domaine précédent !</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Statistiques globales */}
+        <div className="mt-6 bg-white rounded-2xl shadow-xl p-6">
+          <h3 className="text-2xl font-bold text-gray-800 mb-4">
+            Tes statistiques 📊
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center p-4 bg-purple-100 rounded-xl">
+              <div className="text-3xl font-bold text-primary">{profile.totalStars}</div>
+              <div className="text-sm text-gray-600">Étoiles totales</div>
+            </div>
+            <div className="text-center p-4 bg-pink-100 rounded-xl">
+              <div className="text-3xl font-bold text-secondary">
+                {Object.values(currentLevelProgress).filter(d => d.unlocked).length}
+              </div>
+              <div className="text-sm text-gray-600">Domaines débloqués</div>
+            </div>
+            <div className="text-center p-4 bg-yellow-100 rounded-xl">
+              <div className="text-3xl font-bold text-accent">
+                {Object.values(currentLevelProgress).reduce((sum, d) => sum + d.questionsAnswered, 0)}
+              </div>
+              <div className="text-sm text-gray-600">Questions répondues</div>
+            </div>
+            <div className="text-center p-4 bg-green-100 rounded-xl">
+              <div className="text-3xl font-bold text-success">
+                {profile.unlockedAccessories.length}
+              </div>
+              <div className="text-sm text-gray-600">Accessoires débloqués</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
