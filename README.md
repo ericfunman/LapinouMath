@@ -1,6 +1,11 @@
 # 🐰 LapinouMath
 
+[![Deploy to GitHub Pages](https://github.com/ericfunman/LapinouMath/actions/workflows/deploy.yml/badge.svg)](https://github.com/ericfunman/LapinouMath/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Une application éducative ludique pour aider les enfants du CE1 à la 4ème à apprendre les mathématiques avec CalcuLapin !
+
+**🌐 Application en ligne** : https://ericfunman.github.io/LapinouMath/
 
 ## 🎯 Fonctionnalités
 
