@@ -6,8 +6,18 @@ const QUESTIONS_STORE = 'questions';
 
 let db: IDBDatabase | null = null;
 
+// Vérifier si indexedDB est disponible (pas disponible en Node.js)
+const isIndexedDBAvailable = (): boolean => {
+  return typeof indexedDB !== 'undefined';
+};
+
 export const initDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
+    if (!isIndexedDBAvailable()) {
+      reject(new Error('IndexedDB is not available in this environment'));
+      return;
+    }
+
     if (db) {
       resolve(db);
       return;
