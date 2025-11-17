@@ -3,6 +3,14 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "Application éducative ludique pour apprendre les mathématiques du CE1 à la 4ème avec CalcuLapin",
+  "author": "Eric Funman",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ericfunman/LapinouMath.git"
+  },
+  "homepage": "https://ericfunman.github.io/LapinouMath/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

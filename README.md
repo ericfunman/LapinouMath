@@ -43,6 +43,30 @@ npm run build
 
 Les fichiers de production seront dans le dossier `dist/`
 
+## 🌐 Déploiement
+
+L'application est automatiquement déployée sur GitHub Pages via GitHub Actions.
+
+**URL de production** : https://ericfunman.github.io/LapinouMath/
+
+Chaque push sur la branche `main` déclenche automatiquement :
+1. Build de l'application
+2. Tests de compilation
+3. Déploiement sur GitHub Pages
+
+### Configuration du CI/CD
+
+Le workflow GitHub Actions (`.github/workflows/deploy.yml`) :
+- ✅ Build automatique
+- ✅ Tests TypeScript
+- ✅ Déploiement GitHub Pages
+- ✅ Exécution sur chaque push
+
+Pour activer GitHub Pages :
+1. Aller dans Settings > Pages
+2. Source : GitHub Actions
+3. L'application sera disponible à l'URL ci-dessus
+
 ## 📚 Structure du projet
 
 ```
