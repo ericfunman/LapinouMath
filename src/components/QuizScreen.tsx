@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { GradeLevel, MathDomain, Question } from '../types';
 import { getRandomQuestions } from '../data/questions';
+import { reportQuestionError } from '../utils/database';
 
 interface Props {
   level: GradeLevel;
@@ -18,6 +19,8 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState<number>(0);
+  const [reportedQuestions, setReportedQuestions] = useState<Set<string>>(new Set());
+  const [showReportSuccess, setShowReportSuccess] = useState(false);
 
   useEffect(() => {
     const quizQuestions = getRandomQuestions(level, domain, 10);
@@ -87,6 +90,23 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
     setShowLesson(!showLesson);
   };
 
+  const handleReportError = async () => {
+    try {
+      await reportQuestionError({
+        questionId: currentQuestion.id,
+        level,
+        domain,
+        questionText: currentQuestion.question,
+        userNote: 'Signalé comme fautif par l\'utilisateur'
+      });
+      setReportedQuestions(prev => new Set([...prev, currentQuestion.id]));
+      setShowReportSuccess(true);
+      setTimeout(() => setShowReportSuccess(false), 2000);
+    } catch (error) {
+      console.error('Erreur lors du signalement:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
@@ -120,13 +140,32 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
 
         {/* Question card */}
         <div className="bg-white rounded-3xl shadow-2xl p-8 mb-6">
-          <div className="flex items-start gap-4 mb-6">
-            <span className="text-6xl">🐰</span>
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                {currentQuestion.question}
-              </h3>
+          <div className="flex items-start justify-between gap-4 mb-6">
+            <div className="flex items-start gap-4 flex-1">
+              <span className="text-6xl">🐰</span>
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                  {currentQuestion.question}
+                </h3>
+              </div>
             </div>
+            <button
+              onClick={handleReportError}
+              disabled={reportedQuestions.has(currentQuestion.id)}
+              title="Signaler une erreur dans cette question"
+              className={`px-3 py-2 rounded-lg whitespace-nowrap text-sm font-semibold transition-all ${
+                reportedQuestions.has(currentQuestion.id)
+                  ? 'bg-gray-200 text-gray-500 cursor-default'
+                  : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200 cursor-pointer'
+              }`}
+            >
+              {reportedQuestions.has(currentQuestion.id) ? '✓ Signalé' : '⚠️ Signaler'}
+            </button>
+            {showReportSuccess && (
+              <div className="absolute top-4 right-4 bg-green-100 text-green-700 px-4 py-2 rounded-lg text-sm">
+                ✓ Erreur signalée
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

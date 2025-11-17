@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin }: Props) {
-  const currentLevelProgress = profile.progress[profile.currentLevel];
+  const currentLevelProgress = profile.progress?.[profile.currentLevel];
   const questionStats = getQuestionStats();
 
   return (
@@ -77,7 +77,7 @@ export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin 
 
         {/* Domaines de mathématiques */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {MATH_DOMAINS.map(domain => {
+          {currentLevelProgress && MATH_DOMAINS.map(domain => {
             const domainProgress = currentLevelProgress[domain];
             const isUnlocked = domainProgress.unlocked;
             const stars = domainProgress.stars;
@@ -153,13 +153,13 @@ export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin 
             </div>
             <div className="text-center p-4 bg-pink-100 rounded-xl">
               <div className="text-3xl font-bold text-secondary">
-                {Object.values(currentLevelProgress).filter(d => d.unlocked).length}
+                {currentLevelProgress ? Object.values(currentLevelProgress).filter(d => d.unlocked).length : 0}
               </div>
               <div className="text-sm text-gray-600">Domaines débloqués</div>
             </div>
             <div className="text-center p-4 bg-yellow-100 rounded-xl">
               <div className="text-3xl font-bold text-accent">
-                {Object.values(currentLevelProgress).reduce((sum, d) => sum + d.questionsAnswered, 0)}
+                {currentLevelProgress ? Object.values(currentLevelProgress).reduce((sum, d) => sum + d.questionsAnswered, 0) : 0}
               </div>
               <div className="text-sm text-gray-600">Questions répondues</div>
             </div>

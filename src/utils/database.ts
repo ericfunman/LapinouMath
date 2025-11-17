@@ -1,8 +1,9 @@
 // IndexedDB pour une persistance robuste des données
 const DB_NAME = 'LapinouMathDB';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const PROFILES_STORE = 'profiles';
 const QUESTIONS_STORE = 'questions';
+const ERROR_REPORTS_STORE = 'errorReports';
 
 let db: IDBDatabase | null = null;
 
@@ -49,6 +50,13 @@ export const initDB = (): Promise<IDBDatabase> => {
         questionStore.createIndex('level', 'level', { unique: false });
         questionStore.createIndex('domain', 'domain', { unique: false });
         questionStore.createIndex('level_domain', ['level', 'domain'], { unique: false });
+      }
+
+      // Créer le store pour les rapports d'erreurs
+      if (!database.objectStoreNames.contains(ERROR_REPORTS_STORE)) {
+        const reportStore = database.createObjectStore(ERROR_REPORTS_STORE, { keyPath: 'id', autoIncrement: true });
+        reportStore.createIndex('questionId', 'questionId', { unique: false });
+        reportStore.createIndex('timestamp', 'timestamp', { unique: false });
       }
     };
   });
@@ -171,5 +179,61 @@ export const getQuestionsByLevelDomain = async (level: string, domain: string): 
     request.onerror = () => {
       reject(request.error);
     };
+  });
+};
+
+// ========== GESTION DES RAPPORTS D'ERREURS ==========
+
+export interface ErrorReport {
+  id?: number;
+  questionId: string;
+  level: string;
+  domain: string;
+  questionText: string;
+  timestamp?: number;
+  userNote?: string;
+}
+
+export const reportQuestionError = async (report: ErrorReport): Promise<void> => {
+  const database = await initDB();
+  return new Promise((resolve, reject) => {
+    const transaction = database.transaction([ERROR_REPORTS_STORE], 'readwrite');
+    const store = transaction.objectStore(ERROR_REPORTS_STORE);
+    const request = store.add({
+      ...report,
+      timestamp: Date.now()
+    });
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const getErrorReports = async (): Promise<ErrorReport[]> => {
+  const database = await initDB();
+  return new Promise((resolve, reject) => {
+    const transaction = database.transaction([ERROR_REPORTS_STORE], 'readonly');
+    const store = transaction.objectStore(ERROR_REPORTS_STORE);
+    const request = store.getAll();
+
+    request.onsuccess = () => {
+      resolve(request.result || []);
+    };
+
+    request.onerror = () => {
+      reject(request.error);
+    };
+  });
+};
+
+export const deleteErrorReport = async (reportId: number): Promise<void> => {
+  const database = await initDB();
+  return new Promise((resolve, reject) => {
+    const transaction = database.transaction([ERROR_REPORTS_STORE], 'readwrite');
+    const store = transaction.objectStore(ERROR_REPORTS_STORE);
+    const request = store.delete(reportId);
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
   });
 };

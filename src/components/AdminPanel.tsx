@@ -17,6 +17,10 @@ export default function AdminPanel({ onClose }: Props) {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [showCorrectOnly, setShowCorrectOnly] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  // TODO: Onglets pour rapports d'erreurs
+  // const [tab, setTab] = useState<'questions' | 'reports'>('questions');
+  // const [errorReports, setErrorReports] = useState<ErrorReport[]>([]);
+  // const [loadingReports, setLoadingReports] = useState(false);
 
   useEffect(() => {
     getAllQuestionsAsync().then(allQuestions => {
