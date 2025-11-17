@@ -1,5 +1,6 @@
 import { UserProfile, GradeLevel, MathDomain } from '../types';
 import { MATH_DOMAINS } from '../data/constants';
+import { getQuestionStats } from '../utils/questionStats';
 
 interface Props {
   profile: UserProfile;
@@ -9,6 +10,7 @@ interface Props {
 
 export default function Dashboard({ profile, onStartQuiz, onLogout }: Props) {
   const currentLevelProgress = profile.progress[profile.currentLevel];
+  const questionStats = getQuestionStats();
 
   return (
     <div className="min-h-screen p-4 md:p-8">
@@ -56,6 +58,9 @@ export default function Dashboard({ profile, onStartQuiz, onLogout }: Props) {
               </p>
               <p className="text-sm text-primary font-semibold mt-1">
                 🎓 Obtiens <strong>2 étoiles dans tous les domaines</strong> pour passer au niveau supérieur !
+              </p>
+              <p className="text-xs text-gray-500 mt-2">
+                📚 {questionStats.total} questions disponibles au total • {questionStats.byLevel[profile.currentLevel] || 0} pour ton niveau
               </p>
             </div>
           </div>
