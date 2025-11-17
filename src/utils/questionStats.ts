@@ -37,8 +37,9 @@ export function getQuestionStats() {
   return stats;
 }
 
-// Afficher les stats au démarrage (console)
-if (import.meta.env.DEV) {
+// Afficher les stats au démarrage (console) - seulement en développement
+const isDev = globalThis.window?.location.hostname === 'localhost';
+if (isDev) {
   const stats = getQuestionStats();
   console.log('📊 Statistiques des questions LapinouMath:');
   console.log(`Total: ${stats.total} questions`);
