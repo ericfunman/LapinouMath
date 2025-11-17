@@ -68,6 +68,8 @@ export function saveProfile(profile: UserProfile): void {
   syncProfilesToIndexedDB(profiles);
 }
 
+let profileIdCounter = 0;
+
 export function createProfile(name: string, level: GradeLevel): UserProfile {
   const progress: UserProfile['progress'] = {};
   
@@ -84,7 +86,7 @@ export function createProfile(name: string, level: GradeLevel): UserProfile {
   });
 
   const profile: UserProfile = {
-    id: Date.now().toString(),
+    id: `${Date.now()}-${profileIdCounter++}`,
     name,
     avatar: '🐰',
     currentLevel: level,
