@@ -31,7 +31,7 @@ if (typeof indexedDB === 'undefined') {
     onerror: ((event: any) => void) | null = null;
     error: any;
 
-    objectStore(name: string) {
+    objectStore(_name: string) {
       return new MockIDBObjectStore();
     }
 
@@ -61,7 +61,7 @@ if (typeof indexedDB === 'undefined') {
       return new MockIDBRequest(value);
     }
 
-    delete(key: string) {
+    delete(_key: string) {
       return new MockIDBRequest();
     }
   }
@@ -69,13 +69,13 @@ if (typeof indexedDB === 'undefined') {
   class MockIDBDatabase {
     objectStoreNames = { contains: () => true };
 
-    transaction(storeNames: string | string[], mode: string) {
+    transaction(_storeNames: string | string[], _mode: string) {
       return new MockIDBTransaction();
     }
   }
 
   const mockIndexedDB: any = {
-    open: vi.fn((name: string, version: number) => {
+    open: vi.fn((_name: string, _version: number) => {
       return new MockIDBRequest(new MockIDBDatabase());
     }),
   };
