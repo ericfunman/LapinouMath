@@ -1,11 +1,55 @@
 import { UserProfile, GradeLevel } from '../types';
 import { GRADE_LEVELS, MATH_DOMAINS } from '../data/constants';
+import { saveProfiles as saveToIndexedDB, loadProfiles as loadFromIndexedDB, deleteProfile as deleteFromIndexedDB } from './database';
 
 const STORAGE_KEY = 'lapinoumath_profiles';
 
+// Fonction pour synchroniser IndexedDB et LocalStorage
+async function syncProfilesToIndexedDB(profiles: UserProfile[]): Promise<void> {
+  try {
+    await saveToIndexedDB(profiles);
+  } catch (error) {
+    console.error('Erreur de synchronisation IndexedDB:', error);
+  }
+}
+
+// Fonction pour charger depuis IndexedDB en priorité
+async function loadProfilesWithFallback(): Promise<UserProfile[]> {
+  try {
+    const indexedDBProfiles = await loadFromIndexedDB();
+    if (indexedDBProfiles.length > 0) {
+      // Sync vers LocalStorage comme backup
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(indexedDBProfiles));
+      return indexedDBProfiles;
+    }
+  } catch (error) {
+    console.warn('IndexedDB non disponible, utilisation de LocalStorage', error);
+  }
+  
+  // Fallback vers LocalStorage
+  const data = localStorage.getItem(STORAGE_KEY);
+  const profiles = data ? JSON.parse(data) : [];
+  
+  // Tenter de sync vers IndexedDB
+  if (profiles.length > 0) {
+    syncProfilesToIndexedDB(profiles);
+  }
+  
+  return profiles;
+}
+
 export function getAllProfiles(): UserProfile[] {
   const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : [];
+  const profiles = data ? JSON.parse(data) : [];
+  
+  // Sync async vers IndexedDB (non bloquant)
+  syncProfilesToIndexedDB(profiles);
+  
+  return profiles;
+}
+
+export async function getAllProfilesAsync(): Promise<UserProfile[]> {
+  return loadProfilesWithFallback();
 }
 
 export function saveProfile(profile: UserProfile): void {
@@ -19,6 +63,9 @@ export function saveProfile(profile: UserProfile): void {
   }
   
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
+  
+  // Sync async vers IndexedDB (non bloquant)
+  syncProfilesToIndexedDB(profiles);
 }
 
 export function createProfile(name: string, level: GradeLevel): UserProfile {
@@ -55,6 +102,9 @@ export function createProfile(name: string, level: GradeLevel): UserProfile {
 export function deleteProfile(id: string): void {
   const profiles = getAllProfiles().filter(p => p.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
+  
+  // Sync async vers IndexedDB (non bloquant)
+  syncProfilesToIndexedDB(profiles);
 }
 
 export function getProfile(id: string): UserProfile | null {

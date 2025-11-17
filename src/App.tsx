@@ -2,25 +2,46 @@ import { useState, useEffect } from 'react';
 import ProfileSelection from './components/ProfileSelection';
 import Dashboard from './components/Dashboard';
 import QuizScreen from './components/QuizScreen';
+import AdminPanel from './components/AdminPanel';
 import { UserProfile, GradeLevel, MathDomain } from './types';
 import { getProfile, saveProfile } from './utils/storage';
+import { initDB } from './utils/database';
+import { initializeQuestions } from './data/questions';
 
-type Screen = 'profile' | 'dashboard' | 'quiz' | 'lesson';
+type Screen = 'profile' | 'dashboard' | 'quiz' | 'lesson' | 'admin';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('profile');
   const [currentProfile, setCurrentProfile] = useState<UserProfile | null>(null);
   const [selectedDomain, setSelectedDomain] = useState<{level: GradeLevel, domain: MathDomain} | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    const savedProfileId = localStorage.getItem('lapinoumath_current_profile');
-    if (savedProfileId) {
-      const profile = getProfile(savedProfileId);
-      if (profile) {
-        setCurrentProfile(profile);
-        setCurrentScreen('dashboard');
+    // Initialiser IndexedDB et les questions au démarrage
+    async function initialize() {
+      try {
+        await initDB();
+        console.log('✅ Base de données initialisée');
+        
+        await initializeQuestions();
+        console.log('✅ Questions initialisées');
+      } catch (err) {
+        console.error('❌ Erreur initialisation:', err);
+      } finally {
+        setIsInitializing(false);
+      }
+
+      const savedProfileId = localStorage.getItem('lapinoumath_current_profile');
+      if (savedProfileId) {
+        const profile = getProfile(savedProfileId);
+        if (profile) {
+          setCurrentProfile(profile);
+          setCurrentScreen('dashboard');
+        }
       }
     }
+    
+    initialize();
   }, []);
 
   const handleProfileSelect = (profile: UserProfile) => {
@@ -98,27 +119,48 @@ function App() {
     setCurrentScreen('profile');
   };
 
+  const handleOpenAdmin = () => {
+    setCurrentScreen('admin');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
-      {currentScreen === 'profile' && (
-        <ProfileSelection onSelectProfile={handleProfileSelect} />
-      )}
-      
-      {currentScreen === 'dashboard' && currentProfile && (
-        <Dashboard
-          profile={currentProfile}
-          onStartQuiz={handleStartQuiz}
-          onLogout={handleLogout}
-        />
-      )}
-      
-      {currentScreen === 'quiz' && currentProfile && selectedDomain && (
-        <QuizScreen
-          level={selectedDomain.level}
-          domain={selectedDomain.domain}
-          onComplete={handleQuizComplete}
-          onExit={() => setCurrentScreen('dashboard')}
-        />
+      {isInitializing ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="bg-white rounded-3xl shadow-2xl p-12 text-center">
+            <div className="text-6xl mb-4">🐰</div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Chargement de LapinouMath...</h2>
+            <p className="text-gray-600">Initialisation de la base de données</p>
+          </div>
+        </div>
+      ) : (
+        <>
+          {currentScreen === 'profile' && (
+            <ProfileSelection onSelectProfile={handleProfileSelect} />
+          )}
+          
+          {currentScreen === 'dashboard' && currentProfile && (
+            <Dashboard
+              profile={currentProfile}
+              onStartQuiz={handleStartQuiz}
+              onLogout={handleLogout}
+              onOpenAdmin={handleOpenAdmin}
+            />
+          )}
+          
+          {currentScreen === 'quiz' && currentProfile && selectedDomain && (
+            <QuizScreen
+              level={selectedDomain.level}
+              domain={selectedDomain.domain}
+              onComplete={handleQuizComplete}
+              onExit={() => setCurrentScreen('dashboard')}
+            />
+          )}
+
+          {currentScreen === 'admin' && (
+            <AdminPanel onClose={() => setCurrentScreen('dashboard')} />
+          )}
+        </>
       )}
     </div>
   );

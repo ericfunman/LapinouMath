@@ -6,9 +6,10 @@ interface Props {
   profile: UserProfile;
   onStartQuiz: (level: GradeLevel, domain: MathDomain) => void;
   onLogout: () => void;
+  onOpenAdmin: () => void;
 }
 
-export default function Dashboard({ profile, onStartQuiz, onLogout }: Props) {
+export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin }: Props) {
   const currentLevelProgress = profile.progress[profile.currentLevel];
   const questionStats = getQuestionStats();
 
@@ -31,12 +32,20 @@ export default function Dashboard({ profile, onStartQuiz, onLogout }: Props) {
               <div className="text-3xl font-bold text-accent">
                 ⭐ {profile.totalStars}
               </div>
-              <button
-                onClick={onLogout}
-                className="mt-2 text-sm text-gray-500 hover:text-gray-700 underline"
-              >
-                Changer de profil
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={onLogout}
+                  className="text-sm text-gray-500 hover:text-gray-700 underline"
+                >
+                  Changer de profil
+                </button>
+                <button
+                  onClick={onOpenAdmin}
+                  className="text-sm bg-purple-500 text-white px-3 py-1 rounded-lg hover:bg-purple-600"
+                >
+                  ⚙️ Admin
+                </button>
+              </div>
             </div>
           </div>
         </div>

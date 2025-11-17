@@ -33,7 +33,16 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
       // Mélanger les options
       const shuffled = [...options].sort(() => Math.random() - 0.5);
       setShuffledOptions(shuffled);
-      setCorrectAnswerIndex(shuffled.indexOf(correctOption));
+      const newCorrectIndex = shuffled.indexOf(correctOption);
+      setCorrectAnswerIndex(newCorrectIndex);
+      
+      // Debug
+      console.log('Question:', question.question);
+      console.log('Options originales:', options);
+      console.log('Index correct original:', question.correctAnswer);
+      console.log('Bonne réponse:', correctOption);
+      console.log('Options mélangées:', shuffled);
+      console.log('Nouvel index correct:', newCorrectIndex);
     }
   }, [questions, currentQuestionIndex]);
 
