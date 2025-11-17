@@ -1,6 +1,6 @@
 import { UserProfile, GradeLevel } from '../types';
 import { GRADE_LEVELS, MATH_DOMAINS } from '../data/constants';
-import { saveProfiles as saveToIndexedDB, loadProfiles as loadFromIndexedDB, deleteProfile as deleteFromIndexedDB } from './database';
+import { saveProfiles as saveToIndexedDB, loadProfiles as loadFromIndexedDB } from './database';
 
 const STORAGE_KEY = 'lapinoumath_profiles';
 

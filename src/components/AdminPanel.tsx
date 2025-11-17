@@ -167,7 +167,7 @@ export default function AdminPanel({ onClose }: Props) {
 
         {/* Liste des questions */}
         <div className="space-y-4">
-          {filteredQuestions.map((question, index) => (
+          {filteredQuestions.map((question) => (
             <div key={question.id} className="bg-white rounded-2xl shadow-xl p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
