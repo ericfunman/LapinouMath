@@ -48,6 +48,28 @@ npm run build
 
 Les fichiers de production seront dans le dossier `dist/`
 
+### 🌐 Déploiement sur GitHub Pages
+
+L'application est configurée pour se déployer automatiquement sur GitHub Pages via GitHub Actions.
+
+**⚠️ IMPORTANT : Configuration requise**
+
+1. **Activer GitHub Pages** :
+   - Visitez : https://github.com/ericfunman/LapinouMath/settings/pages
+   - Dans "Build and deployment" → "Source"
+   - Sélectionnez : **GitHub Actions** (PAS "Deploy from a branch")
+   - Sauvegardez
+
+2. **Vérifier le statut** :
+   - Exécutez : `.\scripts\check-deployment-status.ps1`
+   - Ou visitez : https://github.com/ericfunman/LapinouMath/actions
+
+3. **Une fois configuré** :
+   - L'application sera accessible à : **https://ericfunman.github.io/LapinouMath/**
+   - Le déploiement est automatique à chaque push sur `main`
+
+Pour plus de détails, consultez [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)
+
 ## 🌐 Déploiement
 
 L'application est automatiquement déployée sur GitHub Pages via GitHub Actions.
