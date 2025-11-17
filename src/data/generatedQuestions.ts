@@ -18,14 +18,21 @@ const generateQuestions = (level: GradeLevel): Question[] => {
     const domainCode = ['cm', 'ar', 'geo', 'fd', 'mes', 'pa'][domainIndex];
     
     for (let i = 1; i <= 50; i++) {
+      // Créer une question avec numéro visible
+      const questionNumber = `[#${levelPrefix}-${domainCode}-${i}]`;
       questions.push({
         id: `${levelPrefix}-${domainCode}-${i}`,
         level,
         domain,
-        question: `Question ${domain} niveau ${level} - ${i}`,
-        options: ['Réponse A', 'Réponse B', 'Réponse C', 'Réponse D'],
+        question: `${questionNumber} Question ${i} - ${domain} niveau ${level}`,
+        options: [
+          `${questionNumber} Réponse A`,
+          `${questionNumber} Réponse B`,
+          `${questionNumber} Réponse C`,
+          `${questionNumber} Réponse D`
+        ],
         correctAnswer: Math.floor(Math.random() * 4),
-        explanation: `Explication de la question ${i} pour ${domain} niveau ${level}`,
+        explanation: `${questionNumber} Explication de la question ${i} pour ${domain} niveau ${level}`,
         difficulty: ((i % 3) + 1) as 1 | 2 | 3
       });
     }
