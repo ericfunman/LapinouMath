@@ -169,13 +169,20 @@ Vous pouvez les remplacer par de vraies questions adaptées à chaque niveau en 
 
 ## 🔜 Améliorations futures
 
-- [ ] Ajout des questions pour tous les niveaux (CE2 à 4ème)
-- [ ] Questions de géométrie interactives avec dessins
+- [x] Génération complète des 2100 questions
+- [x] Questions de tous les niveaux (CE1 à 4ème)
+- [x] Système de déblocage de domaines
+- [x] Système de déblocage de niveaux
+- [x] Mélange aléatoire des réponses dans les QCM
+- [x] CI/CD avec GitHub Actions
+- [ ] Questions de géométrie interactives avec dessins Canvas
 - [ ] Système d'accessoires pour personnaliser CalcuLapin
 - [ ] Mode révision pour revoir les questions manquées
-- [ ] Statistiques détaillées par domaine
+- [ ] Statistiques détaillées par domaine avec graphiques
 - [ ] Mode entraînement chronométré
 - [ ] Certificats de réussite à imprimer
+- [ ] Mode multijoueur (défi entre profils)
+- [ ] Thèmes visuels personnalisables
 
 ## 👨‍👩‍👧‍👦 Pour les parents
 
@@ -184,6 +191,22 @@ Cette application est conçue pour être utilisée de manière autonome par les 
 - Créer plusieurs profils pour vos enfants
 - Les données sont sauvegardées localement dans le navigateur
 
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! N'hésitez pas à :
+- Signaler des bugs via les [Issues](https://github.com/ericfunman/LapinouMath/issues)
+- Proposer de nouvelles fonctionnalités
+- Soumettre des Pull Requests
+- Ajouter de nouvelles questions
+
+## 📊 Statistiques du projet
+
+- **2100 questions** générées (300 par niveau × 7 niveaux)
+- **7 niveaux** scolaires couverts
+- **6 domaines** mathématiques par niveau
+- **Build automatisé** avec GitHub Actions
+- **Déploiement continu** sur GitHub Pages
+
 ## 📄 Licence
 
 Projet personnel pour usage éducatif familial.
@@ -191,3 +214,5 @@ Projet personnel pour usage éducatif familial.
 ---
 
 Développé avec ❤️ pour l'apprentissage des mathématiques
+
+**Prêt à commencer ?** 👉 Consultez [ACTIVER_GITHUB_PAGES.md](ACTIVER_GITHUB_PAGES.md) pour mettre l'application en ligne !
