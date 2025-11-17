@@ -204,12 +204,12 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
         {/* Explanation */}
         {showExplanation && (
           <div className={`rounded-2xl shadow-xl p-6 ${
-            selectedAnswer === currentQuestion.correctAnswer
+            selectedAnswer === correctAnswerIndex
               ? 'bg-green-50'
               : 'bg-red-50'
           }`}>
             <h4 className="text-xl font-bold mb-3">
-              {selectedAnswer === currentQuestion.correctAnswer
+              {selectedAnswer === correctAnswerIndex
                 ? '✅ Bravo ! Bonne réponse !'
                 : '❌ Pas tout à fait...'}
             </h4>
