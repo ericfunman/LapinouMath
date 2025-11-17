@@ -36,6 +36,23 @@ const generateGeometryQuestions = (level: GradeLevel): Question[] => {
     { question: "Combien de faces a un tétraèdre régulier ?", options: ["3", "4", "6", "8"], correctAnswer: 1 },
     { question: "Un angle plat mesure combien de degrés ?", options: ["90°", "180°", "270°", "360°"], correctAnswer: 1 },
     { question: "Quelle est l'aire d'un trapèze de bases 4 cm et 6 cm, et hauteur 3 cm ?", options: ["10 cm²", "15 cm²", "18 cm²", "30 cm²"], correctAnswer: 1 },
+    { question: "Quel est le volume d'une pyramide à base carrée de 4 cm x 4 cm et 6 cm de hauteur ?", options: ["16 cm³", "32 cm³", "48 cm³", "96 cm³"], correctAnswer: 2 },
+    { question: "Une sphère a combien d'axes de symétrie ?", options: ["0", "1", "2", "Infini"], correctAnswer: 3 },
+    { question: "Quelle est l'aire d'un triangle de 10 cm de base et 7 cm de hauteur ?", options: ["17 cm²", "35 cm²", "70 cm²", "140 cm²"], correctAnswer: 1 },
+    { question: "Un polygone régulier à 12 côtés s'appelle comment ?", options: ["Décagone", "Hendécagone", "Dodécagone", "Tridécagone"], correctAnswer: 2 },
+    { question: "Quel est le volume d'un prisme rectangulaire de 3 cm x 4 cm x 5 cm ?", options: ["12 cm³", "30 cm³", "60 cm³", "120 cm³"], correctAnswer: 2 },
+    { question: "Un angle aigu mesure entre combien et combien de degrés ?", options: ["0° et 90°", "90° et 180°", "0° et 180°", "180° et 360°"], correctAnswer: 0 },
+    { question: "Quelle est la circonférence d'un cercle de rayon 3 cm ? (π ≈ 3,14)", options: ["6.28 cm", "9.42 cm", "18.84 cm", "28.26 cm"], correctAnswer: 2 },
+    { question: "Un triangle équilatéral a combien d'axes de symétrie ?", options: ["1", "2", "3", "Infini"], correctAnswer: 2 },
+    { question: "Quelle est l'aire d'un rectangle de 9 cm de longueur et 4 cm de largeur ?", options: ["13 cm²", "26 cm²", "36 cm²", "72 cm²"], correctAnswer: 2 },
+    { question: "Un cube a combien de sommets ?", options: ["6", "8", "10", "12"], correctAnswer: 1 },
+    { question: "Quel est le nombre de faces d'un dodécaèdre régulier ?", options: ["10", "12", "20", "30"], correctAnswer: 1 },
+    { question: "Un triangle scalène a combien de côtés égaux ?", options: ["0", "1", "2", "3"], correctAnswer: 0 },
+    { question: "Quelle est l'aire d'un losange de diagonales 6 cm et 8 cm ?", options: ["14 cm²", "24 cm²", "48 cm²", "96 cm²"], correctAnswer: 2 },
+    { question: "Combien d'arêtes a un octaèdre régulier ?", options: ["8", "12", "15", "24"], correctAnswer: 1 },
+    { question: "Un angle rentrant mesure entre combien et combien de degrés ?", options: ["0° et 180°", "180° et 360°", "90° et 270°", "0° et 360°"], correctAnswer: 1 },
+    { question: "Quelle est l'aire d'un pentagone régulier de 5 cm de côté ? (≈)", options: ["40 cm²", "43 cm²", "50 cm²", "60 cm²"], correctAnswer: 1 },
+    { question: "Un prisme pentagonal a combien d'arêtes ?", options: ["10", "12", "15", "20"], correctAnswer: 2 },
   ];
 
   const questions: Question[] = [];

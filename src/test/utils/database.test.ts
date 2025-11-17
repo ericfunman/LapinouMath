@@ -12,10 +12,10 @@ describe('Database Utils', () => {
   });
 
   it('should handle database initialization gracefully', async () => {
-    // IndexedDB is not available in test environment (jsdom)
-    // Just ensure no crashes occur
+    // IndexedDB mock is available in test environment
     try {
-      await initDB();
+      const database = await initDB();
+      expect(database).toBeDefined();
     } catch (error) {
       expect(error).toBeDefined();
     }
