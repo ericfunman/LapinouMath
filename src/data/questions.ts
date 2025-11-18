@@ -8,6 +8,14 @@ import {
   cinquiemeMentalMath, cinquiemeArithmetic, cinquiemeProportions, cinquiemeGeometry3D, cinquiemeProblems,
   quatriemeMentalMath, quatriemeTrigonometry, quatriemeProblems,
 } from './questionsByLevel';
+import {
+  ce2HardMentalMath, ce2HardArithmetic, ce2HardProblems,
+  cm1HardMentalMath, cm1HardArithmetic, cm1HardFractions, cm1HardProblems,
+  cm2HardMentalMath, cm2HardArithmetic, cm2HardProblems,
+  sixiemeHardMentalMath, sixiemeHardArithmetic, sixiemeHardProblems,
+  cinquiemeHardMentalMath, cinquiemeHardArithmetic, cinquiemeHardProblems,
+  quatriemeHardMentalMath, quatriemeHardArithmetic, quatriemeHardProblems,
+} from './questionsHard';
 import { Question } from '../types';
 import { saveQuestions } from '../utils/database';
 
@@ -16,7 +24,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   const levelQuestions: Record<string, Question[]> = {};
   let idCounter = 10000; // ID unique pour les nouvelles questions
   
-  const mapQuestionFormat = (q: any, level: string, domain: string): Question => {
+  const mapQuestionFormat = (q: any, level: string, domain: string, difficulty: 1 | 2 | 3 = 2): Question => {
     return {
       id: `level-${level}-${domain}-${idCounter++}`,
       level: level as any,
@@ -25,7 +33,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
       options: q.opts,
       correctAnswer: q.ans,
       explanation: q.exp,
-      difficulty: 2, // Par défaut niveau 2 (moyen)
+      difficulty,
     };
   };
   
@@ -54,61 +62,80 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   ];
   levelQuestions['CE1'] = ce1Questions;
   
-  // CE2
+  // CE2 + CE2 HARD
   const ce2Questions = [
-    ...ce2MentalMath.map(q => mapQuestionFormat(q, 'CE2', 'mentalMath')),
-    ...ce2Arithmetic.map(q => mapQuestionFormat(q, 'CE2', 'arithmetic')),
-    ...ce2Fractions.map(q => mapQuestionFormat(q, 'CE2', 'fractions')),
-    ...ce2Measurements.map(q => mapQuestionFormat(q, 'CE2', 'measurements')),
-    ...ce2Problems.map(q => mapQuestionFormat(q, 'CE2', 'problems')),
+    ...ce2MentalMath.map(q => mapQuestionFormat(q, 'CE2', 'Calcul mental', 1)),
+    ...ce2Arithmetic.map(q => mapQuestionFormat(q, 'CE2', 'Arithmétique', 1)),
+    ...ce2Fractions.map(q => mapQuestionFormat(q, 'CE2', 'Fractions/Décimaux', 1)),
+    ...ce2Measurements.map(q => mapQuestionFormat(q, 'CE2', 'Mesures', 1)),
+    ...ce2Problems.map(q => mapQuestionFormat(q, 'CE2', 'Problèmes/Algèbre', 1)),
+    ...ce2HardMentalMath.map(q => mapQuestionFormat(q, 'CE2', 'Calcul mental', 3)),
+    ...ce2HardArithmetic.map(q => mapQuestionFormat(q, 'CE2', 'Arithmétique', 3)),
+    ...ce2HardProblems.map(q => mapQuestionFormat(q, 'CE2', 'Problèmes/Algèbre', 3)),
   ];
   levelQuestions['CE2'] = ce2Questions;
   
-  // CM1
+  // CM1 + CM1 HARD
   const cm1Questions = [
-    ...cm1MentalMath.map(q => mapQuestionFormat(q, 'CM1', 'mentalMath')),
-    ...cm1Arithmetic.map(q => mapQuestionFormat(q, 'CM1', 'arithmetic')),
-    ...cm1Fractions.map(q => mapQuestionFormat(q, 'CM1', 'fractions')),
-    ...cm1Measurements.map(q => mapQuestionFormat(q, 'CM1', 'measurements')),
-    ...cm1Problems.map(q => mapQuestionFormat(q, 'CM1', 'problems')),
+    ...cm1MentalMath.map(q => mapQuestionFormat(q, 'CM1', 'Calcul mental', 1)),
+    ...cm1Arithmetic.map(q => mapQuestionFormat(q, 'CM1', 'Arithmétique', 1)),
+    ...cm1Fractions.map(q => mapQuestionFormat(q, 'CM1', 'Fractions/Décimaux', 1)),
+    ...cm1Measurements.map(q => mapQuestionFormat(q, 'CM1', 'Mesures', 1)),
+    ...cm1Problems.map(q => mapQuestionFormat(q, 'CM1', 'Problèmes/Algèbre', 1)),
+    ...cm1HardMentalMath.map(q => mapQuestionFormat(q, 'CM1', 'Calcul mental', 3)),
+    ...cm1HardArithmetic.map(q => mapQuestionFormat(q, 'CM1', 'Arithmétique', 3)),
+    ...cm1HardFractions.map(q => mapQuestionFormat(q, 'CM1', 'Fractions/Décimaux', 3)),
+    ...cm1HardProblems.map(q => mapQuestionFormat(q, 'CM1', 'Problèmes/Algèbre', 3)),
   ];
   levelQuestions['CM1'] = cm1Questions;
   
-  // CM2
+  // CM2 + CM2 HARD
   const cm2Questions = [
-    ...cm2MentalMath.map(q => mapQuestionFormat(q, 'CM2', 'mentalMath')),
-    ...cm2Arithmetic.map(q => mapQuestionFormat(q, 'CM2', 'arithmetic')),
-    ...cm2Fractions.map(q => mapQuestionFormat(q, 'CM2', 'fractions')),
-    ...cm2Measurements.map(q => mapQuestionFormat(q, 'CM2', 'measurements')),
-    ...cm2Problems.map(q => mapQuestionFormat(q, 'CM2', 'problems')),
+    ...cm2MentalMath.map(q => mapQuestionFormat(q, 'CM2', 'Calcul mental', 1)),
+    ...cm2Arithmetic.map(q => mapQuestionFormat(q, 'CM2', 'Arithmétique', 1)),
+    ...cm2Fractions.map(q => mapQuestionFormat(q, 'CM2', 'Fractions/Décimaux', 1)),
+    ...cm2Measurements.map(q => mapQuestionFormat(q, 'CM2', 'Mesures', 1)),
+    ...cm2Problems.map(q => mapQuestionFormat(q, 'CM2', 'Problèmes/Algèbre', 1)),
+    ...cm2HardMentalMath.map(q => mapQuestionFormat(q, 'CM2', 'Calcul mental', 3)),
+    ...cm2HardArithmetic.map(q => mapQuestionFormat(q, 'CM2', 'Arithmétique', 3)),
+    ...cm2HardProblems.map(q => mapQuestionFormat(q, 'CM2', 'Problèmes/Algèbre', 3)),
   ];
   levelQuestions['CM2'] = cm2Questions;
   
-  // 6ème
+  // 6ème + 6ème HARD
   const sixiemeQuestions = [
-    ...sixiemeMentalMath.map(q => mapQuestionFormat(q, '6ème', 'mentalMath')),
-    ...sixiemeArithmetic.map(q => mapQuestionFormat(q, '6ème', 'arithmetic')),
-    ...sixiemeFractions.map(q => mapQuestionFormat(q, '6ème', 'fractions')),
-    ...sixiemeGeometry.map(q => mapQuestionFormat(q, '6ème', 'geometry')),
-    ...sixiemeProblems.map(q => mapQuestionFormat(q, '6ème', 'problems')),
+    ...sixiemeMentalMath.map(q => mapQuestionFormat(q, '6ème', 'Calcul mental', 1)),
+    ...sixiemeArithmetic.map(q => mapQuestionFormat(q, '6ème', 'Arithmétique', 1)),
+    ...sixiemeFractions.map(q => mapQuestionFormat(q, '6ème', 'Fractions/Décimaux', 1)),
+    ...sixiemeGeometry.map(q => mapQuestionFormat(q, '6ème', 'Géométrie', 1)),
+    ...sixiemeProblems.map(q => mapQuestionFormat(q, '6ème', 'Problèmes/Algèbre', 1)),
+    ...sixiemeHardMentalMath.map(q => mapQuestionFormat(q, '6ème', 'Calcul mental', 3)),
+    ...sixiemeHardArithmetic.map(q => mapQuestionFormat(q, '6ème', 'Arithmétique', 3)),
+    ...sixiemeHardProblems.map(q => mapQuestionFormat(q, '6ème', 'Problèmes/Algèbre', 3)),
   ];
   levelQuestions['6ème'] = sixiemeQuestions;
   
-  // 5ème
+  // 5ème + 5ème HARD
   const cinquiemeQuestions = [
-    ...cinquiemeMentalMath.map(q => mapQuestionFormat(q, '5ème', 'algebra')),
-    ...cinquiemeArithmetic.map(q => mapQuestionFormat(q, '5ème', 'arithmetic')),
-    ...cinquiemeProportions.map(q => mapQuestionFormat(q, '5ème', 'proportions')),
-    ...cinquiemeGeometry3D.map(q => mapQuestionFormat(q, '5ème', 'geometry3D')),
-    ...cinquiemeProblems.map(q => mapQuestionFormat(q, '5ème', 'problems')),
+    ...cinquiemeMentalMath.map(q => mapQuestionFormat(q, '5ème', 'Calcul mental', 1)),
+    ...cinquiemeArithmetic.map(q => mapQuestionFormat(q, '5ème', 'Arithmétique', 1)),
+    ...cinquiemeProportions.map(q => mapQuestionFormat(q, '5ème', 'Proportions', 1)),
+    ...cinquiemeGeometry3D.map(q => mapQuestionFormat(q, '5ème', 'Géométrie', 1)),
+    ...cinquiemeProblems.map(q => mapQuestionFormat(q, '5ème', 'Problèmes/Algèbre', 1)),
+    ...cinquiemeHardMentalMath.map(q => mapQuestionFormat(q, '5ème', 'Calcul mental', 3)),
+    ...cinquiemeHardArithmetic.map(q => mapQuestionFormat(q, '5ème', 'Arithmétique', 3)),
+    ...cinquiemeHardProblems.map(q => mapQuestionFormat(q, '5ème', 'Problèmes/Algèbre', 3)),
   ];
   levelQuestions['5ème'] = cinquiemeQuestions;
   
-  // 4ème
+  // 4ème + 4ème HARD
   const quatriemeQuestions = [
-    ...quatriemeMentalMath.map(q => mapQuestionFormat(q, '4ème', 'algebra')),
-    ...quatriemeTrigonometry.map(q => mapQuestionFormat(q, '4ème', 'trigonometry')),
-    ...quatriemeProblems.map(q => mapQuestionFormat(q, '4ème', 'problems')),
+    ...quatriemeMentalMath.map(q => mapQuestionFormat(q, '4ème', 'Calcul mental', 1)),
+    ...quatriemeTrigonometry.map(q => mapQuestionFormat(q, '4ème', 'Géométrie', 1)),
+    ...quatriemeProblems.map(q => mapQuestionFormat(q, '4ème', 'Problèmes/Algèbre', 1)),
+    ...quatriemeHardMentalMath.map(q => mapQuestionFormat(q, '4ème', 'Calcul mental', 3)),
+    ...quatriemeHardArithmetic.map(q => mapQuestionFormat(q, '4ème', 'Arithmétique', 3)),
+    ...quatriemeHardProblems.map(q => mapQuestionFormat(q, '4ème', 'Problèmes/Algèbre', 3)),
   ];
   levelQuestions['4ème'] = quatriemeQuestions;
   
