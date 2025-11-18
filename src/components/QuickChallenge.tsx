@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { GradeLevel, Question } from '../types';
 import { getRandomQuestions } from '../data/questions';
 
@@ -17,9 +17,18 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
   const [timeLeft, setTimeLeft] = useState(5);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState<number>(0);
-  const [isQuizActive, setIsQuizActive] = useState(true);
+  const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Initialiser les questions mélangées de tous les domaines
+  // Auto-avance à la dernière question -> terminer le quiz
+  useEffect(() => {
+    if (currentQuestionIndex === questions.length - 1 && selectedAnswer !== null && showExplanation) {
+      const timer = setTimeout(() => {
+        onComplete(score.correct, score.total);
+      }, 2000);
+      autoAdvanceTimerRef.current = timer;
+      return () => clearTimeout(timer);
+    }
+  }, [currentQuestionIndex, selectedAnswer, showExplanation, questions.length, score, onComplete]);
   useEffect(() => {
     const allDomains = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre'] as const;
     const allQuestions: Question[] = [];
@@ -36,7 +45,8 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
 
   // Timer countdown
   useEffect(() => {
-    if (!isQuizActive || selectedAnswer !== null) return;
+    if (selectedAnswer !== null) return;
+    if (questions.length === 0) return;
 
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -50,7 +60,7 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isQuizActive, selectedAnswer]);
+  }, [selectedAnswer, questions.length]);
 
   // Mélanger les options quand la question change
   useEffect(() => {
@@ -83,7 +93,6 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
   }
 
   const currentQuestion = questions[currentQuestionIndex];
-  const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null) return;
@@ -96,6 +105,16 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
       correct: prev.correct + (isCorrect ? 1 : 0),
       total: prev.total + 1
     }));
+    
+    // Auto-avance après 1.5s
+    const timer = setTimeout(() => {
+      setCurrentQuestionIndex(prev => 
+        prev === questions.length - 1 ? prev : prev + 1
+      );
+      setSelectedAnswer(null);
+      setShowExplanation(false);
+    }, 1500);
+    autoAdvanceTimerRef.current = timer;
   };
 
   const handleTimeUp = () => {
@@ -105,15 +124,16 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
       ...prev,
       total: prev.total + 1
     }));
-  };
-
-  const handleNext = () => {
-    if (isLastQuestion) {
-      setIsQuizActive(false);
-      onComplete(score.correct, score.total);
-    } else {
-      setCurrentQuestionIndex(prev => prev + 1);
-    }
+    
+    // Auto-avance après 1.5s
+    const timer = setTimeout(() => {
+      setCurrentQuestionIndex(prev => 
+        prev === questions.length - 1 ? prev : prev + 1
+      );
+      setSelectedAnswer(null);
+      setShowExplanation(false);
+    }, 1500);
+    autoAdvanceTimerRef.current = timer;
   };
 
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
@@ -195,7 +215,7 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
                 <button
                   key={`${currentQuestionIndex}-${index}`}
                   onClick={() => handleAnswerSelect(index)}
-                  disabled={selectedAnswer !== null || !isQuizActive}
+                  disabled={selectedAnswer !== null}
                   className={`w-full p-4 rounded-2xl text-lg font-semibold transition-all transform ${getButtonClass()}`}
                 >
                   {option}
@@ -204,7 +224,7 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
             })}
           </div>
 
-          {/* Explication */}
+          {/* Explication avec auto-avance */}
           {showExplanation && (() => {
             const getExplClass = (): string => {
               if (selectedAnswer === correctAnswerIndex) {
@@ -224,31 +244,25 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
               }
               return selectedAnswer === -1 ? '⏱️ Temps écoulé !' : '❌ Incorrect';
             };
+            const isLastQ = currentQuestionIndex === questions.length - 1;
             return (
               <div className={`p-4 rounded-xl mb-6 ${getExplClass()}`}>
                 <p className={`font-semibold mb-2 ${getTextClass()}`}>
                   {getMessage()}
                 </p>
-                <p className="text-gray-700">
+                <p className="text-gray-700 mb-3">
                   {currentQuestion.explanation}
                 </p>
+                {isLastQ ? (
+                  <div className="bg-white bg-opacity-50 rounded p-2 text-center">
+                    <p className="text-sm font-semibold text-primary">🎉 Quiz terminé !</p>
+                  </div>
+                ) : (
+                  <div className="bg-white bg-opacity-50 rounded p-2 text-center">
+                    <p className="text-sm font-semibold text-primary">Passage automatique...</p>
+                  </div>
+                )}
               </div>
-            );
-          })()}
-
-          {/* Bouton suivant */}
-          {showExplanation && (() => {
-            const btnClass = isLastQuestion
-              ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90'
-              : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:opacity-90';
-            const btnText = isLastQuestion ? '🎉 Terminer le défi' : 'Question suivante →';
-            return (
-              <button
-                onClick={handleNext}
-                className={`w-full p-4 rounded-xl font-semibold text-white text-lg transition-all ${btnClass}`}
-              >
-                {btnText}
-              </button>
             );
           })()}
         </div>

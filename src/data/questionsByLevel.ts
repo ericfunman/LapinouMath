@@ -247,7 +247,7 @@ export const ce1Measures = [
   { q: "Quel objet est le plus court ? Livre ou papier", opts: ["livre", "papier", "égal", "autre"], ans: 1, exp: "Le papier est plus court" },
   { q: "Quel verre contient le plus ? Plein ou vide", opts: ["plein", "vide", "égal", "autre"], ans: 0, exp: "Le verre plein contient plus" },
   { q: "Combien de jours dans une semaine ?", opts: ["5", "6", "7", "8"], ans: 2, exp: "Une semaine = 7 jours" },
-  { q: "Quel est le jour avant lundi ?", opts: ["samedi", "dimanche", "mardi", "mercredi"], ans: 0, exp: "Avant lundi vient dimanche" },
+  { q: "Quel est le jour avant lundi ?", opts: ["samedi", "dimanche", "mardi", "mercredi"], ans: 1, exp: "Avant lundi vient dimanche" },
   { q: "Quel est le jour après mercredi ?", opts: ["mardi", "jeudi", "vendredi", "samedi"], ans: 1, exp: "Après mercredi vient jeudi" },
   { q: "Combien d'heures dans une journée ?", opts: ["12", "18", "24", "30"], ans: 2, exp: "Une journée = 24 heures" },
   { q: "Combien de mois dans une année ?", opts: ["10", "11", "12", "13"], ans: 2, exp: "Un an = 12 mois" },
