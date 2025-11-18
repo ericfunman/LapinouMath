@@ -1,17 +1,24 @@
+import { useState } from 'react';
 import { UserProfile, GradeLevel, MathDomain } from '../types';
 import { MATH_DOMAINS } from '../data/constants';
 import { getQuestionStats } from '../utils/questionStats';
+import { getNextAccessoryToUnlock } from '../data/accessories';
+import AccessoryShop from './AccessoryShop';
 
 interface Props {
   profile: UserProfile;
   onStartQuiz: (level: GradeLevel, domain: MathDomain) => void;
   onLogout: () => void;
   onOpenAdmin: () => void;
+  onSelectAccessory?: (accessoryId: string) => void;
+  onUpdateProfile?: (profile: UserProfile) => void;
 }
 
 export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin }: Props) {
+  const [showAccessoryShop, setShowAccessoryShop] = useState(false);
   const currentLevelProgress = profile.progress?.[profile.currentLevel];
   const questionStats = getQuestionStats();
+  const nextAccessory = getNextAccessoryToUnlock(profile.totalStars);
 
   return (
     <div className="min-h-screen p-4 md:p-8">
@@ -33,6 +40,12 @@ export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin 
                 ⭐ {profile.totalStars}
               </div>
               <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => setShowAccessoryShop(!showAccessoryShop)}
+                  className="text-sm bg-yellow-400 text-gray-800 px-3 py-1 rounded-lg hover:bg-yellow-500 font-semibold"
+                >
+                  🏪 Accessoires ({profile.unlockedAccessories.length})
+                </button>
                 <button
                   onClick={onLogout}
                   className="text-sm text-gray-500 hover:text-gray-700 underline"
@@ -171,7 +184,55 @@ export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin 
             </div>
           </div>
         </div>
+
+        {/* Next Accessory Teaser */}
+        {nextAccessory && (
+          <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-4 md:p-6">
+            <div className="flex items-center gap-4">
+              <div className="text-5xl">{nextAccessory.icon}</div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-blue-900 mb-1">
+                  🎯 Prochain accessoire: {nextAccessory.name}
+                </h3>
+                <p className="text-sm text-blue-700 mb-2">
+                  {nextAccessory.description}
+                </p>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-semibold text-blue-900">
+                    +{Math.max(0, nextAccessory.requiredStars - profile.totalStars)} ⭐ pour débloquer
+                  </span>
+                </div>
+                <div className="w-full bg-blue-200 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-blue-400 to-indigo-500 h-full transition-all"
+                    style={{
+                      width: `${Math.min(
+                        100,
+                        (profile.totalStars / nextAccessory.requiredStars) * 100
+                      )}%`,
+                    }}
+                  />
+                </div>
+              </div>
+              <button
+                onClick={() => setShowAccessoryShop(true)}
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold whitespace-nowrap transition-colors"
+              >
+                Voir la boutique →
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Accessory Shop Modal */}
+      {showAccessoryShop && (
+        <AccessoryShop
+          profile={profile}
+          onSelectAccessory={() => setShowAccessoryShop(false)}
+          onClose={() => setShowAccessoryShop(false)}
+        />
+      )}
     </div>
   );
 }
