@@ -1,7 +1,6 @@
-import { questionsCE1 } from './questionsCE1';
-import { questionsCE1Additional } from './questionsCE1Additional';
 import { allGeneratedQuestions } from './generatedQuestions';
 import {
+  ce1MentalMath, ce1Arithmetic, ce1Numbers, ce1Comparison, ce1Measures,
   ce2MentalMath, ce2Arithmetic, ce2Fractions, ce2Measurements, ce2Problems,
   cm1MentalMath, cm1Arithmetic, cm1Fractions, cm1Measurements, cm1Problems,
   cm2MentalMath, cm2Arithmetic, cm2Fractions, cm2Measurements, cm2Problems,
@@ -12,10 +11,7 @@ import {
 import { Question } from '../types';
 import { saveQuestions } from '../utils/database';
 
-// Fusionner toutes les questions CE1
-const allCE1Questions = [...questionsCE1, ...questionsCE1Additional];
-
-// Combiner toutes les questions niveaux CE2-4ème par domaine
+// Combiner toutes les questions niveaux CE1-4ème par domaine
 const buildLevelQuestions = (): Record<string, Question[]> => {
   const levelQuestions: Record<string, Question[]> = {};
   let idCounter = 10000; // ID unique pour les nouvelles questions
@@ -32,6 +28,31 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
       difficulty: 2, // Par défaut niveau 2 (moyen)
     };
   };
+  
+  // Map domaines pour CE1 (traduction anglais → français)
+  const mapCE1Domain = (domain: string): string => {
+    const domainMap: Record<string, string> = {
+      'mentalMath': 'Calcul mental',
+      'arithmetic': 'Arithmétique',
+      'numbers': 'Arithmétique',
+      'comparison': 'Arithmétique',
+      'measurements': 'Mesures',
+      'fractions': 'Fractions/Décimaux',
+      'problems': 'Problèmes/Algèbre',
+    };
+    return domainMap[domain] || domain;
+  };
+
+  
+  // CE1
+  const ce1Questions = [
+    ...ce1MentalMath.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('mentalMath'))),
+    ...ce1Arithmetic.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('arithmetic'))),
+    ...ce1Numbers.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('numbers'))),
+    ...ce1Comparison.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('comparison'))),
+    ...ce1Measures.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('measurements'))),
+  ];
+  levelQuestions['CE1'] = ce1Questions;
   
   // CE2
   const ce2Questions = [
@@ -97,11 +118,10 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
 const levelQuestionsMap = buildLevelQuestions();
 const allLevelQuestions = Object.values(levelQuestionsMap).flat();
 
-// Combiner toutes les questions (CE1 + niveaux générés + CE2-4ème)
+// Combiner toutes les questions (CE1-4ème + niveaux générés, sans l'ancien CE1 qui est maintenant dans levelQuestionsMap)
 export const allQuestions: Question[] = [
-  ...allCE1Questions,
-  ...allGeneratedQuestions,
   ...allLevelQuestions,
+  ...allGeneratedQuestions,
 ];
 
 // Variable pour stocker les questions chargées depuis IndexedDB
