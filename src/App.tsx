@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import ProfileSelection from './components/ProfileSelection';
 import Dashboard from './components/Dashboard';
 import QuizScreen from './components/QuizScreen';
+import QuickChallenge from './components/QuickChallenge';
 import AdminPanel from './components/AdminPanel';
 import { UserProfile, GradeLevel, MathDomain } from './types';
 import { getProfile, saveProfile } from './utils/storage';
 import { initDB } from './utils/database';
 import { initializeQuestions, getAvailableDomains } from './data/questions';
 
-type Screen = 'profile' | 'dashboard' | 'quiz' | 'lesson' | 'admin';
+type Screen = 'profile' | 'dashboard' | 'quiz' | 'lesson' | 'admin' | 'quick-challenge';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('profile');
@@ -51,8 +52,12 @@ function App() {
   };
 
   const handleStartQuiz = (level: GradeLevel, domain: MathDomain) => {
-    setSelectedDomain({ level, domain });
-    setCurrentScreen('quiz');
+    if (domain === 'Bonus - Défi Rapide') {
+      setCurrentScreen('quick-challenge');
+    } else {
+      setSelectedDomain({ level, domain });
+      setCurrentScreen('quiz');
+    }
   };
 
   const updateProgressWithStars = (
@@ -156,6 +161,22 @@ function App() {
     setCurrentScreen('dashboard');
   };
 
+  const handleQuickChallengeComplete = (correctCount: number, totalCount: number) => {
+    if (!currentProfile) {
+      console.warn('Quick challenge complete called without profile');
+      return;
+    }
+
+    const updatedProfile = { ...currentProfile };
+    
+    // Ajouter des points bonus pour le défi rapide
+    updatedProfile.totalStars += Math.floor((correctCount / totalCount) * 10);
+    
+    saveProfile(updatedProfile);
+    setCurrentProfile(updatedProfile);
+    setCurrentScreen('dashboard');
+  };
+
   const handleLogout = () => {
     setCurrentProfile(null);
     localStorage.removeItem('lapinoumath_current_profile');
@@ -205,6 +226,14 @@ function App() {
               level={selectedDomain.level}
               domain={selectedDomain.domain}
               onComplete={handleQuizComplete}
+              onExit={() => setCurrentScreen('dashboard')}
+            />
+          )}
+
+          {currentScreen === 'quick-challenge' && currentProfile && selectedDomain && (
+            <QuickChallenge
+              level={selectedDomain.level}
+              onComplete={handleQuickChallengeComplete}
               onExit={() => setCurrentScreen('dashboard')}
             />
           )}

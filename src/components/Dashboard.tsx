@@ -153,6 +153,55 @@ export default function Dashboard(props: Readonly<Props>) {
               </div>
             );
           })}
+
+          {/* Bouton Défi Rapide */}
+          {currentLevelProgress && (() => {
+            const totalQuestionsAnswered = Object.values(currentLevelProgress).reduce(
+              (sum, domain) => sum + domain.questionsAnswered,
+              0
+            );
+            const canPlayChallenge = totalQuestionsAnswered >= 30;
+
+            return (
+              <button
+                className={`w-full bg-gradient-to-br from-yellow-300 to-orange-400 rounded-2xl shadow-lg p-6 transition-all text-left ${
+                  canPlayChallenge 
+                    ? 'hover:shadow-2xl hover:scale-105 cursor-pointer' 
+                    : 'opacity-50 cursor-not-allowed'
+                } border-4 border-yellow-500 disabled:cursor-not-allowed`}
+                onClick={() => canPlayChallenge && onStartQuiz(profile.currentLevel, 'Bonus - Défi Rapide' as MathDomain)}
+                disabled={!canPlayChallenge}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-2xl font-bold text-white">⚡ Défi Rapide</h3>
+                  {!canPlayChallenge && <span className="text-2xl">🔒</span>}
+                </div>
+
+                {canPlayChallenge ? (
+                  <>
+                    <div className="text-sm text-white space-y-2 font-semibold">
+                      <p>🎮 20 questions • 5 secondes chacune</p>
+                      <p>📚 Questions mélangées de tous les domaines</p>
+                      <p>🏆 Bonus: +10 étoiles maximum</p>
+                    </div>
+                    <div className="mt-4 bg-white rounded-lg p-2 text-center">
+                      <p className="text-sm font-bold text-orange-600">
+                        ✨ Teste ta rapidité !
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-sm text-white text-center py-4 font-semibold">
+                    <p>🔒 Réponds à au moins 30 questions</p>
+                    <p>pour débloquer ce défi !</p>
+                    <p className="mt-2 text-xs">
+                      ({totalQuestionsAnswered}/30 questions)
+                    </p>
+                  </div>
+                )}
+              </button>
+            );
+          })()}
         </div>
 
         {/* Statistiques globales */}
