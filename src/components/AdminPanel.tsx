@@ -3,12 +3,14 @@ import { Question, GradeLevel, MathDomain } from '../types';
 import { getAllQuestionsAsync } from '../data/questions';
 import { updateQuestion } from '../utils/database';
 import { GRADE_LEVELS, MATH_DOMAINS } from '../data/constants';
+import QuestionsImportExport from './QuestionsImportExport';
 
 interface Props {
   onClose: () => void;
 }
 
-export default function AdminPanel({ onClose }: Props) {
+export default function AdminPanel(props: Readonly<Props>) {
+  const { onClose } = props;
   const [questions, setQuestions] = useState<Question[]>([]);
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<GradeLevel | 'ALL'>('ALL');
@@ -123,6 +125,20 @@ export default function AdminPanel({ onClose }: Props) {
                 <p className="text-2xl font-bold text-green-600">{stats.byLevel[level]}</p>
               </div>
             ))}
+          </div>
+
+          {/* Import/Export Section */}
+          <div className="my-6">
+            <QuestionsImportExport
+              allQuestions={questions}
+              onImportComplete={() => {
+                // Refresh questions list after import
+                getAllQuestionsAsync().then(q => {
+                  setQuestions(q);
+                  setFilteredQuestions(q);
+                });
+              }}
+            />
           </div>
 
           {/* Filtres */}
