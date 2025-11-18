@@ -33,6 +33,15 @@ export const ACCESSORIES = [
     tier: 1,
     description: 'Un nœud papillon élégant'
   },
+  {
+    id: 'bunny-party-hat',
+    name: '🎉 Chapeau de fête',
+    icon: '🐰🎉',
+    category: 'hat',
+    requiredStars: 20,
+    tier: 1,
+    description: 'Pour célébrer tes victoires!'
+  },
 
   // TIER 2 - Mid-tier accessories (unlocked at 50 stars)
   {
@@ -42,7 +51,7 @@ export const ACCESSORIES = [
     category: 'hat',
     requiredStars: 50,
     tier: 2,
-    description: 'Une couronne pour le roi des mathématiques !'
+    description: 'Une couronne pour le roi des mathématiques!'
   },
   {
     id: 'bunny-sunglasses',
@@ -61,6 +70,24 @@ export const ACCESSORIES = [
     requiredStars: 50,
     tier: 2,
     description: 'Une écharpe magique remplie d\'étoiles'
+  },
+  {
+    id: 'bunny-heart-eyes',
+    name: '💕 Yeux d\'amour',
+    icon: '🐰💕',
+    category: 'glasses',
+    requiredStars: 40,
+    tier: 2,
+    description: 'Aime les maths avec passion!'
+  },
+  {
+    id: 'bunny-bowtie-pink',
+    name: '🎀 Nœud papillon rose',
+    icon: '🐰💗',
+    category: 'bow',
+    requiredStars: 35,
+    tier: 2,
+    description: 'Un nœud papillon élégant en rose'
   },
 
   // TIER 3 - Advanced accessories (unlocked at 100 stars)
@@ -91,6 +118,24 @@ export const ACCESSORIES = [
     tier: 3,
     description: 'La médaille des champions des maths'
   },
+  {
+    id: 'bunny-detective',
+    name: '🕵️ Chapeau de détective',
+    icon: '🐰🕵️',
+    category: 'hat',
+    requiredStars: 75,
+    tier: 3,
+    description: 'Résoudre les énigmes mathématiques comme un détective'
+  },
+  {
+    id: 'bunny-scholar',
+    name: '📚 Chapeau d\'érudit',
+    icon: '🐰📚',
+    category: 'hat',
+    requiredStars: 80,
+    tier: 3,
+    description: 'Pour les grands savants en mathématiques'
+  },
 
   // TIER 4 - Legendary accessories (unlocked at 200 stars)
   {
@@ -100,7 +145,7 @@ export const ACCESSORIES = [
     category: 'background',
     requiredStars: 200,
     tier: 4,
-    description: 'Un turbo mathématique !'
+    description: 'Un turbo mathématique!'
   },
   {
     id: 'bunny-rainbow',
@@ -118,7 +163,25 @@ export const ACCESSORIES = [
     category: 'background',
     requiredStars: 200,
     tier: 4,
-    description: 'Un lapin en feu... de passion pour les maths !'
+    description: 'Un lapin en feu... de passion pour les maths!'
+  },
+  {
+    id: 'bunny-astronaut',
+    name: '🚀 Astronaute lapin',
+    icon: '🧑‍🚀🐰',
+    category: 'hat',
+    requiredStars: 180,
+    tier: 4,
+    description: 'Explorer l\'univers des mathématiques!'
+  },
+  {
+    id: 'bunny-ninja',
+    name: '🥷 Lapin ninja',
+    icon: '🐰🥷',
+    category: 'hat',
+    requiredStars: 150,
+    tier: 4,
+    description: 'Les techniques secrètes des maths ninja'
   },
 
   // TIER 5 - Ultimate accessories (unlocked at 500 stars)
@@ -140,6 +203,33 @@ export const ACCESSORIES = [
     tier: 5,
     description: 'CalcuLapin légendaire, gardien des mathématiques'
   },
+  {
+    id: 'bunny-cosmic',
+    name: '🌌 Aura cosmique',
+    icon: '🐰🌌',
+    category: 'background',
+    requiredStars: 450,
+    tier: 5,
+    description: 'Une aura cosmique brillante'
+  },
+  {
+    id: 'bunny-diamond',
+    name: '💎 Couronne de diamants',
+    icon: '🐰💎',
+    category: 'hat',
+    requiredStars: 400,
+    tier: 5,
+    description: 'La couronne la plus prestigieuse'
+  },
+  {
+    id: 'bunny-phoenix',
+    name: '🔥‍🌊 Phénix mathématique',
+    icon: '🐰🔥',
+    category: 'background',
+    requiredStars: 350,
+    tier: 4,
+    description: 'Renaître de ses erreurs!'
+  },
 ] as const;
 
 /**
@@ -156,7 +246,7 @@ export function getNextAccessoryToUnlock(totalStars: number) {
   const locked = ACCESSORIES.filter(acc => totalStars < acc.requiredStars);
   if (locked.length === 0) return null;
   return locked.reduce((prev, current) => 
-    current.requiredStars < prev.requiredStars ? current : prev
+    current.requiredStars < prev.requiredStars ? current : prev, locked[0]
   );
 }
 
