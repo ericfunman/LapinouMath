@@ -52,10 +52,10 @@ function App() {
   };
 
   const handleStartQuiz = (level: GradeLevel, domain: MathDomain) => {
+    setSelectedDomain({ level, domain });
     if (domain === 'Bonus - Défi Rapide') {
       setCurrentScreen('quick-challenge');
     } else {
-      setSelectedDomain({ level, domain });
       setCurrentScreen('quiz');
     }
   };

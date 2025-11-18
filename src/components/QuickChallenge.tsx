@@ -3,12 +3,12 @@ import { GradeLevel, Question } from '../types';
 import { getRandomQuestions } from '../data/questions';
 
 interface Props {
-  level: GradeLevel;
-  onComplete: (correctCount: number, totalCount: number) => void;
-  onExit: () => void;
+  readonly level: GradeLevel;
+  readonly onComplete: (correctCount: number, totalCount: number) => void;
+  readonly onExit: () => void;
 }
 
-export default function QuickChallenge({ level, onComplete, onExit }: Props) {
+export default function QuickChallenge({ level, onComplete, onExit }: Readonly<Props>) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -30,8 +30,8 @@ export default function QuickChallenge({ level, onComplete, onExit }: Props) {
     }
     
     // Mélanger et prendre 20 questions
-    const shuffled = allQuestions.sort(() => Math.random() - 0.5).slice(0, 20);
-    setQuestions(shuffled);
+    const shuffledQuestions = [...allQuestions].sort(() => Math.random() - 0.5).slice(0, 20);
+    setQuestions(shuffledQuestions);
   }, [level]);
 
   // Timer countdown
@@ -59,9 +59,9 @@ export default function QuickChallenge({ level, onComplete, onExit }: Props) {
       const options = [...question.options];
       const correctOption = options[question.correctAnswer];
       
-      const shuffled = [...options].sort(() => Math.random() - 0.5);
-      setShuffledOptions(shuffled);
-      const newCorrectIndex = shuffled.indexOf(correctOption);
+      const shuffledOpts = [...options].sort(() => Math.random() - 0.5);
+      setShuffledOptions(shuffledOpts);
+      const newCorrectIndex = shuffledOpts.indexOf(correctOption);
       setCorrectAnswerIndex(newCorrectIndex);
       
       setTimeLeft(5);
@@ -128,7 +128,7 @@ export default function QuickChallenge({ level, onComplete, onExit }: Props) {
               <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-red-500">
                 ⚡ Défi Rapide
               </h1>
-              <p className="text-gray-600 text-sm">Réponds avant que le temps s'écoule !</p>
+              <p className="text-gray-600 text-sm">Réponds avant que le temps s&apos;écoule !</p>
             </div>
             <button
               onClick={onExit}
@@ -159,13 +159,14 @@ export default function QuickChallenge({ level, onComplete, onExit }: Props) {
 
           {/* Timer */}
           <div className="text-center">
-            <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full font-bold text-2xl ${
-              timeLeft <= 2
-                ? 'bg-red-500 text-white animate-pulse'
-                : 'bg-yellow-100 text-yellow-600'
-            }`}>
-              {timeLeft}s
-            </div>
+            {(() => {
+              const timerClass = timeLeft <= 2 ? 'bg-red-500 text-white animate-pulse' : 'bg-yellow-100 text-yellow-600';
+              return (
+                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full font-bold text-2xl ${timerClass}`}>
+                  {timeLeft}s
+                </div>
+              );
+            })()}
           </div>
         </div>
 
@@ -177,67 +178,79 @@ export default function QuickChallenge({ level, onComplete, onExit }: Props) {
 
           {/* Options */}
           <div className="space-y-3 mb-6">
-            {shuffledOptions.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleAnswerSelect(index)}
-                disabled={selectedAnswer !== null || !isQuizActive}
-                className={`w-full p-4 rounded-2xl text-lg font-semibold transition-all transform ${
-                  selectedAnswer === null
-                    ? 'bg-gray-100 hover:bg-yellow-200 border-2 border-transparent hover:border-yellow-400 cursor-pointer hover:scale-105'
-                    : index === correctAnswerIndex
-                    ? 'bg-green-500 text-white border-2 border-green-600'
-                    : selectedAnswer === index
-                    ? 'bg-red-500 text-white border-2 border-red-600'
-                    : 'bg-gray-100 border-2 border-transparent opacity-50'
-                } ${selectedAnswer === -1 && index === correctAnswerIndex ? 'bg-green-500 text-white' : ''}`}
-              >
-                {option}
-              </button>
-            ))}
+            {shuffledOptions.map((option, index) => {
+              const getButtonClass = (): string => {
+                if (selectedAnswer === null) {
+                  return 'bg-gray-100 hover:bg-yellow-200 border-2 border-transparent hover:border-yellow-400 cursor-pointer hover:scale-105';
+                }
+                if (index === correctAnswerIndex) {
+                  return 'bg-green-500 text-white border-2 border-green-600';
+                }
+                if (selectedAnswer === index) {
+                  return 'bg-red-500 text-white border-2 border-red-600';
+                }
+                return 'bg-gray-100 border-2 border-transparent opacity-50';
+              };
+              return (
+                <button
+                  key={`${currentQuestionIndex}-${index}`}
+                  onClick={() => handleAnswerSelect(index)}
+                  disabled={selectedAnswer !== null || !isQuizActive}
+                  className={`w-full p-4 rounded-2xl text-lg font-semibold transition-all transform ${getButtonClass()}`}
+                >
+                  {option}
+                </button>
+              );
+            })}
           </div>
 
           {/* Explication */}
-          {showExplanation && (
-            <div className={`p-4 rounded-xl mb-6 ${
-              selectedAnswer === correctAnswerIndex
-                ? 'bg-green-100 border-2 border-green-500'
-                : selectedAnswer === -1
-                ? 'bg-yellow-100 border-2 border-yellow-500'
-                : 'bg-red-100 border-2 border-red-500'
-            }`}>
-              <p className={`font-semibold mb-2 ${
-                selectedAnswer === correctAnswerIndex
-                  ? 'text-green-700'
-                  : selectedAnswer === -1
-                  ? 'text-yellow-700'
-                  : 'text-red-700'
-              }`}>
-                {selectedAnswer === correctAnswerIndex
-                  ? '✅ Correct !'
-                  : selectedAnswer === -1
-                  ? '⏱️ Temps écoulé !'
-                  : '❌ Incorrect'}
-              </p>
-              <p className="text-gray-700">
-                {currentQuestion.explanation}
-              </p>
-            </div>
-          )}
+          {showExplanation && (() => {
+            const getExplClass = (): string => {
+              if (selectedAnswer === correctAnswerIndex) {
+                return 'bg-green-100 border-2 border-green-500';
+              }
+              return selectedAnswer === -1 ? 'bg-yellow-100 border-2 border-yellow-500' : 'bg-red-100 border-2 border-red-500';
+            };
+            const getTextClass = (): string => {
+              if (selectedAnswer === correctAnswerIndex) {
+                return 'text-green-700';
+              }
+              return selectedAnswer === -1 ? 'text-yellow-700' : 'text-red-700';
+            };
+            const getMessage = (): string => {
+              if (selectedAnswer === correctAnswerIndex) {
+                return '✅ Correct !';
+              }
+              return selectedAnswer === -1 ? '⏱️ Temps écoulé !' : '❌ Incorrect';
+            };
+            return (
+              <div className={`p-4 rounded-xl mb-6 ${getExplClass()}`}>
+                <p className={`font-semibold mb-2 ${getTextClass()}`}>
+                  {getMessage()}
+                </p>
+                <p className="text-gray-700">
+                  {currentQuestion.explanation}
+                </p>
+              </div>
+            );
+          })()}
 
           {/* Bouton suivant */}
-          {showExplanation && (
-            <button
-              onClick={handleNext}
-              className={`w-full p-4 rounded-xl font-semibold text-white text-lg transition-all ${
-                isLastQuestion
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90'
-                  : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:opacity-90'
-              }`}
-            >
-              {isLastQuestion ? '🎉 Terminer le défi' : 'Question suivante →'}
-            </button>
-          )}
+          {showExplanation && (() => {
+            const btnClass = isLastQuestion
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90'
+              : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:opacity-90';
+            const btnText = isLastQuestion ? '🎉 Terminer le défi' : 'Question suivante →';
+            return (
+              <button
+                onClick={handleNext}
+                className={`w-full p-4 rounded-xl font-semibold text-white text-lg transition-all ${btnClass}`}
+              >
+                {btnText}
+              </button>
+            );
+          })()}
         </div>
       </div>
     </div>
