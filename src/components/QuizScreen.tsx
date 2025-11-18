@@ -52,8 +52,18 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
   if (questions.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 text-center">
-          <p className="text-xl text-gray-600">Chargement des questions...</p>
+        <div className="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-md">
+          <p className="text-4xl mb-4">⚠️</p>
+          <p className="text-xl text-gray-800 font-semibold mb-4">Aucune question disponible</p>
+          <p className="text-gray-600 mb-6">
+            Désolé, il n'y a pas de questions disponibles pour {domain} en {level}.
+          </p>
+          <button
+            onClick={onExit}
+            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/80 font-semibold"
+          >
+            Retour au tableau de bord
+          </button>
         </div>
       </div>
     );

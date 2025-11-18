@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { UserProfile, GradeLevel, MathDomain } from '../types';
-import { MATH_DOMAINS } from '../data/constants';
 import { getQuestionStats } from '../utils/questionStats';
 import { getNextAccessoryToUnlock, getCalcuLapinDisplay } from '../data/accessories';
+import { getAvailableDomains } from '../data/questions';
 import AccessoryShop from './AccessoryShop';
 
 interface Props {
@@ -91,7 +91,7 @@ export default function Dashboard(props: Readonly<Props>) {
 
         {/* Domaines de mathématiques */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {currentLevelProgress && MATH_DOMAINS.map(domain => {
+          {currentLevelProgress && getAvailableDomains(profile.currentLevel).map(domain => {
             const domainProgress = currentLevelProgress[domain];
             const isUnlocked = domainProgress.unlocked;
             const stars = domainProgress.stars;
@@ -107,7 +107,7 @@ export default function Dashboard(props: Readonly<Props>) {
                     ? 'hover:shadow-2xl hover:scale-105 cursor-pointer' 
                     : 'opacity-50 cursor-not-allowed'
                 }`}
-                onClick={() => isUnlocked && onStartQuiz(profile.currentLevel, domain)}
+                onClick={() => isUnlocked && onStartQuiz(profile.currentLevel, domain as MathDomain)}
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-xl font-bold text-gray-800">{domain}</h3>

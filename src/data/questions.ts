@@ -200,3 +200,12 @@ export function getRandomQuestions(level: string, domain: string, count: number)
   const shuffled = [...questions].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, Math.min(count, questions.length));
 }
+
+export function getAvailableDomains(level: string): string[] {
+  const allQuestions = getAllQuestions();
+  const levelQuestions = allQuestions.filter(q => q.level === level);
+  const uniqueDomains = [...new Set(levelQuestions.map(q => q.domain))];
+  // Ordre personnalisé des domaines
+  const domainOrder = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre', 'Proportions'];
+  return uniqueDomains.sort((a, b) => domainOrder.indexOf(a) - domainOrder.indexOf(b));
+}
