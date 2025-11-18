@@ -2,7 +2,7 @@ import { questionsCE1 } from './questionsCE1';
 import { questionsCE1Additional } from './questionsCE1Additional';
 import { allGeneratedQuestions } from './generatedQuestions';
 import { Question } from '../types';
-import { loadQuestions, saveQuestions } from '../utils/database';
+import { saveQuestions } from '../utils/database';
 
 // Fusionner toutes les questions CE1
 const allCE1Questions = [...questionsCE1, ...questionsCE1Additional];
@@ -22,19 +22,11 @@ export async function initializeQuestions(): Promise<void> {
   if (isInitialized) return;
   
   try {
-    const dbQuestions = await loadQuestions();
-    
-    if (dbQuestions.length === 0) {
-      // Première fois : importer les questions du code vers IndexedDB
-      console.log('📥 Import initial de', allQuestions.length, 'questions vers IndexedDB...');
-      await saveQuestions(allQuestions);
-      cachedQuestions = allQuestions;
-      console.log('✅ Questions importées avec succès');
-    } else {
-      // Utiliser les questions de la base
-      cachedQuestions = dbQuestions as Question[];
-      console.log('✅', cachedQuestions.length, 'questions chargées depuis IndexedDB');
-    }
+    // Toujours réimporter les questions du code pour forcer un refresh
+    console.log('📥 Import de', allQuestions.length, 'questions vers IndexedDB...');
+    await saveQuestions(allQuestions);
+    cachedQuestions = allQuestions;
+    console.log('✅ Questions importées avec succès');
     
     isInitialized = true;
   } catch (error) {
