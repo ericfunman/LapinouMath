@@ -19,16 +19,6 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState<number>(0);
   const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Auto-avance à la dernière question -> terminer le quiz
-  useEffect(() => {
-    if (currentQuestionIndex === questions.length - 1 && selectedAnswer !== null && showExplanation) {
-      const timer = setTimeout(() => {
-        onComplete(score.correct, score.total);
-      }, 2000);
-      autoAdvanceTimerRef.current = timer;
-      return () => clearTimeout(timer);
-    }
-  }, [currentQuestionIndex, selectedAnswer, showExplanation, questions.length, score, onComplete]);
   useEffect(() => {
     const allDomains = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre'] as const;
     const allQuestions: Question[] = [];
@@ -101,18 +91,25 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
     setShowExplanation(true);
     
     const isCorrect = answerIndex === correctAnswerIndex;
-    setScore(prev => ({
-      correct: prev.correct + (isCorrect ? 1 : 0),
-      total: prev.total + 1
-    }));
+    const newTotal = score.total + 1;
+    const newCorrect = score.correct + (isCorrect ? 1 : 0);
+    
+    setScore({
+      correct: newCorrect,
+      total: newTotal
+    });
     
     // Auto-avance après 1.5s
     const timer = setTimeout(() => {
-      setCurrentQuestionIndex(prev => 
-        prev === questions.length - 1 ? prev : prev + 1
-      );
-      setSelectedAnswer(null);
-      setShowExplanation(false);
+      if (currentQuestionIndex === questions.length - 1) {
+        // Dernière question - terminer le quiz
+        onComplete(newCorrect, newTotal);
+      } else {
+        // Passer à la question suivante
+        setCurrentQuestionIndex(prev => prev + 1);
+        setSelectedAnswer(null);
+        setShowExplanation(false);
+      }
     }, 1500);
     autoAdvanceTimerRef.current = timer;
   };
@@ -120,18 +117,23 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
   const handleTimeUp = () => {
     setSelectedAnswer(-1); // Marquer comme "pas de réponse"
     setShowExplanation(true);
+    const newTotal = score.total + 1;
     setScore(prev => ({
       ...prev,
-      total: prev.total + 1
+      total: newTotal
     }));
     
     // Auto-avance après 1.5s
     const timer = setTimeout(() => {
-      setCurrentQuestionIndex(prev => 
-        prev === questions.length - 1 ? prev : prev + 1
-      );
-      setSelectedAnswer(null);
-      setShowExplanation(false);
+      if (currentQuestionIndex === questions.length - 1) {
+        // Dernière question - terminer le quiz
+        onComplete(score.correct, newTotal);
+      } else {
+        // Passer à la question suivante
+        setCurrentQuestionIndex(prev => prev + 1);
+        setSelectedAnswer(null);
+        setShowExplanation(false);
+      }
     }, 1500);
     autoAdvanceTimerRef.current = timer;
   };
