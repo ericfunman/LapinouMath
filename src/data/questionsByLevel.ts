@@ -605,7 +605,7 @@ export const cm1Arithmetic = [
   { q: "Quel est le résultat de 156 + 234 ?", opts: ["388", "390", "392", "394"], ans: 1, exp: "156 + 234 = 390" },
   { q: "Quel est le résultat de 367 - 148 ?", opts: ["217", "219", "221", "223"], ans: 1, exp: "367 - 148 = 219" },
   { q: "Quel est le résultat de 42 × 5 ?", opts: ["208", "210", "212", "214"], ans: 1, exp: "42 × 5 = 210" },
-  { q: "Quel est le résultat de 278 + 145 ?", opts: ["420", "422", "424", "426"], ans: 2, exp: "278 + 145 = 423" },
+  { q: "Quel est le résultat de 278 + 145 ?", opts: ["421", "422", "423", "424"], ans: 2, exp: "278 + 145 = 423" },
   { q: "Quel est le résultat de 456 - 234 ?", opts: ["220", "222", "224", "226"], ans: 1, exp: "456 - 234 = 222" },
   { q: "Quel est le résultat de 28 × 6 ?", opts: ["166", "168", "170", "172"], ans: 1, exp: "28 × 6 = 168" },
   { q: "Quel est le résultat de 189 + 256 ?", opts: ["443", "445", "447", "449"], ans: 1, exp: "189 + 256 = 445" },
@@ -620,13 +620,13 @@ export const cm1Arithmetic = [
   { q: "Quel est le résultat de 145 + 267 ?", opts: ["410", "412", "414", "416"], ans: 1, exp: "145 + 267 = 412" },
   { q: "Quel est le résultat de 423 - 178 ?", opts: ["243", "245", "247", "249"], ans: 1, exp: "423 - 178 = 245" },
   { q: "Quel est le résultat de 52 × 6 ?", opts: ["310", "312", "314", "316"], ans: 1, exp: "52 × 6 = 312" },
-  { q: "Quel est le résultat de 198 + 245 ?", opts: ["440", "442", "444", "446"], ans: 2, exp: "198 + 245 = 443" },
+  { q: "Quel est le résultat de 198 + 245 ?", opts: ["441", "442", "443", "444"], ans: 2, exp: "198 + 245 = 443" },
   { q: "Quel est le résultat de 358 - 167 ?", opts: ["188", "190", "192", "194"], ans: 2, exp: "358 - 167 = 191" },
   { q: "Quel est le résultat de 37 × 5 ?", opts: ["183", "184", "185", "186"], ans: 2, exp: "37 × 5 = 185" },
   { q: "Quel est le résultat de 289 + 156 ?", opts: ["443", "445", "447", "449"], ans: 1, exp: "289 + 156 = 445" },
   { q: "Quel est le résultat de 467 - 234 ?", opts: ["230", "232", "234", "236"], ans: 1, exp: "467 - 234 = 233" },
   { q: "Quel est le résultat de 46 × 4 ?", opts: ["182", "184", "186", "188"], ans: 1, exp: "46 × 4 = 184" },
-  { q: "Quel est le résultat de 267 + 178 ?", opts: ["442", "444", "446", "448"], ans: 2, exp: "267 + 178 = 445" },
+  { q: "Quel est le résultat de 267 + 178 ?", opts: ["443", "444", "445", "446"], ans: 2, exp: "267 + 178 = 445" },
   { q: "Quel est le résultat de 345 - 189 ?", opts: ["154", "156", "158", "160"], ans: 1, exp: "345 - 189 = 156" },
   { q: "Quel est le résultat de 29 × 8 ?", opts: ["230", "232", "234", "236"], ans: 1, exp: "29 × 8 = 232" },
   { q: "Quel est le résultat de 178 + 234 ?", opts: ["410", "412", "414", "416"], ans: 1, exp: "178 + 234 = 412" },
@@ -638,20 +638,20 @@ export const cm1Arithmetic = [
   { q: "Quel est le résultat de 234 + 267 ?", opts: ["499", "501", "503", "505"], ans: 1, exp: "234 + 267 = 501" },
   { q: "Quel est le résultat de 389 - 178 ?", opts: ["208", "210", "212", "214"], ans: 1, exp: "389 - 178 = 211" },
   { q: "Quel est le résultat de 35 × 8 ?", opts: ["278", "280", "282", "284"], ans: 1, exp: "35 × 8 = 280" },
-  { q: "Quel est le résultat de 267 + 198 ?", opts: ["462", "464", "466", "468"], ans: 2, exp: "267 + 198 = 465" },
+  { q: "Quel est le résultat de 267 + 198 ?", opts: ["463", "464", "465", "466"], ans: 2, exp: "267 + 198 = 465" },
   { q: "Quel est le résultat de 456 - 189 ?", opts: ["265", "267", "269", "271"], ans: 1, exp: "456 - 189 = 267" },
   { q: "Quel est le résultat de 43 × 6 ?", opts: ["256", "258", "260", "262"], ans: 1, exp: "43 × 6 = 258" },
   { q: "Quel est le résultat de 289 + 234 ?", opts: ["521", "523", "525", "527"], ans: 1, exp: "289 + 234 = 523" },
   { q: "Quel est le résultat de 321 - 234 ?", opts: ["85", "87", "89", "91"], ans: 1, exp: "321 - 234 = 87" },
   { q: "Quel est le résultat de 48 × 5 ?", opts: ["238", "240", "242", "244"], ans: 0, exp: "48 × 5 = 240" },
-  { q: "Quel est le résultat de 178 + 267 ?", opts: ["442", "444", "446", "448"], ans: 2, exp: "178 + 267 = 445" },
+  { q: "Quel est le résultat de 178 + 267 ?", opts: ["443", "444", "445", "446"], ans: 2, exp: "178 + 267 = 445" },
   { q: "Quel est le résultat de 234 - 156 ?", opts: ["76", "78", "80", "82"], ans: 1, exp: "234 - 156 = 78" },
   { q: "Quel est le résultat de 32 × 7 ?", opts: ["222", "224", "226", "228"], ans: 1, exp: "32 × 7 = 224" },
 ];
 
 // Fractions/Décimaux: dixièmes et centièmes
 export const cm1Fractions = [
-  { q: "Combien font 0,5 + 0,3 ?", opts: ["0,7", "0,8", "0,9", "1"], ans: 0, exp: "0,5 + 0,3 = 0,8" },
+  { q: "Combien font 0,5 + 0,3 ?", opts: ["0,7", "0,8", "0,9", "1"], ans: 1, exp: "0,5 + 0,3 = 0,8" },
   { q: "Combien font 0,25 + 0,25 ?", opts: ["0,4", "0,5", "0,6", "0,7"], ans: 1, exp: "0,25 + 0,25 = 0,5" },
   { q: "Combien font 1 - 0,3 ?", opts: ["0,6", "0,7", "0,8", "0,9"], ans: 0, exp: "1 - 0,3 = 0,7" },
   { q: "Combien font 1 - 0,25 ?", opts: ["0,5", "0,6", "0,7", "0,75"], ans: 3, exp: "1 - 0,25 = 0,75" },
@@ -1149,7 +1149,7 @@ export const cinquiemeMentalMath = [
 
 // Arithmétique: calculs avec nombres relatifs et opérations mixtes
 export const cinquiemeArithmetic = [
-  { q: "Quel est le résultat de -5 + 8 ?", opts: ["2", "3", "4", "5"], ans: 0, exp: "-5 + 8 = 3" },
+  { q: "Quel est le résultat de -5 + 8 ?", opts: ["2", "3", "4", "5"], ans: 1, exp: "-5 + 8 = 3" },
   { q: "Quel est le résultat de -10 - 5 ?", opts: ["-13", "-14", "-15", "-16"], ans: 2, exp: "-10 - 5 = -15" },
   { q: "Quel est le résultat de -3 × 4 ?", opts: ["-10", "-11", "-12", "-13"], ans: 2, exp: "-3 × 4 = -12" },
   { q: "Quel est le résultat de -20 ÷ 5 ?", opts: ["-2", "-3", "-4", "-5"], ans: 2, exp: "-20 ÷ 5 = -4" },
