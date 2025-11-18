@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { UserProfile, GradeLevel, MathDomain } from '../types';
 import { MATH_DOMAINS } from '../data/constants';
 import { getQuestionStats } from '../utils/questionStats';
-import { getNextAccessoryToUnlock } from '../data/accessories';
+import { getNextAccessoryToUnlock, getCalcuLapinDisplay } from '../data/accessories';
 import AccessoryShop from './AccessoryShop';
 
 interface Props {
@@ -14,7 +14,8 @@ interface Props {
   onUpdateProfile?: (profile: UserProfile) => void;
 }
 
-export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin }: Props) {
+export default function Dashboard(props: Readonly<Props>) {
+  const { profile, onStartQuiz, onLogout, onOpenAdmin } = props;
   const [showAccessoryShop, setShowAccessoryShop] = useState(false);
   const currentLevelProgress = profile.progress?.[profile.currentLevel];
   const questionStats = getQuestionStats();
@@ -27,7 +28,7 @@ export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin 
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <span className="text-6xl">{profile.avatar}</span>
+              <span className="text-6xl">{getCalcuLapinDisplay(profile.selectedAccessory, profile.totalStars)}</span>
               <div>
                 <h1 className="text-3xl font-bold text-gray-800">
                   Bonjour {profile.name} ! 👋
@@ -229,7 +230,10 @@ export default function Dashboard({ profile, onStartQuiz, onLogout, onOpenAdmin 
       {showAccessoryShop && (
         <AccessoryShop
           profile={profile}
-          onSelectAccessory={() => setShowAccessoryShop(false)}
+          onSelectAccessory={(accessoryId) => {
+            props.onSelectAccessory?.(accessoryId);
+            setShowAccessoryShop(false);
+          }}
           onClose={() => setShowAccessoryShop(false)}
         />
       )}

@@ -7,7 +7,8 @@ interface Props {
   onClose: () => void;
 }
 
-export default function AccessoryShop({ profile, onSelectAccessory, onClose }: Props) {
+export default function AccessoryShop(props: Readonly<Props>) {
+  const { profile, onSelectAccessory, onClose } = props;
   const unlockedAccessories = getUnlockedAccessories(profile.totalStars);
   const nextAccessory = getNextAccessoryToUnlock(profile.totalStars);
 
@@ -16,7 +17,25 @@ export default function AccessoryShop({ profile, onSelectAccessory, onClose }: P
   };
 
   const isSelected = (accessoryId: string) => {
-    return profile.unlockedAccessories.includes(accessoryId);
+    return profile.selectedAccessory === accessoryId;
+  };
+
+  const handleSelectAccessory = (accessoryId: string) => {
+    if (isUnlocked(accessoryId)) {
+      onSelectAccessory(accessoryId);
+    }
+  };
+
+  const getButtonStyle = (accessoryId: string): string => {
+    const unlocked = isUnlocked(accessoryId);
+    const selected = isSelected(accessoryId);
+    
+    if (unlocked) {
+      return selected
+        ? 'bg-gradient-to-br from-yellow-100 to-yellow-50 ring-2 ring-yellow-400 scale-105 hover:ring-4 hover:ring-yellow-400'
+        : 'bg-gradient-to-br from-green-50 to-blue-50 hover:shadow-lg hover:scale-105 cursor-pointer';
+    }
+    return 'bg-gray-100 opacity-50 cursor-not-allowed';
   };
 
   return (
@@ -94,16 +113,11 @@ export default function AccessoryShop({ profile, onSelectAccessory, onClose }: P
                     const selected = isSelected(accessory.id);
 
                     return (
-                      <div
+                      <button
                         key={accessory.id}
-                        className={`relative rounded-2xl p-4 transition-all cursor-pointer ${
-                          unlocked
-                            ? selected
-                              ? 'bg-gradient-to-br from-yellow-100 to-yellow-50 ring-2 ring-yellow-400 scale-105'
-                              : 'bg-gradient-to-br from-green-50 to-blue-50 hover:shadow-lg hover:scale-105'
-                            : 'bg-gray-100 opacity-50 cursor-not-allowed'
-                        }`}
-                        onClick={() => unlocked && onSelectAccessory(accessory.id)}
+                        onClick={() => handleSelectAccessory(accessory.id)}
+                        disabled={!unlocked}
+                        className={`relative w-full rounded-2xl p-4 transition-all ${getButtonStyle(accessory.id)}`}
                       >
                         {/* Lock badge for locked items */}
                         {!unlocked && (
@@ -131,19 +145,19 @@ export default function AccessoryShop({ profile, onSelectAccessory, onClose }: P
                         </p>
 
                         {/* Requirements */}
-                        {!unlocked ? (
+                        {unlocked ? (
+                          <div className="flex items-center justify-center pt-2 border-t border-gray-200">
+                            <span className="text-xs font-semibold text-green-600">✓ Débloqué</span>
+                          </div>
+                        ) : (
                           <div className="flex items-center justify-center gap-1 pt-2 border-t border-gray-200">
                             <span className="text-lg">⭐</span>
                             <span className="text-sm font-semibold text-gray-700">
                               {accessory.requiredStars} pour débloquer
                             </span>
                           </div>
-                        ) : (
-                          <div className="flex items-center justify-center pt-2 border-t border-gray-200">
-                            <span className="text-xs font-semibold text-green-600">✓ Débloqué</span>
-                          </div>
                         )}
-                      </div>
+                      </button>
                     );
                   })}
                 </div>

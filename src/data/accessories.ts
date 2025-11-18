@@ -279,3 +279,25 @@ export function getAccessoryProgress(totalStars: number) {
       : 0,
   };
 }
+
+/**
+ * Get CalcuLapin display with accessory
+ * Combines base bunny emoji with selected accessory icon
+ */
+export function getCalcuLapinDisplay(selectedAccessoryId?: string, totalStars?: number): string {
+  const baseIcon = '🐰';
+  
+  if (!selectedAccessoryId || totalStars === undefined) {
+    return baseIcon;
+  }
+  
+  const accessory = ACCESSORIES.find(acc => acc.id === selectedAccessoryId);
+  
+  // Check if accessory is unlocked
+  if (!accessory || totalStars < accessory.requiredStars) {
+    return baseIcon;
+  }
+  
+  // Return the accessory's icon which already includes the bunny
+  return accessory.icon;
+}

@@ -162,6 +162,14 @@ function App() {
     setCurrentScreen('profile');
   };
 
+  const handleSelectAccessory = (accessoryId: string) => {
+    if (currentProfile) {
+      const updatedProfile = { ...currentProfile, selectedAccessory: accessoryId };
+      saveProfile(updatedProfile);
+      setCurrentProfile(updatedProfile);
+    }
+  };
+
   const handleOpenAdmin = () => {
     setCurrentScreen('admin');
   };
@@ -188,6 +196,7 @@ function App() {
               onStartQuiz={handleStartQuiz}
               onLogout={handleLogout}
               onOpenAdmin={handleOpenAdmin}
+              onSelectAccessory={handleSelectAccessory}
             />
           )}
           

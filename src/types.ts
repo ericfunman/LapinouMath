@@ -41,6 +41,7 @@ export interface UserProfile {
   };
   accessories: string[];
   unlockedAccessories: string[];
+  selectedAccessory?: string; // ID of the currently selected accessory
   totalStars: number;
   createdAt: Date;
 }
