@@ -1,6 +1,7 @@
 import { UserProfile, GradeLevel } from '../types';
-import { GRADE_LEVELS, MATH_DOMAINS } from '../data/constants';
+import { GRADE_LEVELS } from '../data/constants';
 import { saveProfiles as saveToIndexedDB, loadProfiles as loadFromIndexedDB } from './database';
+import { getAvailableDomains } from '../data/questions';
 
 const STORAGE_KEY = 'lapinoumath_profiles';
 
@@ -75,7 +76,8 @@ export function createProfile(name: string, level: GradeLevel): UserProfile {
   
   GRADE_LEVELS.forEach(gradeLevel => {
     progress[gradeLevel] = {};
-    MATH_DOMAINS.forEach(domain => {
+    const availableDomains = getAvailableDomains(gradeLevel);
+    availableDomains.forEach(domain => {
       progress[gradeLevel][domain] = {
         questionsAnswered: 0,
         correctAnswers: 0,

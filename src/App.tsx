@@ -6,7 +6,7 @@ import AdminPanel from './components/AdminPanel';
 import { UserProfile, GradeLevel, MathDomain } from './types';
 import { getProfile, saveProfile } from './utils/storage';
 import { initDB } from './utils/database';
-import { initializeQuestions } from './data/questions';
+import { initializeQuestions, getAvailableDomains } from './data/questions';
 
 type Screen = 'profile' | 'dashboard' | 'quiz' | 'lesson' | 'admin';
 
@@ -81,11 +81,11 @@ function App() {
     selectedDomain: { level: GradeLevel; domain: MathDomain },
     stars: number
   ): void => {
-    const DOMAINS_ORDER = ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'];
-    const currentDomainIndex = DOMAINS_ORDER.indexOf(selectedDomain.domain);
+    const availableDomains = getAvailableDomains(selectedDomain.level);
+    const currentDomainIndex = availableDomains.indexOf(selectedDomain.domain);
     
-    if (stars >= 1 && currentDomainIndex >= 0 && currentDomainIndex < DOMAINS_ORDER.length - 1) {
-      const nextDomain = DOMAINS_ORDER[currentDomainIndex + 1] as MathDomain;
+    if (stars >= 1 && currentDomainIndex >= 0 && currentDomainIndex < availableDomains.length - 1) {
+      const nextDomain = availableDomains[currentDomainIndex + 1] as MathDomain;
       const nextDomainProgress = updatedProfile.progress[selectedDomain.level]?.[nextDomain];
       if (nextDomainProgress) {
         nextDomainProgress.unlocked = true;
@@ -97,13 +97,13 @@ function App() {
     updatedProfile: UserProfile,
     selectedDomain: { level: GradeLevel; domain: MathDomain }
   ): void => {
-    const DOMAINS_ORDER = ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'];
+    const availableDomains = getAvailableDomains(selectedDomain.level);
     const LEVELS_ORDER: GradeLevel[] = ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème'];
     
     const currentLevelProgress = updatedProfile.progress[selectedDomain.level];
     if (!currentLevelProgress) return;
 
-    const allDomainsCompleted = DOMAINS_ORDER.every(domain => 
+    const allDomainsCompleted = availableDomains.every(domain => 
       currentLevelProgress[domain as MathDomain]?.stars >= 2
     );
 
