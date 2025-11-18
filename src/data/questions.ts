@@ -1,16 +1,107 @@
 import { questionsCE1 } from './questionsCE1';
 import { questionsCE1Additional } from './questionsCE1Additional';
 import { allGeneratedQuestions } from './generatedQuestions';
+import {
+  ce2MentalMath, ce2Arithmetic, ce2Fractions, ce2Measurements, ce2Problems,
+  cm1MentalMath, cm1Arithmetic, cm1Fractions, cm1Measurements, cm1Problems,
+  cm2MentalMath, cm2Arithmetic, cm2Fractions, cm2Measurements, cm2Problems,
+  sixiemeMentalMath, sixiemeArithmetic, sixiemeFractions, sixiemeGeometry, sixiemeProblems,
+  cinquiemeMentalMath, cinquiemeArithmetic, cinquiemeProportions, cinquiemeGeometry3D, cinquiemeProblems,
+  quatriemeMentalMath, quatriemeTrigonometry, quatriemeProblems,
+} from './questionsByLevel';
 import { Question } from '../types';
 import { saveQuestions } from '../utils/database';
 
 // Fusionner toutes les questions CE1
 const allCE1Questions = [...questionsCE1, ...questionsCE1Additional];
 
-// Combiner toutes les questions (CE1 + niveaux générés)
+// Combiner toutes les questions niveaux CE2-4ème par domaine
+const buildLevelQuestions = (): Record<string, Question[]> => {
+  const levelQuestions: Record<string, Question[]> = {};
+  let idCounter = 10000; // ID unique pour les nouvelles questions
+  
+  const mapQuestionFormat = (q: any, level: string, domain: string): Question => {
+    return {
+      id: `level-${level}-${domain}-${idCounter++}`,
+      level: level as any,
+      domain: domain as any,
+      question: q.q,
+      options: q.opts,
+      correctAnswer: q.ans,
+      explanation: q.exp,
+      difficulty: 2, // Par défaut niveau 2 (moyen)
+    };
+  };
+  
+  // CE2
+  const ce2Questions = [
+    ...ce2MentalMath.map(q => mapQuestionFormat(q, 'CE2', 'mentalMath')),
+    ...ce2Arithmetic.map(q => mapQuestionFormat(q, 'CE2', 'arithmetic')),
+    ...ce2Fractions.map(q => mapQuestionFormat(q, 'CE2', 'fractions')),
+    ...ce2Measurements.map(q => mapQuestionFormat(q, 'CE2', 'measurements')),
+    ...ce2Problems.map(q => mapQuestionFormat(q, 'CE2', 'problems')),
+  ];
+  levelQuestions['CE2'] = ce2Questions;
+  
+  // CM1
+  const cm1Questions = [
+    ...cm1MentalMath.map(q => mapQuestionFormat(q, 'CM1', 'mentalMath')),
+    ...cm1Arithmetic.map(q => mapQuestionFormat(q, 'CM1', 'arithmetic')),
+    ...cm1Fractions.map(q => mapQuestionFormat(q, 'CM1', 'fractions')),
+    ...cm1Measurements.map(q => mapQuestionFormat(q, 'CM1', 'measurements')),
+    ...cm1Problems.map(q => mapQuestionFormat(q, 'CM1', 'problems')),
+  ];
+  levelQuestions['CM1'] = cm1Questions;
+  
+  // CM2
+  const cm2Questions = [
+    ...cm2MentalMath.map(q => mapQuestionFormat(q, 'CM2', 'mentalMath')),
+    ...cm2Arithmetic.map(q => mapQuestionFormat(q, 'CM2', 'arithmetic')),
+    ...cm2Fractions.map(q => mapQuestionFormat(q, 'CM2', 'fractions')),
+    ...cm2Measurements.map(q => mapQuestionFormat(q, 'CM2', 'measurements')),
+    ...cm2Problems.map(q => mapQuestionFormat(q, 'CM2', 'problems')),
+  ];
+  levelQuestions['CM2'] = cm2Questions;
+  
+  // 6ème
+  const sixiemeQuestions = [
+    ...sixiemeMentalMath.map(q => mapQuestionFormat(q, '6ème', 'mentalMath')),
+    ...sixiemeArithmetic.map(q => mapQuestionFormat(q, '6ème', 'arithmetic')),
+    ...sixiemeFractions.map(q => mapQuestionFormat(q, '6ème', 'fractions')),
+    ...sixiemeGeometry.map(q => mapQuestionFormat(q, '6ème', 'geometry')),
+    ...sixiemeProblems.map(q => mapQuestionFormat(q, '6ème', 'problems')),
+  ];
+  levelQuestions['6ème'] = sixiemeQuestions;
+  
+  // 5ème
+  const cinquiemeQuestions = [
+    ...cinquiemeMentalMath.map(q => mapQuestionFormat(q, '5ème', 'algebra')),
+    ...cinquiemeArithmetic.map(q => mapQuestionFormat(q, '5ème', 'arithmetic')),
+    ...cinquiemeProportions.map(q => mapQuestionFormat(q, '5ème', 'proportions')),
+    ...cinquiemeGeometry3D.map(q => mapQuestionFormat(q, '5ème', 'geometry3D')),
+    ...cinquiemeProblems.map(q => mapQuestionFormat(q, '5ème', 'problems')),
+  ];
+  levelQuestions['5ème'] = cinquiemeQuestions;
+  
+  // 4ème
+  const quatriemeQuestions = [
+    ...quatriemeMentalMath.map(q => mapQuestionFormat(q, '4ème', 'algebra')),
+    ...quatriemeTrigonometry.map(q => mapQuestionFormat(q, '4ème', 'trigonometry')),
+    ...quatriemeProblems.map(q => mapQuestionFormat(q, '4ème', 'problems')),
+  ];
+  levelQuestions['4ème'] = quatriemeQuestions;
+  
+  return levelQuestions;
+};
+
+const levelQuestionsMap = buildLevelQuestions();
+const allLevelQuestions = Object.values(levelQuestionsMap).flat();
+
+// Combiner toutes les questions (CE1 + niveaux générés + CE2-4ème)
 export const allQuestions: Question[] = [
   ...allCE1Questions,
   ...allGeneratedQuestions,
+  ...allLevelQuestions,
 ];
 
 // Variable pour stocker les questions chargées depuis IndexedDB
