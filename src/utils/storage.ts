@@ -78,11 +78,14 @@ export function createProfile(name: string, level: GradeLevel): UserProfile {
     progress[gradeLevel] = {};
     const availableDomains = getAvailableDomains(gradeLevel);
     availableDomains.forEach(domain => {
+      // Kangourou is always unlocked (bonus domain), others only unlock on first level or with stars
+      const isKangourou = domain === 'Kangourou';
+      const isFirstDomain = domain === 'Calcul mental';
       progress[gradeLevel][domain] = {
         questionsAnswered: 0,
         correctAnswers: 0,
         stars: 0,
-        unlocked: gradeLevel === level && domain === 'Calcul mental',
+        unlocked: gradeLevel === level && (isFirstDomain || isKangourou),
       };
     });
   });
@@ -116,11 +119,13 @@ export function migrateProfile(profile: UserProfile): UserProfile {
     const availableDomains = getAvailableDomains(gradeLevel);
     availableDomains.forEach(domain => {
       if (!profile.progress[gradeLevel][domain]) {
+        // Kangourou is always unlocked (bonus domain)
+        const isKangourou = domain === 'Kangourou';
         profile.progress[gradeLevel][domain] = {
           questionsAnswered: 0,
           correctAnswers: 0,
           stars: 0,
-          unlocked: false,
+          unlocked: isKangourou,
         };
         updated = true;
       }
