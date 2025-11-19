@@ -4,6 +4,7 @@ import { getAllQuestionsAsync } from '../data/questions';
 import { updateQuestion } from '../utils/database';
 import { GRADE_LEVELS, MATH_DOMAINS } from '../data/constants';
 import QuestionsImportExport from './QuestionsImportExport';
+import ErrorReportsTab from './ErrorReportsTab';
 
 interface Props {
   onClose: () => void;
@@ -19,10 +20,7 @@ export default function AdminPanel(props: Readonly<Props>) {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [showCorrectOnly, setShowCorrectOnly] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  // TODO: Onglets pour rapports d'erreurs
-  // const [tab, setTab] = useState<'questions' | 'reports'>('questions');
-  // const [errorReports, setErrorReports] = useState<ErrorReport[]>([]);
-  // const [loadingReports, setLoadingReports] = useState(false);
+  const [tab, setTab] = useState<'questions' | 'reports'>('questions');
 
   useEffect(() => {
     getAllQuestionsAsync().then(allQuestions => {
@@ -61,10 +59,8 @@ export default function AdminPanel(props: Readonly<Props>) {
     
     setIsSaving(true);
     try {
-      // Sauvegarder en IndexedDB
       await updateQuestion(editingQuestion);
       
-      // Mettre à jour la question dans le state
       const updatedQuestions = questions.map(q => 
         q.id === editingQuestion.id ? editingQuestion : q
       );
@@ -102,7 +98,7 @@ export default function AdminPanel(props: Readonly<Props>) {
               <span className="text-5xl">⚙️</span>
               <div>
                 <h1 className="text-3xl font-bold text-gray-800">Panel Admin</h1>
-                <p className="text-gray-600">Gestion des questions - {filteredQuestions.length} / {stats.total} questions</p>
+                <p className="text-gray-600">Gestion des questions et rapports d'erreurs</p>
               </div>
             </div>
             <button
@@ -113,149 +109,167 @@ export default function AdminPanel(props: Readonly<Props>) {
             </button>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-blue-50 p-4 rounded-xl">
-              <p className="text-sm text-gray-600">Total</p>
-              <p className="text-2xl font-bold text-blue-600">{stats.total}</p>
-            </div>
-            {GRADE_LEVELS.map(level => (
-              <div key={level} className="bg-green-50 p-4 rounded-xl">
-                <p className="text-sm text-gray-600">{level}</p>
-                <p className="text-2xl font-bold text-green-600">{stats.byLevel[level]}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Import/Export Section */}
-          <div className="my-6">
-            <QuestionsImportExport
-              allQuestions={questions}
-              onImportComplete={() => {
-                // Refresh questions list after import
-                getAllQuestionsAsync().then(q => {
-                  setQuestions(q);
-                  setFilteredQuestions(q);
-                });
-              }}
-            />
-          </div>
-
-          {/* Filtres */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <select
-              value={selectedLevel}
-              onChange={(e) => setSelectedLevel(e.target.value as GradeLevel | 'ALL')}
-              className="px-4 py-2 rounded-xl border-2 border-gray-300 focus:border-primary focus:outline-none"
+          {/* Tabs */}
+          <div className="flex gap-4 border-b border-gray-200">
+            <button
+              onClick={() => setTab('questions')}
+              className={`px-6 py-3 font-bold rounded-t-xl transition ${
+                tab === 'questions'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+              }`}
             >
-              <option value="ALL">Tous les niveaux</option>
+              📚 Questions
+            </button>
+            <button
+              onClick={() => setTab('reports')}
+              className={`px-6 py-3 font-bold rounded-t-xl transition ${
+                tab === 'reports'
+                  ? 'bg-red-500 text-white'
+                  : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+              }`}
+            >
+              ⚠️ Rapports d'erreurs
+            </button>
+          </div>
+        </div>
+
+        {/* Content based on tab */}
+        {tab === 'reports' ? (
+          <ErrorReportsTab />
+        ) : (
+          <>
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-blue-50 p-4 rounded-xl">
+                <p className="text-sm text-gray-600">Total</p>
+                <p className="text-2xl font-bold text-blue-600">{stats.total}</p>
+              </div>
               {GRADE_LEVELS.map(level => (
-                <option key={level} value={level}>{level}</option>
-              ))}
-            </select>
-
-            <select
-              value={selectedDomain}
-              onChange={(e) => setSelectedDomain(e.target.value as MathDomain | 'ALL')}
-              className="px-4 py-2 rounded-xl border-2 border-gray-300 focus:border-primary focus:outline-none"
-            >
-              <option value="ALL">Tous les domaines</option>
-              {MATH_DOMAINS.map(domain => (
-                <option key={domain} value={domain}>{domain}</option>
-              ))}
-            </select>
-
-            <input
-              type="text"
-              placeholder="🔍 Rechercher..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-4 py-2 rounded-xl border-2 border-gray-300 focus:border-primary focus:outline-none"
-            />
-
-            <label className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-xl cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showCorrectOnly}
-                onChange={(e) => setShowCorrectOnly(e.target.checked)}
-                className="w-5 h-5"
-              />
-              <span>Afficher réponses</span>
-            </label>
-          </div>
-        </div>
-
-        {/* Liste des questions */}
-        <div className="space-y-4">
-          {filteredQuestions.map((question) => (
-            <div key={question.id} className="bg-white rounded-2xl shadow-xl p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg text-sm font-bold">
-                      {question.level}
-                    </span>
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-lg text-sm font-bold">
-                      {question.domain}
-                    </span>
-                    <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-lg text-sm font-bold">
-                      Difficulté {question.difficulty}/3
-                    </span>
-                    <span className="text-gray-500 text-sm">#{question.id}</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">{question.question}</h3>
-                  
-                  {/* Options */}
-                  <div className="grid grid-cols-2 gap-2 mb-3">
-                    {question.options.map((option, idx) => (
-                      <div
-                        key={idx}
-                        className={`p-3 rounded-lg border-2 ${
-                          idx === question.correctAnswer
-                            ? 'bg-green-100 border-green-500 font-bold'
-                            : 'bg-gray-50 border-gray-300'
-                        }`}
-                      >
-                        {idx === question.correctAnswer && '✅ '}
-                        {option}
-                        {showCorrectOnly && idx === question.correctAnswer && ' (CORRECT)'}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Explication */}
-                  <div className="bg-blue-50 p-3 rounded-lg mb-2">
-                    <p className="text-sm text-gray-700"><strong>Explication:</strong> {question.explanation}</p>
-                  </div>
-
-                  {/* Leçon si présente */}
-                  {question.lesson && (
-                    <div className="bg-purple-50 p-3 rounded-lg">
-                      <p className="text-sm font-bold text-purple-800 mb-1">📚 {question.lesson.title}</p>
-                      <ul className="text-sm text-gray-700 list-disc list-inside">
-                        {question.lesson.steps.map((step, idx) => (
-                          <li key={idx}>{step}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                <div key={level} className="bg-green-50 p-4 rounded-xl">
+                  <p className="text-sm text-gray-600">{level}</p>
+                  <p className="text-2xl font-bold text-green-600">{stats.byLevel[level]}</p>
                 </div>
-
-                <button
-                  onClick={() => handleEditQuestion(question)}
-                  className="ml-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-bold"
-                >
-                  ✏️ Éditer
-                </button>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {filteredQuestions.length === 0 && (
-          <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-            <p className="text-2xl text-gray-500">Aucune question trouvée</p>
-          </div>
+            {/* Import/Export Section */}
+            <div className="my-6">
+              <QuestionsImportExport
+                allQuestions={questions}
+                onImportComplete={() => {
+                  getAllQuestionsAsync().then(q => {
+                    setQuestions(q);
+                    setFilteredQuestions(q);
+                  });
+                }}
+              />
+            </div>
+
+            {/* Filtres */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <select
+                value={selectedLevel}
+                onChange={(e) => setSelectedLevel(e.target.value as GradeLevel | 'ALL')}
+                className="px-4 py-2 rounded-xl border-2 border-gray-300 focus:border-primary focus:outline-none"
+              >
+                <option value="ALL">Tous les niveaux</option>
+                {GRADE_LEVELS.map(level => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
+              </select>
+
+              <select
+                value={selectedDomain}
+                onChange={(e) => setSelectedDomain(e.target.value as MathDomain | 'ALL')}
+                className="px-4 py-2 rounded-xl border-2 border-gray-300 focus:border-primary focus:outline-none"
+              >
+                <option value="ALL">Tous les domaines</option>
+                {MATH_DOMAINS.map(domain => (
+                  <option key={domain} value={domain}>{domain}</option>
+                ))}
+              </select>
+
+              <input
+                type="text"
+                placeholder="🔍 Rechercher..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="px-4 py-2 rounded-xl border-2 border-gray-300 focus:border-primary focus:outline-none"
+              />
+
+              <label className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-xl cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showCorrectOnly}
+                  onChange={(e) => setShowCorrectOnly(e.target.checked)}
+                  className="w-5 h-5"
+                />
+                <span>Afficher réponses</span>
+              </label>
+            </div>
+
+            {/* Liste des questions */}
+            <div className="space-y-4">
+              {filteredQuestions.map((question) => (
+                <div key={question.id} className="bg-white rounded-2xl shadow-xl p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg text-sm font-bold">
+                          {question.level}
+                        </span>
+                        <span className="bg-green-100 text-green-800 px-3 py-1 rounded-lg text-sm font-bold">
+                          {question.domain}
+                        </span>
+                        <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-lg text-sm font-bold">
+                          Difficulté {question.difficulty}/3
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800 mb-3">{question.question}</h3>
+                      
+                      {/* Options */}
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        {question.options.map((option, idx) => (
+                          <div
+                            key={idx}
+                            className={`p-3 rounded-lg border-2 ${
+                              idx === question.correctAnswer
+                                ? 'bg-green-100 border-green-500 font-bold'
+                                : 'bg-gray-50 border-gray-300'
+                            }`}
+                          >
+                            {idx === question.correctAnswer && '✅ '}
+                            {option}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Explication */}
+                      {showCorrectOnly && (
+                        <div className="bg-blue-50 p-3 rounded-lg">
+                          <p className="text-sm text-gray-700"><strong>Explication:</strong> {question.explanation}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={() => handleEditQuestion(question)}
+                      className="ml-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-bold"
+                    >
+                      ✏️ Éditer
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {filteredQuestions.length === 0 && (
+              <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
+                <p className="text-2xl text-gray-500">Aucune question trouvée</p>
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -300,7 +314,7 @@ export default function AdminPanel(props: Readonly<Props>) {
                           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       }`}
                     >
-                      {idx === editingQuestion.correctAnswer ? '✅' : 'Marquer correct'}
+                      {idx === editingQuestion.correctAnswer ? '✅' : 'Marquer'}
                     </button>
                   </div>
                 </div>
