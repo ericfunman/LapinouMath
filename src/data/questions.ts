@@ -1,5 +1,6 @@
 import { allGeneratedQuestions } from './generatedQuestions';
 import { questionsCE2Detailed } from './questionsCE2Detailed';
+import { questionsCM1Detailed } from './questionsCM1Detailed';
 import {
   ce1MentalMath, ce1Arithmetic, ce1Numbers, ce1Comparison, ce1Measures,
   ce2MentalMath, ce2Arithmetic, ce2Fractions, ce2Measurements, ce2Problems,
@@ -87,8 +88,9 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   ];
   levelQuestions['CE2'] = ce2Questions;
   
-  // CM1 + CM1 HARD
+  // CM1 + CM1 HARD + CM1 DETAILED (NEW)
   const cm1Questions = [
+    ...questionsCM1Detailed,
     ...cm1MentalMath.map(q => mapQuestionFormat(q, 'CM1', 'Calcul mental', 1)),
     ...cm1Arithmetic.map(q => mapQuestionFormat(q, 'CM1', 'Arithmétique', 1)),
     ...cm1Fractions.map(q => mapQuestionFormat(q, 'CM1', 'Fractions/Décimaux', 1)),
