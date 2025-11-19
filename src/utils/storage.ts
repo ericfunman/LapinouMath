@@ -103,6 +103,37 @@ export function createProfile(name: string, level: GradeLevel): UserProfile {
   return profile;
 }
 
+// Migration: Add missing domains (like Kangourou) to existing profiles
+export function migrateProfile(profile: UserProfile): UserProfile {
+  let updated = false;
+  
+  GRADE_LEVELS.forEach(gradeLevel => {
+    if (!profile.progress[gradeLevel]) {
+      profile.progress[gradeLevel] = {};
+      updated = true;
+    }
+    
+    const availableDomains = getAvailableDomains(gradeLevel);
+    availableDomains.forEach(domain => {
+      if (!profile.progress[gradeLevel][domain]) {
+        profile.progress[gradeLevel][domain] = {
+          questionsAnswered: 0,
+          correctAnswers: 0,
+          stars: 0,
+          unlocked: false,
+        };
+        updated = true;
+      }
+    });
+  });
+  
+  if (updated) {
+    saveProfile(profile);
+  }
+  
+  return profile;
+}
+
 export function deleteProfile(id: string): void {
   const profiles = getAllProfiles().filter(p => p.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));

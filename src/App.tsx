@@ -5,7 +5,7 @@ import QuizScreen from './components/QuizScreen';
 import QuickChallenge from './components/QuickChallenge';
 import AdminPanel from './components/AdminPanel';
 import { UserProfile, GradeLevel, MathDomain } from './types';
-import { getProfile, saveProfile } from './utils/storage';
+import { getProfile, saveProfile, migrateProfile } from './utils/storage';
 import { initDB } from './utils/database';
 import { initializeQuestions, getAvailableDomains } from './data/questions';
 
@@ -34,8 +34,10 @@ function App() {
 
       const savedProfileId = localStorage.getItem('lapinoumath_current_profile');
       if (savedProfileId) {
-        const profile = getProfile(savedProfileId);
+        let profile = getProfile(savedProfileId);
         if (profile) {
+          // Apply migrations to existing profiles
+          profile = migrateProfile(profile);
           setCurrentProfile(profile);
           setCurrentScreen('dashboard');
         }
@@ -46,6 +48,8 @@ function App() {
   }, []);
 
   const handleProfileSelect = (profile: UserProfile) => {
+    // Apply migrations to existing profiles
+    profile = migrateProfile(profile);
     setCurrentProfile(profile);
     localStorage.setItem('lapinoumath_current_profile', profile.id);
     setCurrentScreen('dashboard');
