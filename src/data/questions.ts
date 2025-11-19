@@ -16,6 +16,7 @@ import {
   cinquiemeHardMentalMath, cinquiemeHardArithmetic, cinquiemeHardProblems,
   quatriemeHardMentalMath, quatriemeHardArithmetic, quatriemeHardProblems,
 } from './questionsHard';
+import { allKangourouQuestions } from './kangourouQuestions';
 import { Question } from '../types';
 import { saveQuestions } from '../utils/database';
 
@@ -59,6 +60,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...ce1Numbers.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('numbers'))),
     ...ce1Comparison.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('comparison'))),
     ...ce1Measures.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('measurements'))),
+    ...allKangourouQuestions.filter(q => q.level === 'CE1'),
   ];
   levelQuestions['CE1'] = ce1Questions;
   
@@ -72,6 +74,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...ce2HardMentalMath.map(q => mapQuestionFormat(q, 'CE2', 'Calcul mental', 3)),
     ...ce2HardArithmetic.map(q => mapQuestionFormat(q, 'CE2', 'Arithmétique', 3)),
     ...ce2HardProblems.map(q => mapQuestionFormat(q, 'CE2', 'Problèmes/Algèbre', 3)),
+    ...allKangourouQuestions.filter(q => q.level === 'CE2'),
   ];
   levelQuestions['CE2'] = ce2Questions;
   
@@ -86,6 +89,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cm1HardArithmetic.map(q => mapQuestionFormat(q, 'CM1', 'Arithmétique', 3)),
     ...cm1HardFractions.map(q => mapQuestionFormat(q, 'CM1', 'Fractions/Décimaux', 3)),
     ...cm1HardProblems.map(q => mapQuestionFormat(q, 'CM1', 'Problèmes/Algèbre', 3)),
+    ...allKangourouQuestions.filter(q => q.level === 'CM1'),
   ];
   levelQuestions['CM1'] = cm1Questions;
   
@@ -99,6 +103,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cm2HardMentalMath.map(q => mapQuestionFormat(q, 'CM2', 'Calcul mental', 3)),
     ...cm2HardArithmetic.map(q => mapQuestionFormat(q, 'CM2', 'Arithmétique', 3)),
     ...cm2HardProblems.map(q => mapQuestionFormat(q, 'CM2', 'Problèmes/Algèbre', 3)),
+    ...allKangourouQuestions.filter(q => q.level === 'CM2'),
   ];
   levelQuestions['CM2'] = cm2Questions;
   
@@ -112,6 +117,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...sixiemeHardMentalMath.map(q => mapQuestionFormat(q, '6ème', 'Calcul mental', 3)),
     ...sixiemeHardArithmetic.map(q => mapQuestionFormat(q, '6ème', 'Arithmétique', 3)),
     ...sixiemeHardProblems.map(q => mapQuestionFormat(q, '6ème', 'Problèmes/Algèbre', 3)),
+    ...allKangourouQuestions.filter(q => q.level === '6ème'),
   ];
   levelQuestions['6ème'] = sixiemeQuestions;
   
@@ -125,6 +131,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cinquiemeHardMentalMath.map(q => mapQuestionFormat(q, '5ème', 'Calcul mental', 3)),
     ...cinquiemeHardArithmetic.map(q => mapQuestionFormat(q, '5ème', 'Arithmétique', 3)),
     ...cinquiemeHardProblems.map(q => mapQuestionFormat(q, '5ème', 'Problèmes/Algèbre', 3)),
+    ...allKangourouQuestions.filter(q => q.level === '5ème'),
   ];
   levelQuestions['5ème'] = cinquiemeQuestions;
   
@@ -136,6 +143,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...quatriemeHardMentalMath.map(q => mapQuestionFormat(q, '4ème', 'Calcul mental', 3)),
     ...quatriemeHardArithmetic.map(q => mapQuestionFormat(q, '4ème', 'Arithmétique', 3)),
     ...quatriemeHardProblems.map(q => mapQuestionFormat(q, '4ème', 'Problèmes/Algèbre', 3)),
+    ...allKangourouQuestions.filter(q => q.level === '4ème'),
   ];
   levelQuestions['4ème'] = quatriemeQuestions;
   
@@ -206,6 +214,6 @@ export function getAvailableDomains(level: string): string[] {
   const levelQuestions = allQuestions.filter(q => q.level === level);
   const uniqueDomains = [...new Set(levelQuestions.map(q => q.domain))];
   // Ordre personnalisé des domaines
-  const domainOrder = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre', 'Proportions'];
+  const domainOrder = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre', 'Proportions', 'Kangourou'];
   return uniqueDomains.sort((a, b) => domainOrder.indexOf(a) - domainOrder.indexOf(b));
 }

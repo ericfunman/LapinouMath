@@ -7,7 +7,8 @@ export type MathDomain =
   | 'Fractions/Décimaux'
   | 'Mesures'
   | 'Problèmes/Algèbre'
-  | 'Bonus - Défi Rapide';
+  | 'Bonus - Défi Rapide'
+  | 'Kangourou';
 
 export interface Question {
   id: string;
