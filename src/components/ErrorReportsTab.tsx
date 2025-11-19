@@ -96,6 +96,9 @@ Rapport ${i + 1}:
 - Date: ${new Date(r.timestamp || 0).toLocaleString()}
       `).join('\n---\n');
 
+      // Initialize EmailJS with public key
+      emailjs.init('ShHyWcGX4s7YtH8lH');
+
       // Send email using EmailJS
       await emailjs.send(
         'service_305dfu9',

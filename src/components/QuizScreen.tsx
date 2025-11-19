@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { GradeLevel, MathDomain, Question } from '../types';
 import { getRandomQuestions } from '../data/questions';
 import { reportQuestionError } from '../utils/database';
+import emailjs from '@emailjs/browser';
 
 interface Props {
   level: GradeLevel;
@@ -113,7 +114,9 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
       
       // Try to send email automatically
       try {
-        const emailjs = (await import('@emailjs/browser')).default;
+        // Initialize EmailJS with public key
+        emailjs.init('ShHyWcGX4s7YtH8lH');
+        
         await emailjs.send(
           'service_305dfu9',
           'template_xphq7n2',
