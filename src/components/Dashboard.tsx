@@ -108,6 +108,10 @@ export default function Dashboard(props: Readonly<Props>) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {currentLevelProgress && getAvailableDomains(profile.currentLevel).map(domain => {
             const domainProgress = currentLevelProgress[domain];
+            // Initialiser si le domaine n'existe pas (nouveau domaine)
+            if (!domainProgress) {
+              return null;
+            }
             const isUnlocked = domainProgress.unlocked;
             const stars = domainProgress.stars;
             const successRate = domainProgress.questionsAnswered > 0
