@@ -10,9 +10,12 @@ interface Props {
 
 // Fonction de mélange utilisant l'algorithme Fisher-Yates
 // Plus robuste que sort() avec Math.random() pour éviter les biais
+// Math.random() est acceptable ici car il s'agit d'un contexte éducatif
+// (mélange de questions), pas de sécurité cryptographique
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
+    // NOSONAR - Math.random() est suffisant pour mélanger des questions de quiz
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }

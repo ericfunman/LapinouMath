@@ -211,9 +211,11 @@ export function getQuestionsByDomain(level: string, domain: string): Question[] 
 }
 
 // Fonction de mélange Fisher-Yates (utilisée pour éviter les biais de Math.random() - 0.5)
+// Math.random() est acceptable ici pour le contexte éducatif (pas de crypto)
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
+    // NOSONAR - Math.random() est suffisant pour mélanger des questions éducatives
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
