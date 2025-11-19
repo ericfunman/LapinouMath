@@ -60,7 +60,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...ce1Numbers.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('numbers'))),
     ...ce1Comparison.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('comparison'))),
     ...ce1Measures.map(q => mapQuestionFormat(q, 'CE1', mapCE1Domain('measurements'))),
-    ...allKangourouQuestions.filter(q => q.level === 'CE1'),
+    ...allKangourouQuestions.filter(q => q.level === 'CE1').map(q => mapQuestionFormat(q, 'CE1', 'Kangourou')),
   ];
   levelQuestions['CE1'] = ce1Questions;
   
@@ -74,7 +74,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...ce2HardMentalMath.map(q => mapQuestionFormat(q, 'CE2', 'Calcul mental', 3)),
     ...ce2HardArithmetic.map(q => mapQuestionFormat(q, 'CE2', 'Arithmétique', 3)),
     ...ce2HardProblems.map(q => mapQuestionFormat(q, 'CE2', 'Problèmes/Algèbre', 3)),
-    ...allKangourouQuestions.filter(q => q.level === 'CE2'),
+    ...allKangourouQuestions.filter(q => q.level === 'CE2').map(q => mapQuestionFormat(q, 'CE2', 'Kangourou')),
   ];
   levelQuestions['CE2'] = ce2Questions;
   
@@ -89,7 +89,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cm1HardArithmetic.map(q => mapQuestionFormat(q, 'CM1', 'Arithmétique', 3)),
     ...cm1HardFractions.map(q => mapQuestionFormat(q, 'CM1', 'Fractions/Décimaux', 3)),
     ...cm1HardProblems.map(q => mapQuestionFormat(q, 'CM1', 'Problèmes/Algèbre', 3)),
-    ...allKangourouQuestions.filter(q => q.level === 'CM1'),
+    ...allKangourouQuestions.filter(q => q.level === 'CM1').map(q => mapQuestionFormat(q, 'CM1', 'Kangourou')),
   ];
   levelQuestions['CM1'] = cm1Questions;
   
@@ -103,7 +103,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cm2HardMentalMath.map(q => mapQuestionFormat(q, 'CM2', 'Calcul mental', 3)),
     ...cm2HardArithmetic.map(q => mapQuestionFormat(q, 'CM2', 'Arithmétique', 3)),
     ...cm2HardProblems.map(q => mapQuestionFormat(q, 'CM2', 'Problèmes/Algèbre', 3)),
-    ...allKangourouQuestions.filter(q => q.level === 'CM2'),
+    ...allKangourouQuestions.filter(q => q.level === 'CM2').map(q => mapQuestionFormat(q, 'CM2', 'Kangourou')),
   ];
   levelQuestions['CM2'] = cm2Questions;
   
@@ -117,7 +117,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...sixiemeHardMentalMath.map(q => mapQuestionFormat(q, '6ème', 'Calcul mental', 3)),
     ...sixiemeHardArithmetic.map(q => mapQuestionFormat(q, '6ème', 'Arithmétique', 3)),
     ...sixiemeHardProblems.map(q => mapQuestionFormat(q, '6ème', 'Problèmes/Algèbre', 3)),
-    ...allKangourouQuestions.filter(q => q.level === '6ème'),
+    ...allKangourouQuestions.filter(q => q.level === '6ème').map(q => mapQuestionFormat(q, '6ème', 'Kangourou')),
   ];
   levelQuestions['6ème'] = sixiemeQuestions;
   
@@ -131,7 +131,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cinquiemeHardMentalMath.map(q => mapQuestionFormat(q, '5ème', 'Calcul mental', 3)),
     ...cinquiemeHardArithmetic.map(q => mapQuestionFormat(q, '5ème', 'Arithmétique', 3)),
     ...cinquiemeHardProblems.map(q => mapQuestionFormat(q, '5ème', 'Problèmes/Algèbre', 3)),
-    ...allKangourouQuestions.filter(q => q.level === '5ème'),
+    ...allKangourouQuestions.filter(q => q.level === '5ème').map(q => mapQuestionFormat(q, '5ème', 'Kangourou')),
   ];
   levelQuestions['5ème'] = cinquiemeQuestions;
   
@@ -143,7 +143,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...quatriemeHardMentalMath.map(q => mapQuestionFormat(q, '4ème', 'Calcul mental', 3)),
     ...quatriemeHardArithmetic.map(q => mapQuestionFormat(q, '4ème', 'Arithmétique', 3)),
     ...quatriemeHardProblems.map(q => mapQuestionFormat(q, '4ème', 'Problèmes/Algèbre', 3)),
-    ...allKangourouQuestions.filter(q => q.level === '4ème'),
+    ...allKangourouQuestions.filter(q => q.level === '4ème').map(q => mapQuestionFormat(q, '4ème', 'Kangourou')),
   ];
   levelQuestions['4ème'] = quatriemeQuestions;
   
