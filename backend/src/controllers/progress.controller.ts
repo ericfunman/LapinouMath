@@ -56,12 +56,11 @@ export async function updateProgress(req: AuthenticatedRequest, res: Response) {
         stats || {}
       );
     }
-    }
 
     res.json(progress);
   } catch (error: unknown) {
     const appError = error instanceof Error ? error : new Error(String(error));
-    res.status(400).json({ error: appError.message });
+    res.status(500).json({ error: appError.message });
   }
 }
 
