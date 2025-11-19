@@ -131,7 +131,8 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
               lesson: {
                 title: q.lessonTitle?.toString() || '',
                 steps
-              }
+              },
+              difficulty: 2 as 1 | 2 | 3
             };
           });
 

@@ -17,7 +17,7 @@ import {
   quatriemeHardMentalMath, quatriemeHardArithmetic, quatriemeHardProblems,
 } from './questionsHard';
 import { allKangourouQuestions } from './kangourouQuestions';
-import { Question } from '../types';
+import { Question, GradeLevel, MathDomain } from '../types';
 import { saveQuestions } from '../utils/database';
 
 // Combiner toutes les questions niveaux CE1-4ème par domaine
@@ -25,15 +25,22 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   const levelQuestions: Record<string, Question[]> = {};
   let idCounter = 10000; // ID unique pour les nouvelles questions
   
-  const mapQuestionFormat = (q: any, level: string, domain: string, difficulty: 1 | 2 | 3 = 2): Question => {
+  interface QuestionData {
+    q: string;
+    opts: string[];
+    ans: number;
+    exp?: string;
+  }
+  
+  const mapQuestionFormat = (q: QuestionData, level: string, domain: string, difficulty: 1 | 2 | 3 = 2): Question => {
     return {
       id: `level-${level}-${domain}-${idCounter++}`,
-      level: level as any,
-      domain: domain as any,
+      level: level as GradeLevel,
+      domain: domain as MathDomain,
       question: q.q,
       options: q.opts,
       correctAnswer: q.ans,
-      explanation: q.exp,
+      explanation: q.exp || '',
       difficulty,
     };
   };

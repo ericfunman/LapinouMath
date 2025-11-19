@@ -1,4 +1,6 @@
 // IndexedDB pour une persistance robuste des données
+import type { Question, UserProfile } from '../types';
+
 const DB_NAME = 'LapinouMathDB';
 const DB_VERSION = 4;
 const PROFILES_STORE = 'profiles';
@@ -62,7 +64,7 @@ export const initDB = (): Promise<IDBDatabase> => {
   });
 };
 
-export const saveProfiles = async (profiles: any[]): Promise<void> => {
+export const saveProfiles = async (profiles: UserProfile[]): Promise<void> => {
   const database = await initDB();
   return new Promise((resolve, reject) => {
     const transaction = database.transaction([PROFILES_STORE], 'readwrite');
@@ -114,7 +116,7 @@ export const deleteProfile = async (profileId: string): Promise<void> => {
 
 // ========== GESTION DES QUESTIONS ==========
 
-export const saveQuestions = async (questions: any[]): Promise<void> => {
+export const saveQuestions = async (questions: Question[]): Promise<void> => {
   const database = await initDB();
   return new Promise((resolve, reject) => {
     const transaction = database.transaction([QUESTIONS_STORE], 'readwrite');
@@ -152,7 +154,7 @@ export const loadQuestions = async (): Promise<any[]> => {
   });
 };
 
-export const updateQuestion = async (question: any): Promise<void> => {
+export const updateQuestion = async (question: Question): Promise<void> => {
   const database = await initDB();
   return new Promise((resolve, reject) => {
     const transaction = database.transaction([QUESTIONS_STORE], 'readwrite');

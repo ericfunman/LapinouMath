@@ -3,7 +3,7 @@
  * Handles exporting all questions to Excel and importing new questions
  */
 
-import { Question } from '../types';
+import { Question, type GradeLevel, type MathDomain } from '../types';
 
 /**
  * Export questions to Excel format (as CSV-like data)
@@ -36,7 +36,7 @@ export function exportQuestionsToExcel(questions: Question[]) {
  * @param data Array of rows from Excel file
  * @returns Array of validated Question objects
  */
-export function importQuestionsFromExcel(data: any[]): { questions: Question[], errors: string[] } {
+export function importQuestionsFromExcel(data: unknown[][]): { questions: Question[], errors: string[] } {
   const questions: Question[] = [];
   const errors: string[] = [];
 
@@ -56,13 +56,13 @@ export function importQuestionsFromExcel(data: any[]): { questions: Question[], 
         continue;
       }
 
-      const correctAnswerIndex = Number.parseInt(row[8], 10);
+      const correctAnswerIndex = Number.parseInt(String(row[8]), 10);
       if (Number.isNaN(correctAnswerIndex) || correctAnswerIndex < 0 || correctAnswerIndex > 3) {
         errors.push(`Ligne ${i + 1}: Index de réponse correcte invalide (doit être 0-3)`);
         continue;
       }
 
-      const difficulty = Number.parseInt(row[10], 10) || 2;
+      const difficulty = Number.parseInt(String(row[10]), 10) || 2;
       if (difficulty < 1 || difficulty > 3) {
         errors.push(`Ligne ${i + 1}: Difficulté invalide (doit être 1, 2 ou 3)`);
         continue;
@@ -82,13 +82,13 @@ export function importQuestionsFromExcel(data: any[]): { questions: Question[], 
       }
 
       const question: Question = {
-        id: (row[0] || `imported-${i}`).toString().trim(),
-        level: (row[1] || '').toString().trim(),
-        domain: (row[2] || '').toString().trim(),
-        question: (row[3] || '').toString().trim(),
+        id: String(row[0] || `imported-${i}`).trim(),
+        level: String(row[1] || '').trim() as GradeLevel,
+        domain: String(row[2] || '').trim() as MathDomain,
+        question: String(row[3] || '').trim(),
         options,
         correctAnswer: correctAnswerIndex,
-        explanation: (row[9] || '').toString().trim(),
+        explanation: String(row[9] || '').trim(),
         difficulty: difficulty as 1 | 2 | 3,
       };
 

@@ -31,6 +31,9 @@ jobs:
     - name: Run tests
       run: npm run test:coverage -- --run
       
+    - name: Security audit
+      run: npm audit --audit-level moderate
+      
     - name: Upload coverage
       uses: actions/upload-artifact@v4
       with:
@@ -40,7 +43,7 @@ jobs:
   sonarcloud:
     needs: test
     runs-on: ubuntu-latest
-    continue-on-error: true
+    # Removed continue-on-error to ensure security scans are properly enforced
     
     steps:
     - name: Checkout code
@@ -58,7 +61,7 @@ jobs:
       uses: SonarSource/sonarcloud-github-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN || '' }}
 
   build:
     needs: [test]
