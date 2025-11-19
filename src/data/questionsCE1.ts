@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Question } from '../types';
 
 export const questionsCE1: Question[] = [

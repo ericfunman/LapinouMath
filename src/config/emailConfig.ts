@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import emailjs from '@emailjs/browser';
 
 // EmailJS Configuration
