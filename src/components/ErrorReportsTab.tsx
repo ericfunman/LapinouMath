@@ -101,7 +101,7 @@ Rapport ${i + 1}:
         'service_305dfu9',
         'template_xphq7n2',
         {
-          to_email: 'email@example.com',
+          to_email: 'lapinae@gmail.com',
           reports_count: reportsToSend.length,
           reports_text: reportText,
           level: reportsToSend[0]?.level || 'N/A',
