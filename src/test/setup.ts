@@ -10,12 +10,16 @@ afterEach(() => {
 
 // Mock IndexedDB pour les tests (jsdom fourni IndexedDB, mais certains tests en ont besoin)
 if (typeof indexedDB === 'undefined') {
+  interface IDBRequestEvent {
+    target: MockIDBRequest | MockIDBTransaction;
+  }
+
   class MockIDBRequest {
-    result: any;
-    onsuccess: ((event: any) => void) | null = null;
-    onerror: ((event: any) => void) | null = null;
+    result: unknown;
+    onsuccess: ((event: IDBRequestEvent) => void) | null = null;
+    onerror: ((event: IDBRequestEvent) => void) | null = null;
     
-    constructor(result?: any) {
+    constructor(result?: unknown) {
       this.result = result;
       // Déclencher le callback success asynchronement
       setTimeout(() => {
@@ -27,9 +31,9 @@ if (typeof indexedDB === 'undefined') {
   }
 
   class MockIDBTransaction {
-    oncomplete: ((event: any) => void) | null = null;
-    onerror: ((event: any) => void) | null = null;
-    error: any;
+    oncomplete: ((event: IDBRequestEvent) => void) | null = null;
+    onerror: ((event: IDBRequestEvent) => void) | null = null;
+    error: unknown;
 
     objectStore(_name: string) {
       return new MockIDBObjectStore();
@@ -49,7 +53,7 @@ if (typeof indexedDB === 'undefined') {
       return new MockIDBRequest();
     }
 
-    add(value: any) {
+    add(value: unknown) {
       return new MockIDBRequest(value);
     }
 
@@ -57,7 +61,7 @@ if (typeof indexedDB === 'undefined') {
       return new MockIDBRequest([]);
     }
 
-    put(value: any) {
+    put(value: unknown) {
       return new MockIDBRequest(value);
     }
 
@@ -74,11 +78,11 @@ if (typeof indexedDB === 'undefined') {
     }
   }
 
-  const mockIndexedDB: any = {
+  const mockIndexedDB: Record<string, unknown> = {
     open: vi.fn((_name: string, _version: number) => {
       return new MockIDBRequest(new MockIDBDatabase());
     }),
   };
 
-  (globalThis as any).indexedDB = mockIndexedDB;
+  (globalThis as Record<string, unknown>).indexedDB = mockIndexedDB;
 }

@@ -37,8 +37,9 @@ export async function createUser(email: string, username: string, password: stri
     const token = generateToken(user.id, user.email);
 
     return { user, token };
-  } catch (error: any) {
-    if (error.code === '23505') {
+  } catch (error: unknown) {
+    const dbError = error as Record<string, unknown>;
+    if (dbError.code === '23505') {
       throw new Error('Email or username already exists');
     }
     throw error;

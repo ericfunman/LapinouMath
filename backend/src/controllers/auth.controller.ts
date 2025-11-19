@@ -17,8 +17,9 @@ export async function register(req: AuthenticatedRequest, res: Response) {
       user,
       token,
     });
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(400).json({ error: appError.message });
   }
 }
 
@@ -36,7 +37,8 @@ export async function login(req: AuthenticatedRequest, res: Response) {
       user,
       token,
     });
-  } catch (error: any) {
-    res.status(401).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(401).json({ error: appError.message });
   }
 }

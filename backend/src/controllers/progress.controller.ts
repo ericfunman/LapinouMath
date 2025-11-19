@@ -19,8 +19,9 @@ export async function getProgress(req: AuthenticatedRequest, res: Response) {
 
     const progress = await progressService.getProgressByProfileId(Number.parseInt(profileId, 10));
     res.json(progress);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: appError.message });
   }
 }
 
@@ -58,8 +59,9 @@ export async function updateProgress(req: AuthenticatedRequest, res: Response) {
     }
 
     res.json(progress);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(400).json({ error: appError.message });
   }
 }
 
@@ -95,7 +97,8 @@ export async function syncProgress(req: AuthenticatedRequest, res: Response) {
     }
 
     res.json({ synced: results.length, data: results });
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(400).json({ error: appError.message });
   }
 }

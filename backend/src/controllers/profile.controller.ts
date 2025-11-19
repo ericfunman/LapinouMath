@@ -18,8 +18,9 @@ export async function createProfile(req: AuthenticatedRequest, res: Response) {
     const profile = await profileService.createProfile(req.user.id, name, gradeLevel);
 
     res.status(201).json(profile);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(400).json({ error: appError.message });
   }
 }
 
@@ -31,8 +32,9 @@ export async function listProfiles(req: AuthenticatedRequest, res: Response) {
 
     const profiles = await profileService.getProfilesByUserId(req.user.id);
     res.json(profiles);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: appError.message });
   }
 }
 
@@ -50,8 +52,9 @@ export async function getProfile(req: AuthenticatedRequest, res: Response) {
     }
 
     res.json(profile);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: appError.message });
   }
 }
 
@@ -72,8 +75,9 @@ export async function updateProfile(req: AuthenticatedRequest, res: Response) {
     const updated = await profileService.updateProfile(Number.parseInt(id, 10), name, gradeLevel, totalStars);
 
     res.json(updated);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(400).json({ error: appError.message });
   }
 }
 
@@ -97,7 +101,8 @@ export async function deleteProfile(req: AuthenticatedRequest, res: Response) {
     } else {
       res.status(500).json({ error: 'Failed to delete profile' });
     }
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: appError.message });
   }
 }

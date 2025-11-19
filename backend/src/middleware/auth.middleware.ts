@@ -16,7 +16,8 @@ export async function authMiddleware(req: AuthenticatedRequest, res: Response, n
     const user = await verifyToken(token);
     req.user = user;
     next();
-  } catch (error: any) {
-    res.status(401).json({ error: error.message });
+  } catch (error: unknown) {
+    const appError = error instanceof Error ? error : new Error(String(error));
+    res.status(401).json({ error: appError.message });
   }
 }
