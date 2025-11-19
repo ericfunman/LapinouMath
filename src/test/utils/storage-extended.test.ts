@@ -26,9 +26,9 @@ describe('Storage Extended Tests', () => {
   });
 
   it('saves and retrieves multiple profiles', () => {
-    const profile1 = createProfile('Alice', 'CE1');
-    const profile2 = createProfile('Bob', 'CM1');
-    const profile3 = createProfile('Charlie', 'CE2');
+    createProfile('Alice', 'CE1');
+    createProfile('Bob', 'CM1');
+    createProfile('Charlie', 'CE2');
     
     const retrieved = getAllProfiles();
     
@@ -40,8 +40,12 @@ describe('Storage Extended Tests', () => {
     const profile = createProfile('David', 'CM2');
     profile.totalStars = 50;
     profile.progress = {
-      'Calcul mental': { correct: 10, total: 20 },
-      'Géométrie': { correct: 5, total: 10 },
+      'CE1': {
+        'Calcul mental': { questionsAnswered: 20, correctAnswers: 10, stars: 5, unlocked: true },
+      },
+      'CM2': {
+        'Géométrie': { questionsAnswered: 10, correctAnswers: 5, stars: 2, unlocked: true },
+      },
     };
     
     saveProfile(profile);
