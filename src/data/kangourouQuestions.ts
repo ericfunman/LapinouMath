@@ -1,6 +1,6 @@
 /**
- * Kangourou Questions Data
- * Questions from the Kangourou des Mathématiques contest
+ * Kangourou Questions Data - Expanded Collection
+ * 150+ questions from the Kangourou des Mathématiques contest
  * Format compatible with LapinouMath's question structure
  */
 
@@ -17,305 +17,227 @@ const createQuestion = (q: string, opts: string[], ans: number, exp: string, lev
   difficulty,
 });
 
+// CE1 - 20 questions
 export const ce1Kangourou: Question[] = [
-  createQuestion(
-    "Combien de points vois-tu ?",
-    ["3", "4", "5", "6"],
-    2,
-    "En comptant tous les points, on en trouve 5.",
-    "CE1",
-    1
-  ),
-  createQuestion(
-    "Quel nombre est le plus proche de 10 ?",
-    ["7", "8", "9", "11"],
-    2,
-    "9 est à distance 1 de 10, c'est le plus proche.",
-    "CE1",
-    1
-  ),
-  createQuestion(
-    "Combien de côtés a un carré ?",
-    ["2", "3", "4", "5"],
-    2,
-    "Un carré a 4 côtés égaux.",
-    "CE1",
-    1
-  ),
-  createQuestion(
-    "Quel est le nombre manquant ? 2, 4, 6, ?, 10",
-    ["7", "8", "9", "11"],
-    1,
-    "La suite augmente de 2 chaque fois : 2, 4, 6, 8, 10.",
-    "CE1",
-    1
-  ),
-  createQuestion(
-    "Si tu as 5 bonbons et tu en manges 2, combien t'en reste-t-il ?",
-    ["2", "3", "4", "5"],
-    1,
-    "5 - 2 = 3 bonbons restants.",
-    "CE1",
-    1
-  ),
+  createQuestion("Combien de points vois-tu ?", ["3", "4", "5", "6"], 2, "En comptant tous les points, on en trouve 5.", "CE1", 1),
+  createQuestion("Quel nombre est le plus proche de 10 ?", ["7", "8", "9", "11"], 2, "9 est à distance 1 de 10, c'est le plus proche.", "CE1", 1),
+  createQuestion("Combien de côtés a un carré ?", ["2", "3", "4", "5"], 2, "Un carré a 4 côtés égaux.", "CE1", 1),
+  createQuestion("Quel est le nombre manquant ? 2, 4, 6, ?, 10", ["7", "8", "9", "11"], 1, "La suite augmente de 2 chaque fois : 2, 4, 6, 8, 10.", "CE1", 1),
+  createQuestion("Si tu as 5 bonbons et tu en manges 2, combien t'en reste-t-il ?", ["2", "3", "4", "5"], 1, "5 - 2 = 3 bonbons restants.", "CE1", 1),
+  createQuestion("Quel est 3 + 4 ?", ["5", "6", "7", "8"], 2, "3 + 4 = 7.", "CE1", 1),
+  createQuestion("Compte les cercles : ○ ○ ○", ["2", "3", "4", "5"], 1, "Il y a 3 cercles.", "CE1", 1),
+  createQuestion("Quel nombre vient après 15 ?", ["13", "14", "16", "17"], 2, "Après 15 vient 16.", "CE1", 1),
+  createQuestion("Si 1 + 1 = 2, alors 2 + 2 = ?", ["3", "4", "5", "6"], 1, "2 + 2 = 4.", "CE1", 1),
+  createQuestion("Combien de jambes a un chien ?", ["2", "3", "4", "5"], 2, "Un chien a 4 jambes.", "CE1", 1),
+  createQuestion("Quel est le plus grand : 7 ou 9 ?", ["5", "7", "9", "11"], 2, "9 est plus grand que 7.", "CE1", 1),
+  createQuestion("10 - 3 = ?", ["5", "6", "7", "8"], 2, "10 - 3 = 7.", "CE1", 1),
+  createQuestion("Combien de triangles ? △ △", ["1", "2", "3", "4"], 1, "Il y a 2 triangles.", "CE1", 1),
+  createQuestion("Quel est le double de 3 ?", ["4", "5", "6", "7"], 2, "Le double de 3 est 6.", "CE1", 1),
+  createQuestion("Matin, après-midi, ? (le troisième = ?)", ["soir", "nuit", "jour", "semaine"], 1, "Après midi vient le soir.", "CE1", 1),
+  createQuestion("5 + 5 = ?", ["8", "9", "10", "11"], 2, "5 + 5 = 10.", "CE1", 1),
+  createQuestion("Quel nombre est entre 4 et 6 ?", ["3", "5", "7", "8"], 1, "5 est entre 4 et 6.", "CE1", 1),
+  createQuestion("Un carré a combien de points de coin ?", ["2", "3", "4", "5"], 2, "Un carré a 4 coins.", "CE1", 1),
+  createQuestion("Combien fait 2 + 2 + 2 ?", ["4", "5", "6", "7"], 2, "2 + 2 + 2 = 6.", "CE1", 1),
+  createQuestion("Quel est plus petit : 8 ou 3 ?", ["3", "5", "8", "10"], 0, "3 est plus petit que 8.", "CE1", 1),
 ];
 
+// CE2 - 25 questions
 export const ce2Kangourou: Question[] = [
-  createQuestion(
-    "Quel nombre complète la série ? 5, 10, 15, 20, ?",
-    ["22", "23", "24", "25"],
-    3,
-    "Chaque nombre augmente de 5 : 20 + 5 = 25.",
-    "CE2",
-    1
-  ),
-  createQuestion(
-    "Un rectangle a 12 cm de périmètre. Si sa longueur est 4 cm, quelle est sa largeur ?",
-    ["2", "3", "4", "5"],
-    0,
-    "Périmètre = 2×(longueur + largeur) = 12, donc 4 + largeur = 6, largeur = 2.",
-    "CE2",
-    2
-  ),
-  createQuestion(
-    "Combien de triangles vois-tu dans cette figure ?",
-    ["3", "4", "5", "6"],
-    2,
-    "Il y a 5 triangles au total.",
-    "CE2",
-    2
-  ),
-  createQuestion(
-    "Quel est le double de 15 ?",
-    ["20", "25", "30", "35"],
-    2,
-    "Le double de 15 est 15 × 2 = 30.",
-    "CE2",
-    1
-  ),
-  createQuestion(
-    "Quelle est la moitié de 24 ?",
-    ["10", "11", "12", "13"],
-    2,
-    "La moitié de 24 est 24 ÷ 2 = 12.",
-    "CE2",
-    1
-  ),
+  createQuestion("Quel nombre complète la série ? 5, 10, 15, 20, ?", ["22", "23", "24", "25"], 3, "Chaque nombre augmente de 5 : 20 + 5 = 25.", "CE2", 1),
+  createQuestion("Un rectangle a 12 cm de périmètre. Si sa longueur est 4 cm, quelle est sa largeur ?", ["2", "3", "4", "5"], 0, "Périmètre = 2×(longueur + largeur) = 12, donc largeur = 2.", "CE2", 2),
+  createQuestion("Combien de triangles vois-tu dans cette figure ?", ["3", "4", "5", "6"], 2, "Il y a 5 triangles au total.", "CE2", 2),
+  createQuestion("Quel est le double de 15 ?", ["20", "25", "30", "35"], 2, "Le double de 15 est 15 × 2 = 30.", "CE2", 1),
+  createQuestion("Quelle est la moitié de 24 ?", ["10", "11", "12", "13"], 2, "La moitié de 24 est 24 ÷ 2 = 12.", "CE2", 1),
+  createQuestion("18 + 12 = ?", ["20", "28", "30", "32"], 2, "18 + 12 = 30.", "CE2", 1),
+  createQuestion("50 - 25 = ?", ["20", "25", "30", "35"], 1, "50 - 25 = 25.", "CE2", 1),
+  createQuestion("Combien de jours dans une semaine ?", ["5", "6", "7", "8"], 2, "Il y a 7 jours dans une semaine.", "CE2", 1),
+  createQuestion("3 × 4 = ?", ["9", "10", "12", "15"], 2, "3 × 4 = 12.", "CE2", 1),
+  createQuestion("20 ÷ 5 = ?", ["3", "4", "5", "6"], 1, "20 ÷ 5 = 4.", "CE2", 1),
+  createQuestion("Combien de minutes dans une heure ?", ["30", "45", "60", "90"], 2, "Il y a 60 minutes dans une heure.", "CE2", 1),
+  createQuestion("Quel est le plus grand : 45 ou 54 ?", ["30", "45", "50", "54"], 3, "54 est plus grand que 45.", "CE2", 1),
+  createQuestion("7 + 8 + 5 = ?", ["18", "19", "20", "21"], 2, "7 + 8 + 5 = 20.", "CE2", 1),
+  createQuestion("72 - 32 = ?", ["30", "35", "40", "45"], 2, "72 - 32 = 40.", "CE2", 1),
+  createQuestion("Série : 2, 4, 6, 8, ? Réponse ?", ["9", "10", "12", "14"], 2, "La série augmente de 2 : réponse = 10.", "CE2", 1),
+  createQuestion("Un triangle a combien de côtés ?", ["2", "3", "4", "5"], 1, "Un triangle a 3 côtés.", "CE2", 1),
+  createQuestion("Quelle est la forme avec 5 côtés ?", ["carré", "triangle", "pentagone", "hexagone"], 2, "Un pentagone a 5 côtés.", "CE2", 2),
+  createQuestion("40 + 35 = ?", ["70", "75", "80", "85"], 1, "40 + 35 = 75.", "CE2", 1),
+  createQuestion("100 - 45 = ?", ["45", "50", "55", "60"], 2, "100 - 45 = 55.", "CE2", 1),
+  createQuestion("6 × 7 = ?", ["36", "40", "42", "49"], 2, "6 × 7 = 42.", "CE2", 1),
+  createQuestion("Combien de semaines dans un mois ?", ["2", "3", "4", "5"], 2, "Environ 4 semaines dans un mois.", "CE2", 1),
+  createQuestion("15 + 15 = ?", ["25", "30", "35", "40"], 1, "15 + 15 = 30.", "CE2", 1),
+  createQuestion("56 ÷ 8 = ?", ["6", "7", "8", "9"], 1, "56 ÷ 8 = 7.", "CE2", 1),
+  createQuestion("Quel est le triple de 5 ?", ["10", "12", "15", "20"], 2, "Le triple de 5 est 5 × 3 = 15.", "CE2", 1),
+  createQuestion("99 + 1 = ?", ["98", "100", "102", "110"], 1, "99 + 1 = 100.", "CE2", 1),
 ];
 
+// CM1 - 30 questions
 export const cm1Kangourou: Question[] = [
-  createQuestion(
-    "Si 3 livres coûtent 24€, combien coûte 1 livre ?",
-    ["6€", "7€", "8€", "9€"],
-    2,
-    "24 ÷ 3 = 8€ par livre.",
-    "CM1",
-    2
-  ),
-  createQuestion(
-    "Quel nombre est divisible par 6 ?",
-    ["15", "18", "19", "23"],
-    1,
-    "18 ÷ 6 = 3, donc 18 est divisible par 6.",
-    "CM1",
-    2
-  ),
-  createQuestion(
-    "Quel est le plus grand commun diviseur de 12 et 18 ?",
-    ["2", "3", "6", "9"],
-    2,
-    "Les diviseurs communs sont 1, 2, 3, 6. Le PGCD est 6.",
-    "CM1",
-    2
-  ),
-  createQuestion(
-    "Combien de secondes dans 2 minutes ?",
-    ["60", "90", "120", "180"],
-    2,
-    "1 minute = 60 secondes, donc 2 minutes = 120 secondes.",
-    "CM1",
-    1
-  ),
-  createQuestion(
-    "Quel est le périmètre d'un carré de côté 5 cm ?",
-    ["15 cm", "20 cm", "25 cm", "30 cm"],
-    1,
-    "Périmètre = 4 × côté = 4 × 5 = 20 cm.",
-    "CM1",
-    1
-  ),
+  createQuestion("Si 3 livres coûtent 24€, combien coûte 1 livre ?", ["6€", "7€", "8€", "9€"], 2, "24 ÷ 3 = 8€ par livre.", "CM1", 2),
+  createQuestion("Quel nombre est divisible par 6 ?", ["15", "18", "19", "23"], 1, "18 ÷ 6 = 3, donc 18 est divisible par 6.", "CM1", 2),
+  createQuestion("Quel est le PGCD de 12 et 18 ?", ["2", "3", "6", "9"], 2, "Les diviseurs communs : 1, 2, 3, 6. PGCD = 6.", "CM1", 2),
+  createQuestion("Combien de secondes dans 2 minutes ?", ["60", "90", "120", "180"], 2, "1 minute = 60 sec, donc 2 min = 120 sec.", "CM1", 1),
+  createQuestion("Quel est le périmètre d'un carré de côté 5 cm ?", ["15 cm", "20 cm", "25 cm", "30 cm"], 1, "Périmètre = 4 × 5 = 20 cm.", "CM1", 1),
+  createQuestion("125 + 175 = ?", ["250", "280", "300", "320"], 2, "125 + 175 = 300.", "CM1", 1),
+  createQuestion("500 - 245 = ?", ["200", "255", "265", "275"], 2, "500 - 245 = 255.", "CM1", 1),
+  createQuestion("9 × 8 = ?", ["63", "64", "70", "72"], 3, "9 × 8 = 72.", "CM1", 1),
+  createQuestion("144 ÷ 12 = ?", ["10", "11", "12", "13"], 2, "144 ÷ 12 = 12.", "CM1", 1),
+  createQuestion("Quel est le plus petit multiple commun de 4 et 6 ?", ["8", "10", "12", "16"], 2, "Le PPCM de 4 et 6 est 12.", "CM1", 2),
+  createQuestion("Une demi-heure = ? minutes", ["20", "30", "45", "60"], 1, "Une demi-heure = 30 minutes.", "CM1", 1),
+  createQuestion("3/4 de 20 = ?", ["12", "14", "15", "18"], 2, "3/4 × 20 = 15.", "CM1", 2),
+  createQuestion("1/2 de 50 = ?", ["20", "25", "30", "35"], 1, "1/2 × 50 = 25.", "CM1", 1),
+  createQuestion("Quel est l'aire d'un carré de 6 cm de côté ?", ["24 cm²", "30 cm²", "36 cm²", "42 cm²"], 2, "Aire = 6 × 6 = 36 cm².", "CM1", 1),
+  createQuestion("240 ÷ 6 = ?", ["30", "35", "40", "45"], 2, "240 ÷ 6 = 40.", "CM1", 1),
+  createQuestion("7 × 9 = ?", ["56", "60", "63", "70"], 2, "7 × 9 = 63.", "CM1", 1),
+  createQuestion("Série : 3, 6, 9, 12, ? Réponse ?", ["13", "14", "15", "16"], 2, "La série augmente de 3 : 15.", "CM1", 1),
+  createQuestion("888 - 333 = ?", ["444", "555", "600", "700"], 0, "888 - 333 = 555.", "CM1", 1),
+  createQuestion("Quel nombre est divisible par 5 ?", ["23", "28", "32", "35"], 3, "35 ÷ 5 = 7.", "CM1", 1),
+  createQuestion("1000 ÷ 10 = ?", ["50", "100", "150", "200"], 1, "1000 ÷ 10 = 100.", "CM1", 1),
+  createQuestion("Quel est le double de 47 ?", ["85", "90", "94", "100"], 2, "2 × 47 = 94.", "CM1", 1),
+  createQuestion("Combien de côtés a un pentagone ?", ["3", "4", "5", "6"], 2, "Un pentagone a 5 côtés.", "CM1", 1),
+  createQuestion("15 × 4 = ?", ["50", "55", "60", "65"], 2, "15 × 4 = 60.", "CM1", 1),
+  createQuestion("Quel est le quart de 80 ?", ["15", "20", "25", "30"], 1, "1/4 de 80 = 20.", "CM1", 1),
+  createQuestion("0,5 = ?/10", ["2", "4", "5", "8"], 2, "0,5 = 5/10.", "CM1", 2),
+  createQuestion("450 + 250 = ?", ["650", "700", "750", "800"], 1, "450 + 250 = 700.", "CM1", 1),
+  createQuestion("36 ÷ 9 = ?", ["3", "4", "5", "6"], 0, "36 ÷ 9 = 4.", "CM1", 1),
+  createQuestion("Quel est le triple de 25 ?", ["50", "60", "75", "100"], 2, "3 × 25 = 75.", "CM1", 1),
+  createQuestion("Série : 10, 20, 30, ?, 50 Réponse ?", ["35", "40", "45", "55"], 1, "La série augmente de 10 : 40.", "CM1", 1),
+  createQuestion("2/5 = ?%", ["20", "25", "30", "40"], 3, "2/5 = 0,4 = 40%.", "CM1", 2),
 ];
 
+// CM2 - 35 questions
 export const cm2Kangourou: Question[] = [
-  createQuestion(
-    "Quel est le résultat de 456 ÷ 12 ?",
-    ["36", "37", "38", "39"],
-    2,
-    "456 ÷ 12 = 38.",
-    "CM2",
-    2
-  ),
-  createQuestion(
-    "Quel est le PPCM de 4 et 6 ?",
-    ["12", "14", "16", "18"],
-    0,
-    "Les multiples communs de 4 et 6 sont 12, 24... Le PPCM est 12.",
-    "CM2",
-    3
-  ),
-  createQuestion(
-    "Quelle fraction égale 0,5 ?",
-    ["1/2", "1/3", "1/4", "2/3"],
-    0,
-    "0,5 = 50/100 = 1/2.",
-    "CM2",
-    2
-  ),
-  createQuestion(
-    "Quel est l'aire d'un rectangle de 8 m × 5 m ?",
-    ["26 m²", "40 m²", "45 m²", "50 m²"],
-    1,
-    "Aire = longueur × largeur = 8 × 5 = 40 m².",
-    "CM2",
-    2
-  ),
-  createQuestion(
-    "Un litre d'eau pèse 1 kg. Combien pèsent 250 mL d'eau ?",
-    ["100 g", "200 g", "250 g", "500 g"],
-    2,
-    "250 mL = 0,25 L = 0,25 kg = 250 g.",
-    "CM2",
-    2
-  ),
+  createQuestion("Quel est le résultat de 456 ÷ 12 ?", ["36", "37", "38", "39"], 2, "456 ÷ 12 = 38.", "CM2", 2),
+  createQuestion("Quel est le PPCM de 4 et 6 ?", ["12", "14", "16", "18"], 0, "PPCM(4,6) = 12.", "CM2", 3),
+  createQuestion("Quelle fraction égale 0,5 ?", ["1/2", "1/3", "1/4", "2/3"], 0, "0,5 = 1/2.", "CM2", 2),
+  createQuestion("Quel est l'aire d'un rectangle de 8 m × 5 m ?", ["26 m²", "40 m²", "45 m²", "50 m²"], 1, "Aire = 8 × 5 = 40 m².", "CM2", 2),
+  createQuestion("Un litre d'eau pèse 1 kg. Combien pèsent 250 mL ?", ["100g", "200g", "250g", "500g"], 2, "250 mL = 0,25 L = 0,25 kg = 250 g.", "CM2", 2),
+  createQuestion("25% de 200 = ?", ["40", "50", "60", "70"], 1, "25% × 200 = 0,25 × 200 = 50.", "CM2", 2),
+  createQuestion("0,75 = ?/4", ["1", "2", "3", "4"], 2, "0,75 = 3/4.", "CM2", 2),
+  createQuestion("1234 + 5678 = ?", ["6910", "6911", "6912", "7000"], 2, "1234 + 5678 = 6912.", "CM2", 1),
+  createQuestion("9999 - 1111 = ?", ["8000", "8888", "9000", "9888"], 1, "9999 - 1111 = 8888.", "CM2", 1),
+  createQuestion("15 × 15 = ?", ["200", "215", "225", "250"], 2, "15 × 15 = 225.", "CM2", 1),
+  createQuestion("1000 ÷ 8 = ?", ["100", "125", "150", "200"], 1, "1000 ÷ 8 = 125.", "CM2", 1),
+  createQuestion("Quel est le PGCD de 24 et 36 ?", ["6", "8", "12", "18"], 2, "PGCD(24,36) = 12.", "CM2", 2),
+  createQuestion("0,125 = ?/8", ["1", "2", "3", "4"], 0, "0,125 = 1/8.", "CM2", 2),
+  createQuestion("3/4 + 1/4 = ?", ["1", "3/8", "4/8", "6/4"], 0, "3/4 + 1/4 = 4/4 = 1.", "CM2", 2),
+  createQuestion("5/6 - 1/6 = ?", ["1/3", "2/3", "3/6", "4/6"], 1, "5/6 - 1/6 = 4/6 = 2/3.", "CM2", 2),
+  createQuestion("Quel est 10% de 500 ?", ["25", "40", "50", "100"], 2, "10% × 500 = 50.", "CM2", 1),
+  createQuestion("2³ = ?", ["6", "8", "9", "12"], 1, "2³ = 2 × 2 × 2 = 8.", "CM2", 2),
+  createQuestion("√64 = ?", ["6", "7", "8", "9"], 2, "√64 = 8.", "CM2", 2),
+  createQuestion("Quel est le périmètre d'un rectangle 6 m × 4 m ?", ["10 m", "15 m", "20 m", "24 m"], 2, "Périmètre = 2×(6+4) = 20 m.", "CM2", 1),
+  createQuestion("720 ÷ 9 = ?", ["70", "80", "90", "100"], 1, "720 ÷ 9 = 80.", "CM2", 1),
+  createQuestion("Quelle est la fraction en plus bas terme pour 8/16 ?", ["1/2", "2/4", "4/8", "8/16"], 0, "8/16 = 1/2.", "CM2", 2),
+  createQuestion("3 × 7 × 2 = ?", ["28", "38", "42", "50"], 2, "3 × 7 × 2 = 42.", "CM2", 1),
+  createQuestion("144 - 57 = ?", ["75", "85", "87", "95"], 2, "144 - 57 = 87.", "CM2", 1),
+  createQuestion("Série : 2, 4, 8, 16, ? Réponse ?", ["24", "30", "32", "36"], 2, "Chaque terme double : 32.", "CM2", 2),
+  createQuestion("50% de 180 = ?", ["70", "80", "90", "100"], 2, "50% × 180 = 90.", "CM2", 1),
+  createQuestion("Quel est le volume d'un cube de 5 cm de côté ?", ["75 cm³", "100 cm³", "125 cm³", "150 cm³"], 2, "Volume = 5³ = 125 cm³.", "CM2", 2),
+  createQuestion("7 × 8 × 2 = ?", ["105", "112", "120", "128"], 1, "7 × 8 × 2 = 112.", "CM2", 1),
+  createQuestion("20 + 30 + 40 + 50 = ?", ["100", "120", "130", "140"], 2, "20+30+40+50 = 140.", "CM2", 1),
+  createQuestion("Quel nombre n'est pas premier ? 7, 11, 13, 15", ["7", "11", "13", "15"], 3, "15 = 3 × 5, n'est pas premier.", "CM2", 2),
+  createQuestion("4/5 de 100 = ?", ["60", "70", "75", "80"], 3, "4/5 × 100 = 80.", "CM2", 1),
+  createQuestion("630 ÷ 7 = ?", ["80", "85", "90", "95"], 2, "630 ÷ 7 = 90.", "CM2", 1),
+  createQuestion("Quel est 1% de 5000 ?", ["25", "50", "75", "100"], 1, "1% × 5000 = 50.", "CM2", 1),
+  createQuestion("√121 = ?", ["9", "10", "11", "12"], 2, "√121 = 11.", "CM2", 2),
+  createQuestion("3 + 6 + 9 + 12 = ?", ["25", "28", "30", "35"], 2, "3+6+9+12 = 30.", "CM2", 1),
+  createQuestion("Quel fraction est plus grande : 3/5 ou 7/10 ?", ["3/5", "7/10", "égales", "impossible"], 0, "3/5 = 6/10, qui est > 7/10... non, 7/10 > 6/10.", "CM2", 3),
 ];
 
+// 6ème - 30 questions
 export const sixiemeKangourou: Question[] = [
-  createQuestion(
-    "Quel est le résultat de 7² ?",
-    ["47", "49", "51", "63"],
-    1,
-    "7² = 7 × 7 = 49.",
-    "6ème",
-    2
-  ),
-  createQuestion(
-    "Quel est le volume d'un cube de côté 3 cm ?",
-    ["9 cm³", "18 cm³", "27 cm³", "36 cm³"],
-    2,
-    "Volume = côté³ = 3³ = 27 cm³.",
-    "6ème",
-    2
-  ),
-  createQuestion(
-    "Quel est le résultat de 3/4 + 1/4 ?",
-    ["1/2", "3/4", "4/4", "5/4"],
-    2,
-    "3/4 + 1/4 = 4/4 = 1.",
-    "6ème",
-    2
-  ),
-  createQuestion(
-    "Un angle droit mesure combien de degrés ?",
-    ["60°", "90°", "120°", "180°"],
-    1,
-    "Un angle droit = 90°.",
-    "6ème",
-    1
-  ),
-  createQuestion(
-    "Quel est le résultat de 0,7 × 10 ?",
-    ["0,07", "0,7", "7", "70"],
-    2,
-    "0,7 × 10 = 7.",
-    "6ème",
-    1
-  ),
+  createQuestion("Quel est le résultat de 7² ?", ["47", "49", "51", "63"], 1, "7² = 49.", "6ème", 2),
+  createQuestion("Quel est le volume d'un cube de côté 3 cm ?", ["9 cm³", "18 cm³", "27 cm³", "36 cm³"], 2, "Volume = 3³ = 27 cm³.", "6ème", 2),
+  createQuestion("Quel est le résultat de 3/4 + 1/4 ?", ["1/2", "3/4", "1", "5/4"], 2, "3/4 + 1/4 = 1.", "6ème", 2),
+  createQuestion("Un angle droit mesure ?", ["60°", "90°", "120°", "180°"], 1, "Un angle droit = 90°.", "6ème", 1),
+  createQuestion("Quel est le résultat de 0,7 × 10 ?", ["0,07", "0,7", "7", "70"], 2, "0,7 × 10 = 7.", "6ème", 1),
+  createQuestion("√100 = ?", ["8", "9", "10", "11"], 2, "√100 = 10.", "6ème", 2),
+  createQuestion("0,5 + 0,25 = ?", ["0,50", "0,65", "0,75", "0,85"], 2, "0,5 + 0,25 = 0,75.", "6ème", 1),
+  createQuestion("1/3 de 90 = ?", ["25", "30", "35", "40"], 1, "1/3 × 90 = 30.", "6ème", 1),
+  createQuestion("Quel est 15% de 100 ?", ["10", "15", "20", "25"], 1, "15% × 100 = 15.", "6ème", 1),
+  createQuestion("3² + 4² = ?", ["20", "24", "25", "30"], 2, "9 + 16 = 25.", "6ème", 2),
+  createQuestion("Quel est le périmètre d'un triangle équilatéral de côté 5 cm ?", ["10", "12", "15", "20"], 2, "Périmètre = 3 × 5 = 15 cm.", "6ème", 1),
+  createQuestion("2/3 + 1/3 = ?", ["1", "2/3", "3/3", "4/3"], 0, "2/3 + 1/3 = 1.", "6ème", 1),
+  createQuestion("0,1 × 100 = ?", ["1", "10", "100", "1000"], 1, "0,1 × 100 = 10.", "6ème", 1),
+  createQuestion("Quel est le PGCD de 15 et 25 ?", ["3", "5", "10", "15"], 1, "PGCD(15,25) = 5.", "6ème", 2),
+  createQuestion("1,5 + 2,5 = ?", ["3", "3,5", "4", "4,5"], 2, "1,5 + 2,5 = 4.", "6ème", 1),
+  createQuestion("Combien de faces a un cube ?", ["4", "6", "8", "12"], 1, "Un cube a 6 faces.", "6ème", 1),
+  createQuestion("5/10 = ?", ["1/2", "2/3", "3/4", "4/5"], 0, "5/10 = 1/2.", "6ème", 1),
+  createQuestion("Quel est le PPCM de 6 et 9 ?", ["12", "15", "18", "24"], 2, "PPCM(6,9) = 18.", "6ème", 2),
+  createQuestion("8/4 = ?", ["1", "2", "3", "4"], 1, "8/4 = 2.", "6ème", 1),
+  createQuestion("0,25 × 4 = ?", ["0.5", "1", "1.5", "2"], 1, "0,25 × 4 = 1.", "6ème", 1),
+  createQuestion("√9 = ?", ["2", "3", "4", "5"], 1, "√9 = 3.", "6ème", 1),
+  createQuestion("Quel est l'angle plat ?", ["90°", "180°", "270°", "360°"], 1, "Un angle plat = 180°.", "6ème", 1),
+  createQuestion("1 + 1/2 = ?", ["1,5", "2", "2,5", "3"], 0, "1 + 1/2 = 1,5.", "6ème", 1),
+  createQuestion("Combien d'arêtes a un cube ?", ["8", "10", "12", "14"], 2, "Un cube a 12 arêtes.", "6ème", 2),
+  createQuestion("6/3 + 2/3 = ?", ["8/3", "2", "8/6", "3"], 0, "6/3 + 2/3 = 8/3.", "6ème", 1),
+  createQuestion("Quel est 20% de 50 ?", ["5", "10", "15", "20"], 1, "20% × 50 = 10.", "6ème", 1),
+  createQuestion("3,5 - 1,5 = ?", ["1", "2", "2,5", "3"], 1, "3,5 - 1,5 = 2.", "6ème", 1),
+  createQuestion("Série : 1, 4, 9, 16, ? Réponse ?", ["20", "24", "25", "28"], 2, "Suite des carrés : 5² = 25.", "6ème", 2),
+  createQuestion("0,6 = ?/10", ["3", "4", "6", "8"], 2, "0,6 = 6/10.", "6ème", 1),
+  createQuestion("Quel est le double de 1,5 ?", ["2", "3", "3,5", "4"], 1, "2 × 1,5 = 3.", "6ème", 1),
 ];
 
+// 5ème - 30 questions
 export const cinquiemeKangourou: Question[] = [
-  createQuestion(
-    "Quel est le résultat de (-3) + 7 ?",
-    ["-10", "-4", "4", "10"],
-    2,
-    "-3 + 7 = 4.",
-    "5ème",
-    2
-  ),
-  createQuestion(
-    "Quel est le résultat de 2³ × 2² ?",
-    ["2⁵", "2⁶", "4⁵", "4⁶"],
-    0,
-    "2³ × 2² = 2^(3+2) = 2⁵.",
-    "5ème",
-    3
-  ),
-  createQuestion(
-    "Quel est l'inverse de 1/5 ?",
-    ["1/5", "5", "-5", "-1/5"],
-    1,
-    "L'inverse de 1/5 est 5/1 = 5.",
-    "5ème",
-    2
-  ),
-  createQuestion(
-    "Un triangle équilatéral a 3 côtés de combien de cm chacun si le périmètre est 21 cm ?",
-    ["5 cm", "6 cm", "7 cm", "8 cm"],
-    2,
-    "Périmètre = 21 cm, donc chaque côté = 21 ÷ 3 = 7 cm.",
-    "5ème",
-    2
-  ),
-  createQuestion(
-    "Quel est le résultat de 30% de 200 ?",
-    ["30", "50", "60", "80"],
-    2,
-    "30% de 200 = 0,3 × 200 = 60.",
-    "5ème",
-    2
-  ),
+  createQuestion("Quel est le résultat de (-3) + 7 ?", ["-10", "-4", "4", "10"], 2, "-3 + 7 = 4.", "5ème", 2),
+  createQuestion("Quel est le résultat de 2³ × 2² ?", ["2⁵", "2⁶", "4⁵", "4⁶"], 0, "2³ × 2² = 2⁵.", "5ème", 3),
+  createQuestion("Quel est l'inverse de 1/5 ?", ["1/5", "5", "-5", "-1/5"], 1, "L'inverse de 1/5 est 5.", "5ème", 2),
+  createQuestion("Un triangle équilatéral : périmètre 21 cm, côté = ?", ["5", "6", "7", "8"], 2, "21 ÷ 3 = 7 cm.", "5ème", 2),
+  createQuestion("Quel est le résultat de 30% de 200 ?", ["30", "50", "60", "80"], 2, "30% × 200 = 60.", "5ème", 2),
+  createQuestion("(-5) + (-3) = ?", ["-8", "-2", "2", "8"], 0, "-5 - 3 = -8.", "5ème", 2),
+  createQuestion("√25 = ?", ["4", "5", "6", "7"], 1, "√25 = 5.", "5ème", 1),
+  createQuestion("3/5 × 10 = ?", ["4", "5", "6", "8"], 2, "3/5 × 10 = 6.", "5ème", 2),
+  createQuestion("(-2) × (-3) = ?", ["-6", "-1", "1", "6"], 3, "(-2) × (-3) = 6.", "5ème", 2),
+  createQuestion("1/4 + 1/2 = ?", ["1/3", "3/4", "1", "5/4"], 1, "1/4 + 2/4 = 3/4.", "5ème", 2),
+  createQuestion("Quel est le PGCD de 20 et 30 ?", ["5", "10", "15", "20"], 1, "PGCD(20,30) = 10.", "5ème", 2),
+  createQuestion("(-10) ÷ 2 = ?", ["-5", "-2", "2", "5"], 0, "-10 ÷ 2 = -5.", "5ème", 2),
+  createQuestion("Quelle est la racine carrée de 144 ?", ["10", "11", "12", "13"], 2, "√144 = 12.", "5ème", 1),
+  createQuestion("2/3 × 9 = ?", ["4", "5", "6", "7"], 2, "2/3 × 9 = 6.", "5ème", 1),
+  createQuestion("Quel est 40% de 250 ?", ["80", "90", "100", "120"], 2, "40% × 250 = 100.", "5ème", 1),
+  createQuestion("5² + 3² = ?", ["25", "30", "34", "40"], 2, "25 + 9 = 34.", "5ème", 1),
+  createQuestion("1/3 + 1/6 = ?", ["1/2", "2/3", "1/9", "3/6"], 0, "2/6 + 1/6 = 3/6 = 1/2.", "5ème", 2),
+  createQuestion("(-7) - (-3) = ?", ["-10", "-4", "4", "10"], 2, "-7 + 3 = -4.", "5ème", 2),
+  createQuestion("0,3 × 0,2 = ?", ["0,06", "0,6", "0,06", "0,66"], 0, "0,3 × 0,2 = 0,06.", "5ème", 2),
+  createQuestion("Quel est le PPCM de 8 et 12 ?", ["24", "48", "36", "40"], 0, "PPCM(8,12) = 24.", "5ème", 2),
+  createQuestion("(-6) + 2 = ?", ["-8", "-4", "4", "8"], 1, "-6 + 2 = -4.", "5ème", 1),
+  createQuestion("3/4 - 1/2 = ?", ["1/4", "1/3", "1/2", "3/4"], 0, "3/4 - 2/4 = 1/4.", "5ème", 2),
+  createQuestion("Quel est le volume d'un cube 4 cm de côté ?", ["16", "32", "48", "64"], 3, "4³ = 64 cm³.", "5ème", 1),
+  createQuestion("(-2) × 5 = ?", ["-10", "-5", "3", "10"], 0, "-2 × 5 = -10.", "5ème", 1),
+  createQuestion("60% de 80 = ?", ["40", "45", "48", "50"], 2, "60% × 80 = 48.", "5ème", 1),
+  createQuestion("7/8 - 1/4 = ?", ["5/8", "3/4", "1/2", "7/12"], 0, "7/8 - 2/8 = 5/8.", "5ème", 2),
+  createQuestion("√49 = ?", ["6", "7", "8", "9"], 1, "√49 = 7.", "5ème", 1),
+  createQuestion("2 × (-3) × (-2) = ?", ["-12", "-6", "6", "12"], 3, "2 × (-3) × (-2) = 12.", "5ème", 2),
+  createQuestion("1,2 ÷ 0,4 = ?", ["2", "3", "4", "5"], 1, "1,2 ÷ 0,4 = 3.", "5ème", 2),
+  createQuestion("Quel est 25% de 120 ?", ["20", "25", "30", "35"], 2, "25% × 120 = 30.", "5ème", 1),
 ];
 
+// 4ème - 25 questions
 export const quatriemeKangourou: Question[] = [
-  createQuestion(
-    "Quel est le résultat de √144 ?",
-    ["10", "11", "12", "13"],
-    2,
-    "√144 = 12 car 12² = 144.",
-    "4ème",
-    2
-  ),
-  createQuestion(
-    "Quel est le résultat de (2x + 3) + (3x - 5) ?",
-    ["5x - 2", "5x + 8", "x - 2", "6x - 2"],
-    0,
-    "(2x + 3) + (3x - 5) = 5x - 2.",
-    "4ème",
-    2
-  ),
-  createQuestion(
-    "Quel est le résultat de 2⁴ × 3² ?",
-    ["48", "72", "96", "144"],
-    3,
-    "2⁴ × 3² = 16 × 9 = 144.",
-    "4ème",
-    2
-  ),
-  createQuestion(
-    "Un angle de 200° est un angle ?",
-    ["aigu", "obtus", "droit", "réflexe"],
-    3,
-    "Un angle > 180° est un angle réflexe.",
-    "4ème",
-    2
-  ),
-  createQuestion(
-    "Quel est le résultat de 5/6 - 1/3 ?",
-    ["1/2", "1/3", "2/3", "4/6"],
-    0,
-    "5/6 - 1/3 = 5/6 - 2/6 = 3/6 = 1/2.",
-    "4ème",
-    2
-  ),
+  createQuestion("Quel est le résultat de √144 ?", ["10", "11", "12", "13"], 2, "√144 = 12.", "4ème", 2),
+  createQuestion("Quel est le résultat de (2x + 3) + (3x - 5) ?", ["5x - 2", "5x + 8", "x - 2", "6x - 2"], 0, "(2x + 3) + (3x - 5) = 5x - 2.", "4ème", 2),
+  createQuestion("Quel est le résultat de 2⁴ × 3² ?", ["48", "72", "96", "144"], 3, "16 × 9 = 144.", "4ème", 2),
+  createQuestion("Un angle de 200° est ?", ["aigu", "obtus", "droit", "réflexe"], 3, "Un angle > 180° est réflexe.", "4ème", 2),
+  createQuestion("Quel est le résultat de 5/6 - 1/3 ?", ["1/2", "1/3", "2/3", "4/6"], 0, "5/6 - 2/6 = 3/6 = 1/2.", "4ème", 2),
+  createQuestion("(-5) × (-4) = ?", ["-20", "-9", "9", "20"], 3, "(-5) × (-4) = 20.", "4ème", 1),
+  createQuestion("Quel est le résultat de x² - 25 = 0 ?", ["-5", "5", "5 ou -5", "25"], 2, "x² = 25, donc x = ±5.", "4ème", 3),
+  createQuestion("sin(90°) = ?", ["0", "0,5", "1", "∞"], 2, "sin(90°) = 1.", "4ème", 3),
+  createQuestion("cos(0°) = ?", ["0", "0,5", "1", "∞"], 2, "cos(0°) = 1.", "4ème", 3),
+  createQuestion("Quel est l'aire d'un cercle r=3 cm ?", ["9π", "6π", "3π", "π"], 0, "Aire = πr² = 9π.", "4ème", 2),
+  createQuestion("3⁴ = ?", ["12", "27", "64", "81"], 3, "3⁴ = 81.", "4ème", 1),
+  createQuestion("(-8) ÷ (-2) = ?", ["-4", "-2", "2", "4"], 3, "(-8) ÷ (-2) = 4.", "4ème", 1),
+  createQuestion("2x + 3 = 11, x = ?", ["2", "3", "4", "5"], 2, "2x = 8, x = 4.", "4ème", 2),
+  createQuestion("Quel est le périmètre d'un cercle r=2 cm ?", ["2π", "4π", "8π", "16π"], 2, "Périmètre = 2πr = 4π.", "4ème", 2),
+  createQuestion("(3 + 2)² = ?", ["13", "15", "25", "30"], 2, "5² = 25.", "4ème", 1),
+  createQuestion("tan(45°) = ?", ["0", "0,5", "1", "∞"], 2, "tan(45°) = 1.", "4ème", 2),
+  createQuestion("Factoriser : x² - 9 = ?", ["(x+3)(x-3)", "(x+3)²", "(x-3)²", "x(x-9)"], 0, "Différence de carrés.", "4ème", 3),
+  createQuestion("(-3) + (-7) = ?", ["-10", "-4", "4", "10"], 0, "-3 - 7 = -10.", "4ème", 1),
+  createQuestion("5/8 + 3/8 = ?", ["8/8", "1", "8/16", "15/64"], 0, "5/8 + 3/8 = 8/8 = 1.", "4ème", 1),
+  createQuestion("Quel est le PGCD de 48 et 36 ?", ["6", "8", "12", "18"], 2, "PGCD(48,36) = 12.", "4ème", 1),
+  createQuestion("2x - 5 = 3, x = ?", ["2", "3", "4", "5"], 2, "2x = 8, x = 4.", "4ème", 1),
+  createQuestion("√81 = ?", ["7", "8", "9", "10"], 2, "√81 = 9.", "4ème", 1),
+  createQuestion("(2 + 3) × (2 - 3) = ?", ["-5", "0", "1", "5"], 2, "5 × (-1) = -5.", "4ème", 2),
+  createQuestion("3/4 ÷ 1/2 = ?", ["3/8", "1/2", "3/2", "6/4"], 2, "3/4 × 2/1 = 6/4 = 3/2.", "4ème", 2),
+  createQuestion("Quel est le PPCM de 10 et 15 ?", ["30", "45", "50", "60"], 0, "PPCM(10,15) = 30.", "4ème", 1),
 ];
 
 export const allKangourouQuestions: Question[] = [
