@@ -61,6 +61,6 @@ for q in questions:
     by_level[level] = by_level.get(level, 0) + 1
 
 print(f"✅ Created {output_path} with {len(questions)} questions")
-print(f"Breakdown by level:")
+print("Breakdown by level:")
 for level in sorted(by_level.keys()):
     print(f"  {level}: {by_level[level]}")

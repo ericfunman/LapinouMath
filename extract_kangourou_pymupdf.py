@@ -29,7 +29,6 @@ def extract_kangourou(pdf_path: str, level: str, year: int) -> List[Dict]:
     q_num = 0
     in_question = False
     in_options = False
-    question_start_idx = 0
 
     for page_num, page in enumerate(doc):
         text = page.get_text()
@@ -84,7 +83,6 @@ def extract_kangourou(pdf_path: str, level: str, year: int) -> List[Dict]:
 def main():
     """Main extraction function"""
     pdf_dir = Path("kangourou")
-    output_dir = Path("src/data")
     
     if not pdf_dir.exists():
         print(f"❌ Dossier non trouvé: {pdf_dir}")
@@ -114,7 +112,7 @@ def main():
                 
                 # Affiche les premières questions
                 if qs:
-                    print(f"   Exemple:")
+                    print("   Exemple:")
                     q = qs[0]
                     print(f"   Q: {q['question'][:80]}...")
                     print(f"   Options: {len(q['options'])}")
@@ -125,7 +123,7 @@ def main():
             print(f"\n⚠️  Fichier non trouvé: {path}")
     
     if all_questions:
-        print(f"\n📊 RÉSUMÉ TOTAL")
+        print("\n📊 RÉSUMÉ TOTAL")
         print("="*60)
         print(f"Total questions extraites: {len(all_questions)}")
         
@@ -138,12 +136,12 @@ def main():
             by_level[level] = by_level.get(level, 0) + 1
             by_difficulty[diff] = by_difficulty.get(diff, 0) + 1
         
-        print(f"\nPar niveau:")
+        print("\nPar niveau:")
         for level in ['CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']:
             if level in by_level:
                 print(f"  {level}: {by_level[level]}")
         
-        print(f"\nPar difficulté:")
+        print("\nPar difficulté:")
         for diff in [1, 2, 3, 4]:
             if diff in by_difficulty:
                 print(f"  Niveau {diff}: {by_difficulty[diff]}")
@@ -161,7 +159,7 @@ def main():
         print(f"📁 Fichier CSV sauvegardé: {csv_file}")
         
         print("\n✅ Extraction terminée!")
-        print(f"Vous pouvez valider les questions et utiliser le JSON pour l'intégration")
+        print("Vous pouvez valider les questions et utiliser le JSON pour l'intégration")
     else:
         print("\n❌ Aucune question extraite")
 

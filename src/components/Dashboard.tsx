@@ -119,14 +119,15 @@ export default function Dashboard(props: Readonly<Props>) {
               : 0;
 
             return (
-              <div
+              <button
                 key={domain}
-                className={`bg-white rounded-2xl shadow-lg p-6 transition-all ${
+                className={`bg-white rounded-2xl shadow-lg p-6 transition-all text-left ${
                   isUnlocked 
                     ? 'hover:shadow-2xl hover:scale-105 cursor-pointer' 
                     : 'opacity-50 cursor-not-allowed'
                 }`}
                 onClick={() => isUnlocked && onStartQuiz(profile.currentLevel, domain as MathDomain)}
+                disabled={!isUnlocked}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -172,7 +173,7 @@ export default function Dashboard(props: Readonly<Props>) {
                     <p>dans le domaine précédent !</p>
                   </div>
                 )}
-              </div>
+              </button>
             );
           })}
 

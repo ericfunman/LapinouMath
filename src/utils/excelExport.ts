@@ -130,7 +130,7 @@ export function generateQuestionsCSV(questions: Question[]): string {
       const str = String(cell);
       // Escape quotes and wrap in quotes if contains comma or quotes
       if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-        return `"${str.replace(/"/g, '""')}"`;
+        return `"${str.replaceAll('"', '""')}"`;
       }
       return str;
     }).join(',')

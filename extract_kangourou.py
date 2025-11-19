@@ -39,7 +39,7 @@ def parse_kangourou_questions(text, subject_code):
     # Kangourou format: number followed by question text
     
     # Pattern to find questions
-    question_pattern = r'(\d+)\.\s*(.+?)(?=\d+\.|$)'
+    question_pattern = r'(\d+)\.\s*(.+)(?=\d+\.|$)'
     matches = re.finditer(question_pattern, text, re.DOTALL)
     
     for match in matches:
@@ -70,16 +70,6 @@ def main():
     if not pdf_dir.exists():
         print(f"Directory not found: {pdf_dir}")
         return
-    
-    all_questions = {
-        'CE2': [],
-        'CM1': [],
-        'CM2': [],
-        '6ème': [],
-        '5ème': [],
-        '4ème': [],
-        '3ème': []
-    }
     
     # Process each PDF
     for pdf_file in pdf_dir.glob("kangourou2020*.pdf"):

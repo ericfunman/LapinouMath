@@ -14,12 +14,6 @@ def split_into_questions(text: str) -> List[str]:
     Split PDF text into individual questions
     Kangourou questions usually start with verb (Quel, Combien, Laquelle, etc.)
     """
-    # Common question starters in French
-    question_starters = [
-        r'(?:Quel|Quelle|Quels|Quelles|Que|Qui|Combien|Lequel|Laquelle|Où|Comment|Quand)',
-        r'(?:Marie|Jean|Tom|Julie|Jeanne|Luc|Louise|Lucas|Noah|Léa|Jade|Louis|Manon|Claudie|Anne|Mathis)',
-    ]
-    
     # Split by patterns that likely indicate new question
     # Usually a capitalized word followed by specific text patterns
     splitter = r'\n(?=[A-Z][a-z]+(?:\s+(?:co|re|a|de|est|su|vi|se|pl|dé|d\'|l\')|(?:colorie|écrit|dessine|regarde|place|mesure|a\s+exactement|plie|construit|doit|vaut|ont|sort|rencontre|se\s|peut)))'
@@ -78,8 +72,8 @@ def extract_kangourou_smart(pdf_path: str, level: str, year: int) -> List[Dict]:
     doc.close()
     
     # Remove header/footer noise (like page numbers, KANGOUROU 2020, etc.)
-    full_text = re.sub(r'KANGOUROU \d+.*?\n', '', full_text, flags=re.IGNORECASE)
-    full_text = re.sub(r'(?:E|B|C)-\d+', '', full_text)
+    full_text = re.sub(r'KANGOUROU \d+[^\n]*\n', '', full_text, flags=re.IGNORECASE)
+    full_text = re.sub(r'[EBC]-\d+', '', full_text)
     full_text = re.sub(r'Sujet [A-Z]', '', full_text)
     
     # Split into questions
@@ -132,7 +126,7 @@ def main():
             print(f"   ✅ {len(qs)} questions extraites")
             
             if qs:
-                print(f"\n   Exemples:")
+                print("\n   Exemples:")
                 for i, q in enumerate(qs[:3]):
                     print(f"\n   Q{i+1} (Difficulté {q['difficulty']}):")
                     print(f"      {q['question'][:80]}...")
@@ -143,7 +137,7 @@ def main():
             print(f"\n⚠️  {pdf_file} non trouvé")
     
     if all_questions:
-        print(f"\n\n📊 RÉSUMÉ")
+        print("\n\n📊 RÉSUMÉ")
         print("="*70)
         print(f"Total questions: {len(all_questions)}")
         
@@ -153,11 +147,11 @@ def main():
             by_level[q['level']] = by_level.get(q['level'], 0) + 1
             by_difficulty[q['difficulty']] = by_difficulty.get(q['difficulty'], 0) + 1
         
-        print(f"\nPar niveau:")
+        print("\nPar niveau:")
         for level in ['CE2', '6ème', '4ème']:
             print(f"  {level}: {by_level.get(level, 0)}")
         
-        print(f"\nPar difficulté:")
+        print("\nPar difficulté:")
         for d in [1, 2, 3]:
             print(f"  Niveau {d}: {by_difficulty.get(d, 0)}")
         
@@ -167,7 +161,7 @@ def main():
             json.dump(all_questions, f, ensure_ascii=False, indent=2)
         
         print(f"\n✅ Fichier sauvegardé: {json_file}")
-        print(f"   Prêt pour intégration dans LapinouMath")
+        print("   Prêt pour intégration dans LapinouMath")
     else:
         print("\n❌ Aucune question extraite")
 

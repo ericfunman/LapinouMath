@@ -23,7 +23,7 @@ def extract_kangourou_v2(pdf_path: str, level: str, year: int) -> List[Dict]:
     
     # Split by question markers (numbered like "1", "2", "3" at start of lines or after newlines)
     # Pattern: newline + optional spaces + number + ) or . + space + question text
-    question_pattern = r'\n\s*(\d+)\)?\s+([A-Z].+?)(?=\n\s*\d+\)|$)'
+    question_pattern = r'\n\s*(\d+)\)?\s+([A-Z].+)(?=\n\s*\d+\)|$)'
     
     q_matches = list(re.finditer(question_pattern, full_text, re.DOTALL))
     
@@ -33,7 +33,7 @@ def extract_kangourou_v2(pdf_path: str, level: str, year: int) -> List[Dict]:
         
         # Extract options from question text
         # Format: A) option text B) option text C) option text D) option text E) option text
-        option_pattern = r'([A-E]\))\s*([^\n]*?)(?=[A-E]\)|$)'
+        option_pattern = r'([A-E]\))\s*([^\n]*)(?=[A-E]\)|$)'
         option_matches = list(re.finditer(option_pattern, q_text))
         
         if len(option_matches) >= 4:
@@ -129,7 +129,7 @@ def main():
             # Show example
             if qs:
                 q = qs[0]
-                print(f"\n   Exemple:")
+                print("\n   Exemple:")
                 print(f"   Q: {q['question'][:60]}...")
                 print(f"   Options: {q['options']}")
                 if q['correctAnswer'] is not None:
@@ -141,7 +141,7 @@ def main():
             print(f"\n⚠️  {questions_file} non trouvé")
     
     if all_questions:
-        print(f"\n\n📊 RÉSUMÉ FINAL")
+        print("\n\n📊 RÉSUMÉ FINAL")
         print("="*70)
         print(f"Total questions: {len(all_questions)}")
         
@@ -156,12 +156,12 @@ def main():
             by_level[level] = by_level.get(level, 0) + 1
             by_difficulty[diff] = by_difficulty.get(diff, 0) + 1
         
-        print(f"\nPar niveau:")
+        print("\nPar niveau:")
         for level in ['CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']:
             if level in by_level:
                 print(f"  {level}: {by_level[level]}")
         
-        print(f"\nPar difficulté:")
+        print("\nPar difficulté:")
         for diff in [1, 2, 3]:
             if diff in by_difficulty:
                 print(f"  Niveau {diff}: {by_difficulty[diff]}")

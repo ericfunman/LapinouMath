@@ -120,7 +120,7 @@ if errors:
 
 if warnings:
     print("\n" + "=" * 80)
-    print(f"MATH WARNINGS (showing first 50):")
+    print("MATH WARNINGS (showing first 50):")
     print("=" * 80)
     for i, warn in enumerate(warnings[:50], 1):
         print(f"\n{i}. {warn['type']}")

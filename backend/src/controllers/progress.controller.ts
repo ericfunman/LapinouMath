@@ -45,15 +45,16 @@ export async function updateProgress(req: AuthenticatedRequest, res: Response) {
 
     let progress = await progressService.getProgressByDomain(Number.parseInt(profileId, 10), domain);
 
-    if (!progress) {
+    if (progress) {
+      progress = await progressService.updateProgressRecord(progress.id, level, stats);
+    } else {
       progress = await progressService.createProgressRecord(
         Number.parseInt(profileId, 10),
         level,
         domain,
         stats || {}
       );
-    } else {
-      progress = await progressService.updateProgressRecord(progress.id, level, stats);
+    }
     }
 
     res.json(progress);
@@ -85,10 +86,10 @@ export async function syncProgress(req: AuthenticatedRequest, res: Response) {
       const { domain, level, stats } = item;
       let progress = await progressService.getProgressByDomain(profileId, domain);
 
-      if (!progress) {
-        progress = await progressService.createProgressRecord(profileId, level, domain, stats || {});
-      } else {
+      if (progress) {
         progress = await progressService.updateProgressRecord(progress.id, level, stats);
+      } else {
+        progress = await progressService.createProgressRecord(profileId, level, domain, stats || {});
       }
       results.push(progress);
     }

@@ -7,7 +7,7 @@ interface Props {
   onSelectProfile: (profile: UserProfile) => void;
 }
 
-export default function ProfileSelection({ onSelectProfile }: Props) {
+export default function ProfileSelection({ onSelectProfile }: Readonly<Props>) {
   const [profiles, setProfiles] = useState<UserProfile[]>(getAllProfiles());
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newName, setNewName] = useState('');
@@ -85,10 +85,11 @@ export default function ProfileSelection({ onSelectProfile }: Props) {
         {showCreateForm && (
           <div className="space-y-4">
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">
+              <label htmlFor="name-input" className="block text-gray-700 font-semibold mb-2">
                 Prénom de l'élève
               </label>
               <input
+                id="name-input"
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
@@ -99,10 +100,11 @@ export default function ProfileSelection({ onSelectProfile }: Props) {
             </div>
 
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">
+              <label htmlFor="level-select" className="block text-gray-700 font-semibold mb-2">
                 Niveau scolaire
               </label>
               <select
+                id="level-select"
                 value={newLevel}
                 onChange={(e) => setNewLevel(e.target.value as GradeLevel)}
                 className="w-full px-4 py-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:border-primary"

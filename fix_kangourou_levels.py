@@ -61,6 +61,6 @@ ts_content += """];
 with open('src/data/kangourouQuestions.ts', 'w', encoding='utf-8') as f:
     f.write(ts_content)
 
-print(f"✅ Fixed kangourouQuestions.ts!")
+print("✅ Fixed kangourouQuestions.ts!")
 print(f"Total questions: {len(data)}")
 print("Level conversion: 4e→4ème, 5e→5ème, 6e→6ème, etc.")

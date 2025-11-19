@@ -47,6 +47,6 @@ ts_content += """];
 with open('src/data/kangourouQuestions.ts', 'w', encoding='utf-8') as f:
     f.write(ts_content)
 
-print(f"✅ Fixed kangourouQuestions.ts!")
+print("✅ Fixed kangourouQuestions.ts!")
 print(f"Total questions: {len(data)}")
 print("Format conversion: question→q, options→opts, correctAnswer→ans, explanation→exp")

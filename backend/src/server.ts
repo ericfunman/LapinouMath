@@ -68,6 +68,6 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
-start();
+await start();
 
 export default app;

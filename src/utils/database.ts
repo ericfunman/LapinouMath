@@ -27,7 +27,7 @@ export const initDB = (): Promise<IDBDatabase> => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => {
-      reject(request.error);
+      reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
     };
 
     request.onsuccess = () => {
@@ -79,7 +79,7 @@ export const saveProfiles = async (profiles: any[]): Promise<void> => {
     };
 
     transaction.oncomplete = () => resolve();
-    transaction.onerror = () => reject(transaction.error);
+    transaction.onerror = () => reject(transaction.error instanceof Error ? transaction.error : new Error(String(transaction.error)));
   });
 };
 
@@ -95,7 +95,7 @@ export const loadProfiles = async (): Promise<any[]> => {
     };
 
     request.onerror = () => {
-      reject(request.error);
+      reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
     };
   });
 };
@@ -108,7 +108,7 @@ export const deleteProfile = async (profileId: string): Promise<void> => {
     const request = store.delete(profileId);
 
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
+    request.onerror = () => reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
   });
 };
 
@@ -131,7 +131,7 @@ export const saveQuestions = async (questions: any[]): Promise<void> => {
     };
 
     transaction.oncomplete = () => resolve();
-    transaction.onerror = () => reject(transaction.error);
+    transaction.onerror = () => reject(transaction.error instanceof Error ? transaction.error : new Error(String(transaction.error)));
   });
 };
 
@@ -147,7 +147,7 @@ export const loadQuestions = async (): Promise<any[]> => {
     };
 
     request.onerror = () => {
-      reject(request.error);
+      reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
     };
   });
 };
@@ -160,7 +160,7 @@ export const updateQuestion = async (question: any): Promise<void> => {
     const request = store.put(question);
 
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
+    request.onerror = () => reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
   });
 };
 
@@ -177,7 +177,7 @@ export const getQuestionsByLevelDomain = async (level: string, domain: string): 
     };
 
     request.onerror = () => {
-      reject(request.error);
+      reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
     };
   });
 };
@@ -205,7 +205,7 @@ export const reportQuestionError = async (report: ErrorReport): Promise<void> =>
     });
 
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
+    request.onerror = () => reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
   });
 };
 
@@ -221,7 +221,7 @@ export const getErrorReports = async (): Promise<ErrorReport[]> => {
     };
 
     request.onerror = () => {
-      reject(request.error);
+      reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
     };
   });
 };
@@ -234,6 +234,6 @@ export const deleteErrorReport = async (reportId: number): Promise<void> => {
     const request = store.delete(reportId);
 
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
+    request.onerror = () => reject(request.error instanceof Error ? request.error : new Error(String(request.error)));
   });
 };

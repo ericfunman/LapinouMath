@@ -29,7 +29,7 @@ def create_question() -> Optional[Dict]:
         
         while True:
             try:
-                correct = int(input(f"\n✓ Numéro de la bonne réponse (0=A, 1=B, 2=C, 3=D): "))
+                correct = int(input("\n✓ Numéro de la bonne réponse (0=A, 1=B, 2=C, 3=D): "))
                 if correct not in [0, 1, 2, 3]:
                     raise ValueError
                 break

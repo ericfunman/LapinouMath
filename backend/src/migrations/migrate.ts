@@ -85,7 +85,10 @@ export async function runMigrations(): Promise<void> {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runMigrations()
-    .then(() => process.exit(0))
-    .catch(() => process.exit(1));
+  try {
+    await runMigrations();
+    process.exit(0);
+  } catch {
+    process.exit(1);
+  }
 }

@@ -17,9 +17,9 @@ def clean_question_text(text: str) -> str:
     text = re.sub(r'L\'association.*?points chacune\.\s*', '', text, flags=re.DOTALL)
     
     # Remove copyright/footer stuff
-    text = re.sub(r'Toute représentation.*?\n', '', text)
-    text = re.sub(r'© Art Culture.*?\n', '', text)
-    text = re.sub(r'Kangourou des mathématiques.*?\n', '', text)
+    text = re.sub(r'Toute représentation[^\n]*\n', '', text)
+    text = re.sub(r'© Art Culture[^\n]*\n', '', text)
+    text = re.sub(r'Kangourou des mathématiques[^\n]*\n', '', text)
     
     # Clean up multiple newlines
     text = re.sub(r'\n\s*\n+', '\n', text)
@@ -75,7 +75,7 @@ def main():
     print(f"   After cleaning: {len(valid_questions)} valid questions")
     
     if valid_questions:
-        print(f"\n📊 Breakdown by level:")
+        print("\n📊 Breakdown by level:")
         by_level = {}
         for q in valid_questions:
             level = q['level']
@@ -85,7 +85,7 @@ def main():
             print(f"  {level}: {by_level[level]}")
         
         # Show some examples
-        print(f"\n📝 Exemples:")
+        print("\n📝 Exemples:")
         for i, q in enumerate(valid_questions[:3], 1):
             print(f"\n  Q{i} ({q['level']}, Difficulté {q['difficulty']}):")
             print(f"     {q['question'][:80]}...")

@@ -11,7 +11,7 @@ interface Props {
   onExit: () => void;
 }
 
-export default function QuizScreen({ level, domain, onComplete, onExit }: Props) {
+export default function QuizScreen({ level, domain, onComplete, onExit }: Readonly<Props>) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -223,7 +223,7 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
 
               return (
                 <button
-                  key={index}
+                  key={`option-${currentQuestion.id}-${index}`}
                   onClick={() => handleAnswerSelect(index)}
                   disabled={selectedAnswer !== null}
                   className={`${bgColor} p-4 rounded-xl text-left text-lg font-semibold transition-all ${
@@ -267,7 +267,7 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
             </h4>
             <div className="space-y-3">
               {currentQuestion.lesson.steps.map((step, index) => (
-                <div key={index} className="flex items-start gap-3">
+                <div key={`step-${currentQuestion.id}-${index}`} className="flex items-start gap-3">
                   <span className="bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">
                     {index + 1}
                   </span>

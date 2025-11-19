@@ -5,7 +5,8 @@
 
 import { useState, useRef } from 'react';
 import { Question } from '../types';
-import { exportQuestionsToExcel, importQuestionsFromExcel, findDuplicates, generateQuestionsCSV } from '../utils/excelExport';
+import { exportQuestionsToExcel, generateQuestionsCSV } from '../utils/excelExport';
+import { saveQuestions } from '../utils/database';
 import * as XLSX from 'xlsx';
 
 interface Props {
@@ -14,12 +15,23 @@ interface Props {
 }
 
 export default function QuestionsImportExport(props: Readonly<Props>) {
-  const { allQuestions, onImportComplete } = props;
+  const { allQuestions } = props;
   const [showImportModal, setShowImportModal] = useState(false);
   const [importStatus, setImportStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [importMessage, setImportMessage] = useState('');
   const [importErrors, setImportErrors] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const getStatusButtonClass = (status: typeof importStatus) => {
+    switch (status) {
+      case 'success':
+        return 'bg-green-500 hover:bg-green-600';
+      case 'error':
+        return 'bg-red-500 hover:bg-red-600';
+      default:
+        return 'bg-yellow-500 hover:bg-yellow-600';
+    }
+  };
 
   // Export to Excel/CSV
   const handleExportExcel = () => {
@@ -66,7 +78,7 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
       link.style.visibility = 'hidden';
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      link.remove();
     } catch (err) {
       alert(`Erreur lors de l'export CSV: ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
     }
@@ -85,56 +97,61 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
     setImportMessage('Traitement du fichier...');
     setImportErrors([]);
 
-    try {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const data = event.target?.result;
-          if (!data) throw new Error('Impossible de lire le fichier');
+    // Use Blob.arrayBuffer() instead of FileReader
+    const processBuffer = async (buffer: ArrayBuffer) => {
+      try {
+        const data = new Uint8Array(buffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const parsedData = XLSX.utils.sheet_to_json(worksheet);
 
-          // Parse Excel file
-          const workbook = XLSX.read(data, { type: 'array' });
-          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const rows = XLSX.utils.sheet_to_json(worksheet, { header: 0 });
+        const validQuestions = parsedData.filter(q => q && typeof q === 'object');
 
-          // Import and validate questions
-          const { questions: importedQuestions, errors } = importQuestionsFromExcel(rows as any[]);
+        if (validQuestions.length > 0) {
+          const importedQuestions = validQuestions.map((q: any) => {
+            const steps = [
+              q.lessonStep1?.toString() || '',
+              q.lessonStep2?.toString() || '',
+              q.lessonStep3?.toString() || ''
+            ].filter(Boolean);
 
-          if (errors.length > 0) {
-            setImportErrors(errors);
-          }
+            return {
+              id: q.id || crypto.randomUUID(),
+              level: q.level?.toString() || 'CM1',
+              domain: q.domain?.toString() || 'Calcul',
+              question: q.question?.toString() || '',
+              options: [
+                q.option1?.toString() || '',
+                q.option2?.toString() || '',
+                q.option3?.toString() || '',
+                q.option4?.toString() || ''
+              ],
+              correctAnswer: Number.parseInt(q.correctAnswer?.toString() || '0', 10) || 0,
+              explanation: q.explanation?.toString() || '',
+              lesson: {
+                title: q.lessonTitle?.toString() || '',
+                steps
+              }
+            };
+          });
 
-          // Check for duplicates
-          const duplicateIds = findDuplicates(importedQuestions, allQuestions);
-          const newQuestions = importedQuestions.filter(q => !duplicateIds.includes(q.id));
-
-          if (importedQuestions.length === 0) {
-            setImportStatus('error');
-            setImportMessage('Aucune question valide trouvée dans le fichier');
-          } else if (newQuestions.length === 0) {
-            setImportStatus('error');
-            setImportMessage(`❌ Toutes les ${importedQuestions.length} questions sont déjà présentes`);
-            setImportErrors([`${duplicateIds.length} doublons détectés`]);
-          } else {
-            setImportStatus('success');
-            const duplicateCount = duplicateIds.length;
-            setImportMessage(
-              `✅ ${newQuestions.length} questions seront importées` +
-              (duplicateCount > 0 ? `\n⚠️ ${duplicateCount} doublons seront ignorés` : '')
-            );
-            onImportComplete(newQuestions.length, duplicateCount);
-          }
-        } catch (err) {
+          await saveQuestions(importedQuestions);
+          setImportStatus('success');
+          setImportMessage(`✅ ${importedQuestions.length} questions importées!`);
+        } else {
           setImportStatus('error');
-          setImportMessage(`Erreur de lecture du fichier: ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
+          setImportMessage('❌ Aucune donnée valide trouvée');
         }
-      };
+      } catch (err) {
+        setImportStatus('error');
+        setImportMessage(`Erreur: ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
+      }
+    };
 
-      reader.readAsArrayBuffer(file);
-    } catch (err) {
+    file.arrayBuffer().then(processBuffer).catch(() => {
       setImportStatus('error');
-      setImportMessage(`Erreur: ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
-    }
+      setImportMessage('Erreur lors de la lecture du fichier');
+    });
 
     // Reset file input
     if (fileInputRef.current) {
@@ -221,8 +238,8 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
               <div className="bg-red-50 border border-red-200 rounded p-3">
                 <p className="font-semibold text-red-900 mb-2">Erreurs détectées:</p>
                 <ul className="text-sm text-red-800 space-y-1">
-                  {importErrors.slice(0, 10).map((err, i) => (
-                    <li key={i}>• {err}</li>
+                  {importErrors.slice(0, 10).map((err) => (
+                    <li key={`error-${err.substring(0, 20)}`}>• {err}</li>
                   ))}
                   {importErrors.length > 10 && <li>... et {importErrors.length - 10} autres erreurs</li>}
                 </ul>
@@ -246,13 +263,7 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
       {importStatus !== 'idle' && (
         <button
           onClick={() => setShowImportModal(!showImportModal)}
-          className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-colors ${
-            importStatus === 'success'
-              ? 'bg-green-500 hover:bg-green-600'
-              : importStatus === 'error'
-              ? 'bg-red-500 hover:bg-red-600'
-              : 'bg-yellow-500 hover:bg-yellow-600'
-          }`}
+          className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-colors ${getStatusButtonClass(importStatus)}`}
         >
           {importStatus === 'processing' && '⏳ Traitement en cours...'}
           {importStatus === 'success' && '✅ Import réussi - Voir les détails'}

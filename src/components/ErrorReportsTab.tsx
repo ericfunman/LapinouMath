@@ -43,7 +43,7 @@ export default function ErrorReportsTab() {
     if (selectedReports.size === reports.length) {
       setSelectedReports(new Set());
     } else {
-      setSelectedReports(new Set(reports.map((_, i) => i)));
+      setSelectedReports(new Set(reports.map((r) => r.id!)));
     }
   };
 
@@ -51,14 +51,11 @@ export default function ErrorReportsTab() {
     if (selectedReports.size === 0) return;
     
     try {
-      // Delete reports by index (reverse order to avoid index shifting)
-      const indicesToDelete = Array.from(selectedReports).sort((a, b) => b - a);
+      // Delete reports by ID
+      const idsToDelete = Array.from(selectedReports);
       
-      for (const index of indicesToDelete) {
-        const report = reports[index];
-        if (report.id) {
-          await deleteErrorReport(report.id);
-        }
+      for (const reportId of idsToDelete) {
+        await deleteErrorReport(reportId);
       }
 
       // Reload reports
@@ -203,15 +200,15 @@ Rapport ${i + 1}:
           )}
 
           <div className="reports-list">
-            {reports.map((report, index) => (
+            {reports.map((report) => (
               <div 
-                key={index} 
-                className={`report-item ${selectedReports.has(index) ? 'selected' : ''}`}
+                key={report.id} 
+                className={`report-item ${selectedReports.has(report.id!) ? 'selected' : ''}`}
               >
                 <input
                   type="checkbox"
-                  checked={selectedReports.has(index)}
-                  onChange={() => toggleReportSelection(index)}
+                  checked={selectedReports.has(report.id!)}
+                  onChange={() => toggleReportSelection(report.id!)}
                   className="report-checkbox"
                 />
                 

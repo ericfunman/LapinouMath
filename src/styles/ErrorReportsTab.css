@@ -77,7 +77,7 @@
 
 .btn-export {
   background: #4CAF50;
-  color: white;
+  color: #000000;
 }
 
 .btn-export:hover:not(:disabled) {
@@ -86,7 +86,7 @@
 
 .btn-email {
   background: #2196F3;
-  color: white;
+  color: #000000;
 }
 
 .btn-email:hover:not(:disabled) {
@@ -95,7 +95,7 @@
 
 .btn-delete {
   background: #f44336;
-  color: white;
+  color: #000000;
 }
 
 .btn-delete:hover:not(:disabled) {

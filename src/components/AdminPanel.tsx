@@ -232,7 +232,7 @@ export default function AdminPanel(props: Readonly<Props>) {
                       <div className="grid grid-cols-2 gap-2 mb-3">
                         {question.options.map((option, idx) => (
                           <div
-                            key={idx}
+                            key={`option-${question.id}-${idx}`}
                             className={`p-3 rounded-lg border-2 ${
                               idx === question.correctAnswer
                                 ? 'bg-green-100 border-green-500 font-bold'
@@ -281,8 +281,9 @@ export default function AdminPanel(props: Readonly<Props>) {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-bold mb-2">Question</label>
+                <label htmlFor="question-input" className="block text-sm font-bold mb-2">Question</label>
                 <textarea
+                  id="question-input"
                   value={editingQuestion.question}
                   onChange={(e) => setEditingQuestion({...editingQuestion, question: e.target.value})}
                   className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary focus:outline-none"
@@ -291,7 +292,7 @@ export default function AdminPanel(props: Readonly<Props>) {
               </div>
 
               {editingQuestion.options.map((option, idx) => (
-                <div key={idx}>
+                <div key={`edit-option-${editingQuestion.id}-${idx}`}>
                   <label className="block text-sm font-bold mb-2">
                     Option {idx + 1} {idx === editingQuestion.correctAnswer && '✅ (Correcte)'}
                   </label>
@@ -321,8 +322,9 @@ export default function AdminPanel(props: Readonly<Props>) {
               ))}
 
               <div>
-                <label className="block text-sm font-bold mb-2">Explication</label>
+                <label htmlFor="explication-input" className="block text-sm font-bold mb-2">Explication</label>
                 <textarea
+                  id="explication-input"
                   value={editingQuestion.explanation}
                   onChange={(e) => setEditingQuestion({...editingQuestion, explanation: e.target.value})}
                   className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary focus:outline-none"
@@ -330,7 +332,7 @@ export default function AdminPanel(props: Readonly<Props>) {
                 />
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex gap-2">
                 <button
                   onClick={handleSaveEdit}
                   disabled={isSaving}
