@@ -1,3 +1,5 @@
+import emailjs from '@emailjs/browser';
+
 // EmailJS Configuration
 // Get these from your EmailJS account at https://dashboard.emailjs.com/
 
@@ -8,5 +10,14 @@ export const EMAILJS_CONFIG = {
 };
 
 // Initialize EmailJS
-import emailjs from '@emailjs/browser';
-emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+export const initEmailJS = () => {
+  try {
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+    console.log('✅ EmailJS initialized successfully');
+  } catch (error) {
+    console.error('❌ Failed to initialize EmailJS:', error);
+  }
+};
+
+// Call init immediately when module loads
+initEmailJS();

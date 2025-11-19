@@ -102,6 +102,7 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
 
   const handleReportError = async () => {
     try {
+      // Save to IndexedDB
       await reportQuestionError({
         questionId: currentQuestion.id,
         level,
@@ -109,6 +110,30 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Props)
         questionText: currentQuestion.question,
         userNote: 'Signalé comme fautif par l\'utilisateur'
       });
+      
+      // Try to send email automatically
+      try {
+        const emailjs = (await import('@emailjs/browser')).default;
+        await emailjs.send(
+          'service_305dfu9',
+          'template_xphq7n2',
+          {
+            to_email: 'lapinae@gmail.com',
+            reports_count: 1,
+            level: level,
+            domain: domain,
+            questionText: currentQuestion.question,
+            userNote: 'Signalé comme fautif par l\'utilisateur',
+            questionId: currentQuestion.id,
+            timestamp: new Date().toLocaleString(),
+            reports_text: `Rapport d'erreur:\n- Niveau: ${level}\n- Domaine: ${domain}\n- Question: ${currentQuestion.question}\n- Date: ${new Date().toLocaleString()}`
+          }
+        );
+        console.log('✅ Email envoyé automatiquement');
+      } catch (emailError) {
+        console.warn('⚠️ Email automatique non envoyé (rapport sauvegardé en local):', emailError);
+      }
+      
       setReportedQuestions(prev => new Set([...prev, currentQuestion.id]));
       setShowReportSuccess(true);
       setTimeout(() => setShowReportSuccess(false), 2000);
