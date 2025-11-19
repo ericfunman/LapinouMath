@@ -213,7 +213,14 @@ export function getAvailableDomains(level: string): string[] {
   const allQuestions = getAllQuestions();
   const levelQuestions = allQuestions.filter(q => q.level === level);
   const uniqueDomains = [...new Set(levelQuestions.map(q => q.domain))];
+  
   // Ordre personnalisé des domaines
   const domainOrder = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre', 'Proportions', 'Kangourou'];
+  
+  // Ensure Kangourou is always included (bonus domain)
+  if (!uniqueDomains.includes('Kangourou')) {
+    uniqueDomains.push('Kangourou');
+  }
+  
   return uniqueDomains.sort((a, b) => domainOrder.indexOf(a) - domainOrder.indexOf(b));
 }
