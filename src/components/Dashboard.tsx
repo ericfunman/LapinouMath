@@ -14,6 +14,21 @@ interface Props {
   onUpdateProfile?: (profile: UserProfile) => void;
 }
 
+const getDomainEmoji = (domain: string): string => {
+  const emojiMap: Record<string, string> = {
+    'Calcul mental': '🧮',
+    'Arithmétique': '➕',
+    'Géométrie': '📐',
+    'Fractions/Décimaux': '🥧',
+    'Mesures': '📏',
+    'Problèmes/Algèbre': '🤔',
+    'Bonus - Défi Rapide': '⚡',
+    'Proportions': '⚖️',
+    'Kangourou': '🦘',
+  };
+  return emojiMap[domain] || '📚';
+};
+
 export default function Dashboard(props: Readonly<Props>) {
   const { profile, onStartQuiz, onLogout, onOpenAdmin } = props;
   const [showAccessoryShop, setShowAccessoryShop] = useState(false);
@@ -110,7 +125,10 @@ export default function Dashboard(props: Readonly<Props>) {
                 onClick={() => isUnlocked && onStartQuiz(profile.currentLevel, domain as MathDomain)}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xl font-bold text-gray-800">{domain}</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{getDomainEmoji(domain)}</span>
+                    <h3 className="text-xl font-bold text-gray-800">{domain}</h3>
+                  </div>
                   {!isUnlocked && <span className="text-2xl">🔒</span>}
                 </div>
 
