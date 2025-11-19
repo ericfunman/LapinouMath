@@ -57,23 +57,29 @@ export const GeometryCanvas: React.FC<GeometryCanvasProps> = ({
     }
   };
 
-  const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    if (question.interactionType === 'draw') {
-      const stage = stageRef.current;
-      if (stage && e.target === e.target.getStage()) {
-        setIsDrawing(true);
-        const pointerPos = stage.getPointerPosition();
-        if (pointerPos) {
-          setDrawingPoints([pointerPos]);
-        }
-      }
+  const handleMouseDown = () => {
+    if (question.interactionType !== 'draw') return;
+    
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    // Toujours commencer le dessin peu importe où on clique sur le canvas
+    setIsDrawing(true);
+    const pointerPos = stage.getPointerPosition();
+    if (pointerPos) {
+      setDrawingPoints([pointerPos]);
     }
   };
 
   const handleMouseUp = () => {
-    if (isDrawing && drawingPoints.length > 0) {
+    if (isDrawing && drawingPoints.length > 1) {
       setIsDrawing(false);
+      // Envoyer les points dessinés
       onInteraction?.('drawn-line', `draw:${JSON.stringify(drawingPoints)}`);
+      // Garder la ligne dessinée visible
+      // setDrawingPoints([]); // Décommentez pour effacer après
+    } else if (isDrawing) {
+      setIsDrawing(false);
       setDrawingPoints([]);
     }
   };
@@ -105,7 +111,7 @@ export const GeometryCanvas: React.FC<GeometryCanvasProps> = ({
         );
 
       case 'line':
-      case 'segment':
+      case 'segment': {
         if (!element.points || element.points.length < 2) return null;
         const flatPoints = element.points.flatMap((p) => [p.x, p.y]);
         return (
@@ -119,6 +125,7 @@ export const GeometryCanvas: React.FC<GeometryCanvasProps> = ({
             cursor={question.interactionType === 'click' ? 'pointer' : 'default'}
           />
         );
+      }
 
       case 'circle':
         return (
@@ -136,7 +143,7 @@ export const GeometryCanvas: React.FC<GeometryCanvasProps> = ({
           />
         );
 
-      case 'polygon':
+      case 'polygon': {
         if (!element.points || element.points.length < 3) return null;
         const polygonPoints = element.points.flatMap((p) => [p.x, p.y]);
         return (
@@ -151,6 +158,7 @@ export const GeometryCanvas: React.FC<GeometryCanvasProps> = ({
             cursor={question.interactionType === 'click' ? 'pointer' : 'default'}
           />
         );
+      }
 
       default:
         return null;
