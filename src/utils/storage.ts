@@ -107,6 +107,7 @@ export function createProfile(name: string, level: GradeLevel): UserProfile {
 }
 
 // Migration: Add missing domains (like Kangourou) to existing profiles
+// Also ensure Kangourou is always unlocked
 export function migrateProfile(profile: UserProfile): UserProfile {
   let updated = false;
   
@@ -118,15 +119,20 @@ export function migrateProfile(profile: UserProfile): UserProfile {
     
     const availableDomains = getAvailableDomains(gradeLevel);
     availableDomains.forEach(domain => {
+      const isKangourou = domain === 'Kangourou';
+      
       if (!profile.progress[gradeLevel][domain]) {
-        // Kangourou is always unlocked (bonus domain)
-        const isKangourou = domain === 'Kangourou';
+        // Create missing domain (Kangourou is always unlocked)
         profile.progress[gradeLevel][domain] = {
           questionsAnswered: 0,
           correctAnswers: 0,
           stars: 0,
           unlocked: isKangourou,
         };
+        updated = true;
+      } else if (isKangourou && !profile.progress[gradeLevel][domain].unlocked) {
+        // Ensure Kangourou is always unlocked if it exists but is locked
+        profile.progress[gradeLevel][domain].unlocked = true;
         updated = true;
       }
     });
