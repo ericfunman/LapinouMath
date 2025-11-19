@@ -7,7 +7,7 @@ import { useState, useRef } from 'react';
 import { Question } from '../types';
 import { exportQuestionsToExcel, generateQuestionsCSV } from '../utils/excelExport';
 import { saveQuestions } from '../utils/database';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 interface Props {
   allQuestions: Question[];
@@ -34,33 +34,60 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
   };
 
   // Export to Excel/CSV
-  const handleExportExcel = () => {
+  const handleExportExcel = async () => {
     try {
       const { headers, rows } = exportQuestionsToExcel(allQuestions);
       
-      // Create workbook and worksheet
-      const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Questions');
+      // Create workbook and worksheet with ExcelJS
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Questions');
+      
+      // Add headers
+      worksheet.addRow(headers);
+      
+      // Add data rows
+      rows.forEach(row => {
+        worksheet.addRow(row);
+      });
       
       // Set column widths
-      ws['!cols'] = [
-        { wch: 15 },  // ID
-        { wch: 12 },  // Level
-        { wch: 18 },  // Domain
-        { wch: 35 },  // Question
-        { wch: 20 },  // Option 1
-        { wch: 20 },  // Option 2
-        { wch: 20 },  // Option 3
-        { wch: 20 },  // Option 4
-        { wch: 8 },   // Correct Answer
-        { wch: 30 },  // Explanation
-        { wch: 8 },   // Difficulty
+      worksheet.columns = [
+        { width: 15 },  // ID
+        { width: 12 },  // Level
+        { width: 18 },  // Domain
+        { width: 35 },  // Question
+        { width: 20 },  // Option 1
+        { width: 20 },  // Option 2
+        { width: 20 },  // Option 3
+        { width: 20 },  // Option 4
+        { width: 8 },   // Correct Answer
+        { width: 30 },  // Explanation
+        { width: 8 },   // Difficulty
       ];
+      
+      // Style header row
+      worksheet.getRow(1).font = { bold: true };
+      worksheet.getRow(1).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFE0E0E0' }
+      };
 
       // Generate filename with date
       const date = new Date().toISOString().split('T')[0];
-      XLSX.writeFile(wb, `LapinouMath_Questions_${date}.xlsx`);
+      
+      // Write to browser
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `LapinouMath_Questions_${date}.xlsx`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
     } catch (err) {
       alert(`Erreur lors de l'export: ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
     }
@@ -97,62 +124,86 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
     setImportMessage('Traitement du fichier...');
     setImportErrors([]);
 
-    // Use Blob.arrayBuffer() instead of FileReader
-    const processBuffer = async (buffer: ArrayBuffer) => {
-      try {
-        const data = new Uint8Array(buffer);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const parsedData = XLSX.utils.sheet_to_json(worksheet);
-
-        const validQuestions = parsedData.filter(q => q && typeof q === 'object');
-
-        if (validQuestions.length > 0) {
-          const importedQuestions = validQuestions.map((q: any) => {
-            const steps = [
-              q.lessonStep1?.toString() || '',
-              q.lessonStep2?.toString() || '',
-              q.lessonStep3?.toString() || ''
-            ].filter(Boolean);
-
-            return {
-              id: q.id || crypto.randomUUID(),
-              level: q.level?.toString() || 'CM1',
-              domain: q.domain?.toString() || 'Calcul',
-              question: q.question?.toString() || '',
-              options: [
-                q.option1?.toString() || '',
-                q.option2?.toString() || '',
-                q.option3?.toString() || '',
-                q.option4?.toString() || ''
-              ],
-              correctAnswer: Number.parseInt(q.correctAnswer?.toString() || '0', 10) || 0,
-              explanation: q.explanation?.toString() || '',
-              lesson: {
-                title: q.lessonTitle?.toString() || '',
-                steps
-              },
-              difficulty: 2 as 1 | 2 | 3
-            };
-          });
-
-          await saveQuestions(importedQuestions);
-          setImportStatus('success');
-          setImportMessage(`✅ ${importedQuestions.length} questions importées!`);
-        } else {
-          setImportStatus('error');
-          setImportMessage('❌ Aucune donnée valide trouvée');
-        }
-      } catch (err) {
+    try {
+      // Read file with ExcelJS
+      const buffer = await file.arrayBuffer();
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(buffer);
+      
+      const worksheet = workbook.getWorksheet(1);
+      if (!worksheet) {
         setImportStatus('error');
-        setImportMessage(`Erreur: ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
+        setImportMessage('❌ Aucune feuille trouvée dans le fichier');
+        return;
       }
-    };
 
-    file.arrayBuffer().then(processBuffer).catch(() => {
+      const parsedData: unknown[] = [];
+      
+      // Skip header row (row 1) and iterate through data rows
+      worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber === 1) return; // Skip header
+        
+        const values = row.values as unknown[];
+        // ExcelJS rows are 1-indexed and first element is undefined
+        const rowData = {
+          id: values[1]?.toString() || '',
+          level: values[2]?.toString() || '',
+          domain: values[3]?.toString() || '',
+          question: values[4]?.toString() || '',
+          option1: values[5]?.toString() || '',
+          option2: values[6]?.toString() || '',
+          option3: values[7]?.toString() || '',
+          option4: values[8]?.toString() || '',
+          correctAnswer: values[9]?.toString() || '',
+          explanation: values[10]?.toString() || '',
+          difficulty: values[11]?.toString() || '2'
+        };
+        
+        parsedData.push(rowData);
+      });
+
+      const validQuestions = parsedData.filter(q => q && typeof q === 'object');
+
+      if (validQuestions.length > 0) {
+        const importedQuestions = validQuestions.map((q: any) => {
+          const steps = [
+            q.lessonStep1?.toString() || '',
+            q.lessonStep2?.toString() || '',
+            q.lessonStep3?.toString() || ''
+          ].filter(Boolean);
+
+          return {
+            id: q.id || crypto.randomUUID(),
+            level: q.level?.toString() || 'CM1',
+            domain: q.domain?.toString() || 'Calcul',
+            question: q.question?.toString() || '',
+            options: [
+              q.option1?.toString() || '',
+              q.option2?.toString() || '',
+              q.option3?.toString() || '',
+              q.option4?.toString() || ''
+            ],
+            correctAnswer: Number.parseInt(q.correctAnswer?.toString() || '0', 10) || 0,
+            explanation: q.explanation?.toString() || '',
+            lesson: {
+              title: q.lessonTitle?.toString() || '',
+              steps
+            },
+            difficulty: (Number.parseInt(q.difficulty?.toString() || '2', 10) || 2) as 1 | 2 | 3
+          };
+        });
+
+        await saveQuestions(importedQuestions);
+        setImportStatus('success');
+        setImportMessage(`✅ ${importedQuestions.length} questions importées!`);
+      } else {
+        setImportStatus('error');
+        setImportMessage('❌ Aucune donnée valide trouvée');
+      }
+    } catch (err) {
       setImportStatus('error');
-      setImportMessage('Erreur lors de la lecture du fichier');
-    });
+      setImportMessage(`Erreur: ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
+    }
 
     // Reset file input
     if (fileInputRef.current) {
