@@ -4,12 +4,13 @@ import Dashboard from './components/Dashboard';
 import QuizScreen from './components/QuizScreen';
 import QuickChallenge from './components/QuickChallenge';
 import AdminPanel from './components/AdminPanel';
+import InteractiveDemo from './components/InteractiveDemo';
 import { UserProfile, GradeLevel, MathDomain } from './types';
 import { getProfile, saveProfile, migrateProfile } from './utils/storage';
 import { initDB } from './utils/database';
 import { initializeQuestions, getAvailableDomains } from './data/questions';
 
-type Screen = 'profile' | 'dashboard' | 'quiz' | 'lesson' | 'admin' | 'quick-challenge';
+type Screen = 'profile' | 'dashboard' | 'quiz' | 'lesson' | 'admin' | 'quick-challenge' | 'interactive-demo';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('profile');
@@ -209,8 +210,22 @@ function App() {
         </div>
       ) : (
         <>
+          {currentScreen === 'interactive-demo' && (
+            <div className="relative">
+              <button
+                onClick={() => setCurrentScreen('profile')}
+                className="absolute top-4 left-4 z-50 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors"
+              >
+                ← Retour
+              </button>
+              <InteractiveDemo />
+            </div>
+          )}
+
           {currentScreen === 'profile' && (
-            <ProfileSelection onSelectProfile={handleProfileSelect} />
+            <ProfileSelection 
+              onSelectProfile={handleProfileSelect}
+            />
           )}
           
           {currentScreen === 'dashboard' && currentProfile && (
@@ -219,6 +234,7 @@ function App() {
               onStartQuiz={handleStartQuiz}
               onLogout={handleLogout}
               onOpenAdmin={handleOpenAdmin}
+              onOpenInteractiveDemo={() => setCurrentScreen('interactive-demo')}
               onSelectAccessory={handleSelectAccessory}
             />
           )}

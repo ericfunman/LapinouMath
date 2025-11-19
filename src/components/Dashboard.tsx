@@ -10,6 +10,7 @@ interface Props {
   onStartQuiz: (level: GradeLevel, domain: MathDomain) => void;
   onLogout: () => void;
   onOpenAdmin: () => void;
+  onOpenInteractiveDemo?: () => void;
   onSelectAccessory?: (accessoryId: string) => void;
   onUpdateProfile?: (profile: UserProfile) => void;
 }
@@ -30,7 +31,7 @@ const getDomainEmoji = (domain: string): string => {
 };
 
 export default function Dashboard(props: Readonly<Props>) {
-  const { profile, onStartQuiz, onLogout, onOpenAdmin } = props;
+  const { profile, onStartQuiz, onLogout, onOpenAdmin, onOpenInteractiveDemo } = props;
   const [showAccessoryShop, setShowAccessoryShop] = useState(false);
   const currentLevelProgress = profile.progress?.[profile.currentLevel];
   const questionStats = getQuestionStats();
@@ -62,6 +63,14 @@ export default function Dashboard(props: Readonly<Props>) {
                 >
                   🏪 Accessoires ({profile.unlockedAccessories.length})
                 </button>
+                {onOpenInteractiveDemo && (
+                  <button
+                    onClick={onOpenInteractiveDemo}
+                    className="text-sm bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 font-semibold"
+                  >
+                    🎨 Démo Interactive
+                  </button>
+                )}
                 <button
                   onClick={onLogout}
                   className="text-sm text-gray-500 hover:text-gray-700 underline"
