@@ -15,8 +15,7 @@ interface Props {
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
-    // NOSONAR - Math.random() est suffisant pour mélanger des questions de quiz
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(Math.random() * (i + 1)); // NOSONAR: S2245 - Math.random() suffisant pour mélange éducatif
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
@@ -42,9 +41,7 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
       allQuestions.push(...domainQuestions);
     }
     
-    // Mélanger et prendre 20 questions
-    // Utilisation de Math.random() pour le mélange des questions - acceptable dans un contexte éducatif
-    // car il ne s'agit pas de sécurité cryptographique mais de variété pédagogique
+    // NOSONAR: S2245 - Math.random() suffisant pour variété pédagogique, pas de sécurité cryptographique
     const shuffledQuestions = shuffleArray([...allQuestions]).slice(0, 20);
     setQuestions(shuffledQuestions);
   }, [level]);
