@@ -15,11 +15,41 @@ def split_into_questions(text: str) -> List[str]:
     Kangourou questions usually start with verb (Quel, Combien, Laquelle, etc.)
     """
     # Split by patterns that likely indicate new question
-    # Usually a capitalized word followed by specific text patterns
-    splitter = r'\n(?=[A-Z][a-z]+(?:\s+(?:co|re|a|de|est|su|vi|se|pl|dé|d\'|l\')|(?:colorie|écrit|dessine|regarde|place|mesure|a\s+exactement|plie|construit|doit|vaut|ont|sort|rencontre|se\s|peut)))'
+    # Look for capitalized words followed by common question starters
+    question_starters = [
+        r'\nQuel', r'\nQuelle', r'\nQuels', r'\nQuelles', r'\nCombien',
+        r'\nLaquelle', r'\nLequel', r'\nLesquels', r'\nLesquelles',
+        r'\nColorie', r'\nÉcrit', r'\nDessine', r'\nRegarde', r'\nPlace',
+        r'\nMesure', r'\nPlie', r'\nConstruit', r'\nDoit', r'\nVaut'
+    ]
     
+    splitter = '|'.join(question_starters)
     question_texts = re.split(splitter, text)
     return [q.strip() for q in question_texts if q.strip()]
+
+OPTION_PATTERN = re.compile(r'^[A-E]\)')
+
+def find_option_lines(lines: List[str]) -> int:
+    """Find the index where options start"""
+    for i, line in enumerate(lines):
+        if OPTION_PATTERN.match(line):
+            return i
+    return -1
+
+def extract_single_option(lines: List[str], start_idx: int) -> tuple[str, int]:
+    """Extract one option and return (option_text, next_index)"""
+    line = lines[start_idx]
+    option_text = OPTION_PATTERN.sub('', line).strip()
+    
+    j = start_idx + 1
+    while j < len(lines) and not OPTION_PATTERN.match(lines[j]) and lines[j].strip():
+        if not any(w in lines[j] for w in ['écrits', 'Qu\'', 'est', 'vaut', 'Sur qu', 'où', 'Lequel']):
+            option_text += ' ' + lines[j].strip()
+            j += 1
+        else:
+            break
+    
+    return option_text.strip(), j
 
 def extract_options_and_answer(question_text: str) -> Dict:
     """Extract options A-E and determine correct answer"""
@@ -27,26 +57,17 @@ def extract_options_and_answer(question_text: str) -> Dict:
     
     # Find options
     options = []
-    option_start_idx = -1
+    option_start_idx = find_option_lines(lines)
     
-    for i, line in enumerate(lines):
-        # Match: A) option_text
-        if re.match(r'^[A-E]\)', line):
-            if option_start_idx == -1:
-                option_start_idx = i
-            option_text = re.sub(r'^[A-E]\)\s*', '', line).strip()
-            # Some PDFs have option text split across lines
-            # Collect consecutive lines until next option letter
-            j = i + 1
-            while j < len(lines) and not re.match(r'^[A-E]\)', lines[j]) and lines[j].strip():
-                # Check if this looks like part of current option (no new question)
-                if not any(w in lines[j] for w in ['écrits', 'Qu\'', 'est', 'vaut', 'Sur qu', 'où', 'Lequel']):
-                    option_text += ' ' + lines[j].strip()
-                    j += 1
-                else:
-                    break
-            
-            options.append(option_text.strip())
+    if option_start_idx >= 0:
+        i = option_start_idx
+        while i < len(lines) and len(options) < 5:
+            if OPTION_PATTERN.match(lines[i]):
+                option_text, next_i = extract_single_option(lines, i)
+                options.append(option_text)
+                i = next_i
+            else:
+                i += 1
     
     # Extract question text (everything before first option)
     question_text_only = ''
@@ -102,6 +123,54 @@ def extract_kangourou_smart(pdf_path: str, level: str, year: int) -> List[Dict]:
     
     return questions
 
+def process_single_pdf(pdf_path: Path, level: str, year: int) -> List[Dict]:
+    """Process a single PDF file and return extracted questions"""
+    if not pdf_path.exists():
+        print(f"\n⚠️  {pdf_path.name} non trouvé")
+        return []
+    
+    print(f"\n📖 {pdf_path.name}")
+    questions = extract_kangourou_smart(str(pdf_path), level, year)
+    print(f"   ✅ {len(questions)} questions extraites")
+    
+    if questions:
+        print("\n   Exemples:")
+        for i, q in enumerate(questions[:3]):
+            print(f"\n   Q{i+1} (Difficulté {q['difficulty']}):")
+            print(f"      {q['question'][:80]}...")
+            print(f"      Réponses: {len(q['options'])}")
+    
+    return questions
+
+def print_summary(all_questions: List[Dict]) -> None:
+    """Print summary statistics of extracted questions"""
+    print("\n\n📊 RÉSUMÉ")
+    print("="*70)
+    print(f"Total questions: {len(all_questions)}")
+    
+    by_level = {}
+    by_difficulty = {}
+    for q in all_questions:
+        by_level[q['level']] = by_level.get(q['level'], 0) + 1
+        by_difficulty[q['difficulty']] = by_difficulty.get(q['difficulty'], 0) + 1
+    
+    print("\nPar niveau:")
+    for level in ['CE2', '6ème', '4ème']:
+        print(f"  {level}: {by_level.get(level, 0)}")
+    
+    print("\nPar difficulté:")
+    for d in [1, 2, 3]:
+        print(f"  Niveau {d}: {by_difficulty.get(d, 0)}")
+
+def save_questions_to_json(questions: List[Dict], filename: str) -> None:
+    """Save questions to JSON file"""
+    json_file = Path(filename)
+    with open(json_file, 'w', encoding='utf-8') as f:
+        json.dump(questions, f, ensure_ascii=False, indent=2)
+    
+    print(f"\n✅ Fichier sauvegardé: {json_file}")
+    print("   Prêt pour intégration dans LapinouMath")
+
 def main():
     """Main function"""
     pdf_dir = Path("kangourou")
@@ -119,49 +188,12 @@ def main():
     
     for pdf_file, level, year in file_mappings:
         pdf_path = pdf_dir / pdf_file
-        
-        if pdf_path.exists():
-            print(f"\n📖 {pdf_file}")
-            qs = extract_kangourou_smart(str(pdf_path), level, year)
-            print(f"   ✅ {len(qs)} questions extraites")
-            
-            if qs:
-                print("\n   Exemples:")
-                for i, q in enumerate(qs[:3]):
-                    print(f"\n   Q{i+1} (Difficulté {q['difficulty']}):")
-                    print(f"      {q['question'][:80]}...")
-                    print(f"      Réponses: {len(q['options'])}")
-            
-            all_questions.extend(qs)
-        else:
-            print(f"\n⚠️  {pdf_file} non trouvé")
+        questions = process_single_pdf(pdf_path, level, year)
+        all_questions.extend(questions)
     
     if all_questions:
-        print("\n\n📊 RÉSUMÉ")
-        print("="*70)
-        print(f"Total questions: {len(all_questions)}")
-        
-        by_level = {}
-        by_difficulty = {}
-        for q in all_questions:
-            by_level[q['level']] = by_level.get(q['level'], 0) + 1
-            by_difficulty[q['difficulty']] = by_difficulty.get(q['difficulty'], 0) + 1
-        
-        print("\nPar niveau:")
-        for level in ['CE2', '6ème', '4ème']:
-            print(f"  {level}: {by_level.get(level, 0)}")
-        
-        print("\nPar difficulté:")
-        for d in [1, 2, 3]:
-            print(f"  Niveau {d}: {by_difficulty.get(d, 0)}")
-        
-        # Save
-        json_file = Path("kangourou_questions.json")
-        with open(json_file, 'w', encoding='utf-8') as f:
-            json.dump(all_questions, f, ensure_ascii=False, indent=2)
-        
-        print(f"\n✅ Fichier sauvegardé: {json_file}")
-        print("   Prêt pour intégration dans LapinouMath")
+        print_summary(all_questions)
+        save_questions_to_json(all_questions, "kangourou_questions.json")
     else:
         print("\n❌ Aucune question extraite")
 

@@ -83,6 +83,91 @@ def extract_corrections(pdf_path: str) -> Dict[int, int]:
     
     return corrections
 
+def process_single_pdf_pair(questions_file: Path, corrections_file: Path, level: str, year: int) -> List[Dict]:
+    """Process a single PDF pair (questions + corrections)"""
+    if not questions_file.exists():
+        print(f"\n⚠️  {questions_file.name} non trouvé")
+        return []
+    
+    print(f"\n📖 {questions_file.name} ({level})")
+    
+    # Extract questions
+    questions = extract_kangourou_v2(str(questions_file), level, year)
+    print(f"   ✅ Extrait {len(questions)} questions")
+    
+    # Extract corrections if available
+    corrections = {}
+    if corrections_file.exists():
+        corrections = extract_corrections(str(corrections_file))
+        print(f"   ✅ Extrait {len(corrections)} réponses")
+        
+        # Apply corrections
+        for q in questions:
+            q_num = q.get('questionNumber')
+            if q_num in corrections:
+                q['correctAnswer'] = corrections[q_num]
+    
+    # Show example
+    if questions:
+        q = questions[0]
+        print("\n   Exemple:")
+        print(f"   Q: {q['question'][:60]}...")
+        print(f"   Options: {q['options']}")
+        if q['correctAnswer'] is not None:
+            print(f"   ✓ Réponse: {chr(65 + q['correctAnswer'])}")
+        print(f"   Difficulté: {q['difficulty']}/3")
+    
+    return questions
+
+def print_summary(all_questions: List[Dict]) -> None:
+    """Print summary statistics of extracted questions"""
+    print("\n\n📊 RÉSUMÉ FINAL")
+    print("="*70)
+    print(f"Total questions: {len(all_questions)}")
+    
+    # Count by level and difficulty
+    by_level = {}
+    by_difficulty = {}
+    with_answers = sum(1 for q in all_questions if q['correctAnswer'] is not None)
+    
+    for q in all_questions:
+        level = q['level']
+        diff = q['difficulty']
+        by_level[level] = by_level.get(level, 0) + 1
+        by_difficulty[diff] = by_difficulty.get(diff, 0) + 1
+    
+    print("\nPar niveau:")
+    for level in ['CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']:
+        if level in by_level:
+            print(f"  {level}: {by_level[level]}")
+    
+    print("\nPar difficulté:")
+    for diff in [1, 2, 3]:
+        if diff in by_difficulty:
+            print(f"  Niveau {diff}: {by_difficulty[diff]}")
+    
+    print(f"\nRéponses trouvées: {with_answers}/{len(all_questions)}")
+
+def save_questions_to_json(questions: List[Dict], filename: str, clean_filename: str = None) -> None:
+    """Save questions to JSON file(s)"""
+    json_file = Path(filename)
+    with open(json_file, 'w', encoding='utf-8') as f:
+        json.dump(questions, f, ensure_ascii=False, indent=2)
+    print(f"\n✅ Fichier sauvegardé: {json_file}")
+    
+    if clean_filename:
+        # Remove questionNumber field for final output
+        clean_questions = []
+        for q in questions:
+            clean_q = q.copy()
+            del clean_q['questionNumber']
+            clean_questions.append(clean_q)
+        
+        json_file_clean = Path(clean_filename)
+        with open(json_file_clean, 'w', encoding='utf-8') as f:
+            json.dump(clean_questions, f, ensure_ascii=False, indent=2)
+        print(f"✅ Fichier propre sauvegardé: {json_file_clean}")
+
 def main():
     """Main extraction"""
     pdf_dir = Path("kangourou")
@@ -106,83 +191,12 @@ def main():
     for questions_file, corrections_file, level, year in file_mappings:
         q_path = pdf_dir / questions_file
         c_path = pdf_dir / corrections_file
-        
-        if q_path.exists():
-            print(f"\n📖 {questions_file} ({level})")
-            
-            # Extract questions
-            qs = extract_kangourou_v2(str(q_path), level, year)
-            print(f"   ✅ Extrait {len(qs)} questions")
-            
-            # Extract corrections if available
-            corrections = {}
-            if c_path.exists():
-                corrections = extract_corrections(str(c_path))
-                print(f"   ✅ Extrait {len(corrections)} réponses")
-                
-                # Apply corrections
-                for q in qs:
-                    q_num = q.get('questionNumber')
-                    if q_num in corrections:
-                        q['correctAnswer'] = corrections[q_num]
-            
-            # Show example
-            if qs:
-                q = qs[0]
-                print("\n   Exemple:")
-                print(f"   Q: {q['question'][:60]}...")
-                print(f"   Options: {q['options']}")
-                if q['correctAnswer'] is not None:
-                    print(f"   ✓ Réponse: {chr(65 + q['correctAnswer'])}")
-                print(f"   Difficulté: {q['difficulty']}/3")
-            
-            all_questions.extend(qs)
-        else:
-            print(f"\n⚠️  {questions_file} non trouvé")
+        questions = process_single_pdf_pair(q_path, c_path, level, year)
+        all_questions.extend(questions)
     
     if all_questions:
-        print("\n\n📊 RÉSUMÉ FINAL")
-        print("="*70)
-        print(f"Total questions: {len(all_questions)}")
-        
-        # Count by level and difficulty
-        by_level = {}
-        by_difficulty = {}
-        with_answers = sum(1 for q in all_questions if q['correctAnswer'] is not None)
-        
-        for q in all_questions:
-            level = q['level']
-            diff = q['difficulty']
-            by_level[level] = by_level.get(level, 0) + 1
-            by_difficulty[diff] = by_difficulty.get(diff, 0) + 1
-        
-        print("\nPar niveau:")
-        for level in ['CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']:
-            if level in by_level:
-                print(f"  {level}: {by_level[level]}")
-        
-        print("\nPar difficulté:")
-        for diff in [1, 2, 3]:
-            if diff in by_difficulty:
-                print(f"  Niveau {diff}: {by_difficulty[diff]}")
-        
-        print(f"\nRéponses trouvées: {with_answers}/{len(all_questions)}")
-        
-        # Save JSON
-        json_file = Path("kangourou_extracted.json")
-        with open(json_file, 'w', encoding='utf-8') as f:
-            json.dump(all_questions, f, ensure_ascii=False, indent=2)
-        print(f"\n✅ Fichier sauvegardé: {json_file}")
-        
-        # Remove questionNumber field for final output
-        for q in all_questions:
-            del q['questionNumber']
-        
-        json_file_clean = Path("kangourou_questions.json")
-        with open(json_file_clean, 'w', encoding='utf-8') as f:
-            json.dump(all_questions, f, ensure_ascii=False, indent=2)
-        print(f"✅ Fichier propre sauvegardé: {json_file_clean}")
-        
+        print_summary(all_questions)
+        save_questions_to_json(all_questions, "kangourou_extracted.json", "kangourou_questions.json")
     else:
         print("\n❌ Aucune question extraite")
 

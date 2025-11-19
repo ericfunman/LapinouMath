@@ -12,11 +12,9 @@ import re
 from pathlib import Path
 from typing import List, Dict, Optional
 
-def extract_kangourou(pdf_path: str, level: str, year: int) -> List[Dict]:
-    """Extract Kangourou questions from PDF"""
-    doc = fitz.open(pdf_path)
-    questions = []
-    current_q = {
+def create_new_question(level: str, year: int) -> Dict:
+    """Create a new question dictionary"""
+    return {
         'question': '',
         'options': [],
         'correctAnswer': None,
@@ -25,60 +23,153 @@ def extract_kangourou(pdf_path: str, level: str, year: int) -> List[Dict]:
         'difficulty': 1,
         'year': year
     }
-    
-    q_num = 0
-    in_question = False
-    in_options = False
 
-    for page_num, page in enumerate(doc):
+def is_question_start(line: str) -> tuple[bool, str]:
+    """Check if line starts a new question, return (is_start, question_text)"""
+    match = re.match(r'^(\d+)\.\s+', line)
+    if match:
+        question_text = re.sub(r'^\d+\.\s+', '', line)
+        return True, question_text
+    return False, ""
+
+def is_option_line(line: str) -> tuple[bool, str]:
+    """Check if line is an option, return (is_option, option_text)"""
+    match = re.match(r'^[A-E]\)\s+(.+)', line)
+    if match:
+        return True, match.group(1)
+    return False, ""
+
+def calculate_difficulty(q_num: int) -> int:
+    """Calculate difficulty based on question number"""
+    return min(4, max(1, (q_num // 8) + 1))
+
+from typing import Optional
+
+def finalize_question(current_q: Dict, q_num: int) -> Optional[Dict]:
+    """Finalize a question by setting difficulty and returning a copy"""
+    if current_q['question'] and len(current_q['options']) >= 4:
+        final_q = current_q.copy()
+        final_q['difficulty'] = calculate_difficulty(q_num)
+        return final_q
+    return None
+
+def process_page_lines(lines: List[str], level: str, year: int) -> List[Dict]:
+    """Process lines from a page and extract questions"""
+    questions = []
+    current_q = create_new_question(level, year)
+    q_num = 0
+    in_options = False
+    
+    for line in lines:
+        is_start, question_text = is_question_start(line)
+        
+        if is_start:
+            final_q = finalize_question(current_q, q_num)
+            if final_q:
+                questions.append(final_q)
+            q_num += 1
+            current_q = create_new_question(level, year)
+            current_q['question'] = question_text
+            in_options = False
+            continue
+        
+        if not current_q['question']:
+            continue
+            
+        is_option, option_text = is_option_line(line)
+        if is_option:
+            current_q['options'].append(option_text)
+            in_options = True
+        elif in_options and line and not line.startswith('('):
+            in_options = False
+            if not re.match(r'Réponse|Answer', line, re.IGNORECASE):
+                current_q['explanation'] = line[:200]
+    
+    final_q = finalize_question(current_q, q_num)
+    if final_q:
+        questions.append(final_q)
+    
+    return questions
+
+def extract_kangourou(pdf_path: str, level: str, year: int) -> List[Dict]:
+    """Extract Kangourou questions from PDF"""
+    doc = fitz.open(pdf_path)
+    all_questions = []
+    
+    for page in doc:
         text = page.get_text()
         lines = [line.strip() for line in text.split('\n') if line.strip()]
-
-        for idx, line in enumerate(lines):
-            # Détecte un numéro de question (1., 2., etc.)
-            if re.match(r'^(\d+)\.\s+', line):
-                # Sauvegarde la question précédente
-                if current_q['question'] and len(current_q['options']) >= 4:
-                    # Estimé la difficulté selon le numéro
-                    # Kangourou: 1-8=facile(1-2), 9-16=moyen(2-3), 17-24=difficile(3-4)
-                    current_q['difficulty'] = min(4, max(1, (q_num // 8) + 1))
-                    questions.append(current_q)
-                
-                q_num += 1
-                question_text = re.sub(r'^\d+\.\s+', '', line)
-                current_q = {
-                    'question': question_text,
-                    'options': [],
-                    'correctAnswer': None,
-                    'explanation': '',
-                    'level': level,
-                    'difficulty': 1,
-                    'year': year
-                }
-                in_question = True
-                in_options = False
-            
-            # Détecte les options (A) B) C) D) ou A. B. C. D.)
-            elif in_question and re.match(r'^[A-E]\)\s+(.+)', line):
-                option_match = re.match(r'^[A-E]\)\s+(.+)', line)
-                if option_match:
-                    current_q['options'].append(option_match.group(1))
-                in_options = True
-            
-            # Fin des options si on voit une nouvelle ligne qui n'est pas une option
-            elif in_options and not re.match(r'^[A-E]\)', line) and line and not line.startswith('('):
-                in_options = False
-                # La ligne suivante peut être l'explication ou la prochaine question
-                if not re.match(r'^\d+\.\s+', line) and not re.match(r'Réponse|Answer', line, re.IGNORECASE):
-                    current_q['explanation'] = line[:200]  # Limiter à 200 chars
-
-    # Ajoute la dernière question
-    if current_q['question'] and len(current_q['options']) >= 4:
-        current_q['difficulty'] = min(4, max(1, (q_num // 8) + 1))
-        questions.append(current_q)
+        questions = process_page_lines(lines, level, year)
+        all_questions.extend(questions)
     
     doc.close()
-    return questions
+    return all_questions
+
+def process_single_file(pdf_path: Path, level: str, year: int) -> List[Dict]:
+    """Process a single PDF file and return extracted questions"""
+    if not pdf_path.exists():
+        print(f"\n⚠️  Fichier non trouvé: {pdf_path}")
+        return []
+    
+    print(f"\n📖 Traitement: {pdf_path.name} ({level}, {year})")
+    try:
+        questions = extract_kangourou(str(pdf_path), level, year)
+        print(f"   ✅ Extrait {len(questions)} questions")
+        
+        # Show example
+        if questions:
+            print("   Exemple:")
+            q = questions[0]
+            print(f"   Q: {q['question'][:80]}...")
+            print(f"   Options: {len(q['options'])}")
+            print(f"   Difficulté: {q['difficulty']}")
+        
+        return questions
+    except Exception as e:
+        print(f"   ❌ Erreur: {e}")
+        return []
+
+def print_summary(all_questions: List[Dict]) -> None:
+    """Print summary statistics"""
+    print("\n📊 RÉSUMÉ TOTAL")
+    print("="*60)
+    print(f"Total questions extraites: {len(all_questions)}")
+    
+    # Count by level and difficulty
+    by_level = {}
+    by_difficulty = {}
+    for q in all_questions:
+        level = q['level']
+        diff = q['difficulty']
+        by_level[level] = by_level.get(level, 0) + 1
+        by_difficulty[diff] = by_difficulty.get(diff, 0) + 1
+    
+    print("\nPar niveau:")
+    for level in ['CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']:
+        if level in by_level:
+            print(f"  {level}: {by_level[level]}")
+    
+    print("\nPar difficulté:")
+    for diff in [1, 2, 3, 4]:
+        if diff in by_difficulty:
+            print(f"  Niveau {diff}: {by_difficulty[diff]}")
+
+def save_results(all_questions: List[Dict]) -> None:
+    """Save results to JSON and CSV files"""
+    # Save JSON
+    json_file = Path("kangourou_extracted.json")
+    with open(json_file, 'w', encoding='utf-8') as f:
+        json.dump(all_questions, f, ensure_ascii=False, indent=2)
+    print(f"\n📁 Fichier JSON sauvegardé: {json_file}")
+    
+    # Save CSV for Excel
+    csv_file = Path("kangourou_extracted.csv")
+    df = pd.DataFrame(all_questions)
+    df.to_csv(csv_file, index=False, encoding='utf-8')
+    print(f"📁 Fichier CSV sauvegardé: {csv_file}")
+    
+    print("\n✅ Extraction terminée!")
+    print("Vous pouvez valider les questions et utiliser le JSON pour l'intégration")
 
 def main():
     """Main extraction function"""
@@ -103,63 +194,12 @@ def main():
     
     for filename, level, year in file_mappings:
         path = pdf_dir / filename
-        if path.exists():
-            print(f"\n📖 Traitement: {filename} ({level}, {year})")
-            try:
-                qs = extract_kangourou(str(path), level, year)
-                all_questions.extend(qs)
-                print(f"   ✅ Extrait {len(qs)} questions")
-                
-                # Affiche les premières questions
-                if qs:
-                    print("   Exemple:")
-                    q = qs[0]
-                    print(f"   Q: {q['question'][:80]}...")
-                    print(f"   Options: {len(q['options'])}")
-                    print(f"   Difficulté: {q['difficulty']}")
-            except Exception as e:
-                print(f"   ❌ Erreur: {e}")
-        else:
-            print(f"\n⚠️  Fichier non trouvé: {path}")
+        questions = process_single_file(path, level, year)
+        all_questions.extend(questions)
     
     if all_questions:
-        print("\n📊 RÉSUMÉ TOTAL")
-        print("="*60)
-        print(f"Total questions extraites: {len(all_questions)}")
-        
-        # Comptage par niveau
-        by_level = {}
-        by_difficulty = {}
-        for q in all_questions:
-            level = q['level']
-            diff = q['difficulty']
-            by_level[level] = by_level.get(level, 0) + 1
-            by_difficulty[diff] = by_difficulty.get(diff, 0) + 1
-        
-        print("\nPar niveau:")
-        for level in ['CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']:
-            if level in by_level:
-                print(f"  {level}: {by_level[level]}")
-        
-        print("\nPar difficulté:")
-        for diff in [1, 2, 3, 4]:
-            if diff in by_difficulty:
-                print(f"  Niveau {diff}: {by_difficulty[diff]}")
-        
-        # Sauvegarde JSON
-        json_file = Path("kangourou_extracted.json")
-        with open(json_file, 'w', encoding='utf-8') as f:
-            json.dump(all_questions, f, ensure_ascii=False, indent=2)
-        print(f"\n📁 Fichier JSON sauvegardé: {json_file}")
-        
-        # Sauvegarde CSV pour Excel
-        csv_file = Path("kangourou_extracted.csv")
-        df = pd.DataFrame(all_questions)
-        df.to_csv(csv_file, index=False, encoding='utf-8')
-        print(f"📁 Fichier CSV sauvegardé: {csv_file}")
-        
-        print("\n✅ Extraction terminée!")
-        print("Vous pouvez valider les questions et utiliser le JSON pour l'intégration")
+        print_summary(all_questions)
+        save_results(all_questions)
     else:
         print("\n❌ Aucune question extraite")
 
