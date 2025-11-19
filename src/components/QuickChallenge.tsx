@@ -20,11 +20,11 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
   const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const allDomains = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre'] as const;
+    const allDomains = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre', 'Kangourou'] as const;
     const allQuestions: Question[] = [];
     
     for (const domain of allDomains) {
-      const domainQuestions = getRandomQuestions(level, domain, 5);
+      const domainQuestions = getRandomQuestions(level, domain, 3);
       allQuestions.push(...domainQuestions);
     }
     
