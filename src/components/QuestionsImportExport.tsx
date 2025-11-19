@@ -4,7 +4,7 @@
  */
 
 import { useState, useRef } from 'react';
-import { Question, type GradeLevel, type MathDomain } from '../types';
+import { Question, InteractiveQuestion, type GradeLevel, type MathDomain } from '../types';
 import { exportQuestionsToExcel, generateQuestionsCSV } from '../utils/excelExport';
 import { saveQuestions } from '../utils/database';
 import ExcelJS from 'exceljs';
@@ -20,7 +20,7 @@ function safeString(value: unknown, fallback = ''): string {
 }
 
 interface Props {
-  allQuestions: Question[];
+  allQuestions: (Question | InteractiveQuestion)[];
   onImportComplete: (importedCount: number, duplicates: number) => void;
 }
 

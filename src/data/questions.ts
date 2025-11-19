@@ -11,6 +11,11 @@ import { questionsCinquiemeDetailed } from './questionsCinquiemeDetailed';
 import { questionsCinquiemeDetailed2 } from './questionsCinquiemeDetailed2';
 import { questionsQuatriemerDetailed } from './questionsQuatriemerDetailed';
 import { questionsQuatriemerDetailed2 } from './questionsQuatriemerDetailed2';
+// Interactive geometry questions
+import { interactiveGeometryCE2 } from './interactiveGeometryCE2';
+import { interactiveGeometryCE2Extended } from './interactiveGeometryCE2Extended';
+import { interactiveGeometryCM1 } from './interactiveGeometryCM1';
+import { interactiveGeometryCM2, interactiveGeometry6eme, interactiveGeometry5eme } from './interactiveGeometryAdvanced';
 import {
   ce1MentalMath, ce1Arithmetic, ce1Numbers, ce1Comparison, ce1Measures,
   ce2MentalMath, ce2Arithmetic, ce2Fractions, ce2Measurements, ce2Problems,
@@ -29,12 +34,12 @@ import {
   quatriemeHardMentalMath, quatriemeHardArithmetic, quatriemeHardProblems,
 } from './questionsHard';
 import { allKangourouQuestions } from './kangourouQuestions';
-import { Question, GradeLevel, MathDomain } from '../types';
+import { Question, GradeLevel, MathDomain, InteractiveQuestion } from '../types';
 import { saveQuestions } from '../utils/database';
 
 // Combiner toutes les questions niveaux CE1-4ème par domaine
-const buildLevelQuestions = (): Record<string, Question[]> => {
-  const levelQuestions: Record<string, Question[]> = {};
+const buildLevelQuestions = (): Record<string, (Question | InteractiveQuestion)[]> => {
+  const levelQuestions: Record<string, (Question | InteractiveQuestion)[]> = {};
   let idCounter = 10000; // ID unique pour les nouvelles questions
   
   interface QuestionData {
@@ -95,6 +100,8 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...ce2HardMentalMath.map(q => mapQuestionFormat(q, 'CE2', 'Calcul mental', 3)),
     ...ce2HardArithmetic.map(q => mapQuestionFormat(q, 'CE2', 'Arithmétique', 3)),
     ...ce2HardProblems.map(q => mapQuestionFormat(q, 'CE2', 'Problèmes/Algèbre', 3)),
+    ...interactiveGeometryCE2,
+    ...interactiveGeometryCE2Extended,
     ...allKangourouQuestions.filter(q => q.level === 'CE2').map(q => mapQuestionFormat(q, 'CE2', 'Kangourou')),
   ];
   levelQuestions['CE2'] = ce2Questions;
@@ -112,6 +119,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cm1HardArithmetic.map(q => mapQuestionFormat(q, 'CM1', 'Arithmétique', 3)),
     ...cm1HardFractions.map(q => mapQuestionFormat(q, 'CM1', 'Fractions/Décimaux', 3)),
     ...cm1HardProblems.map(q => mapQuestionFormat(q, 'CM1', 'Problèmes/Algèbre', 3)),
+    ...interactiveGeometryCM1,
     ...allKangourouQuestions.filter(q => q.level === 'CM1').map(q => mapQuestionFormat(q, 'CM1', 'Kangourou')),
   ];
   levelQuestions['CM1'] = cm1Questions;
@@ -128,6 +136,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cm2HardMentalMath.map(q => mapQuestionFormat(q, 'CM2', 'Calcul mental', 3)),
     ...cm2HardArithmetic.map(q => mapQuestionFormat(q, 'CM2', 'Arithmétique', 3)),
     ...cm2HardProblems.map(q => mapQuestionFormat(q, 'CM2', 'Problèmes/Algèbre', 3)),
+    ...interactiveGeometryCM2,
     ...allKangourouQuestions.filter(q => q.level === 'CM2').map(q => mapQuestionFormat(q, 'CM2', 'Kangourou')),
   ];
   levelQuestions['CM2'] = cm2Questions;
@@ -141,6 +150,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...sixiemeArithmetic.map(q => mapQuestionFormat(q, '6ème', 'Arithmétique', 1)),
     ...sixiemeFractions.map(q => mapQuestionFormat(q, '6ème', 'Fractions/Décimaux', 1)),
     ...sixiemeGeometry.map(q => mapQuestionFormat(q, '6ème', 'Géométrie', 1)),
+    ...interactiveGeometry6eme,
     ...sixiemeProblems.map(q => mapQuestionFormat(q, '6ème', 'Problèmes/Algèbre', 1)),
     ...sixiemeHardMentalMath.map(q => mapQuestionFormat(q, '6ème', 'Calcul mental', 3)),
     ...sixiemeHardArithmetic.map(q => mapQuestionFormat(q, '6ème', 'Arithmétique', 3)),
@@ -157,6 +167,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
     ...cinquiemeArithmetic.map(q => mapQuestionFormat(q, '5ème', 'Arithmétique', 1)),
     ...cinquiemeProportions.map(q => mapQuestionFormat(q, '5ème', 'Proportions', 1)),
     ...cinquiemeGeometry3D.map(q => mapQuestionFormat(q, '5ème', 'Géométrie', 1)),
+    ...interactiveGeometry5eme,
     ...cinquiemeProblems.map(q => mapQuestionFormat(q, '5ème', 'Problèmes/Algèbre', 1)),
     ...cinquiemeHardMentalMath.map(q => mapQuestionFormat(q, '5ème', 'Calcul mental', 3)),
     ...cinquiemeHardArithmetic.map(q => mapQuestionFormat(q, '5ème', 'Arithmétique', 3)),
@@ -186,13 +197,13 @@ const levelQuestionsMap = buildLevelQuestions();
 const allLevelQuestions = Object.values(levelQuestionsMap).flat();
 
 // Combiner toutes les questions (CE1-4ème + niveaux générés, sans l'ancien CE1 qui est maintenant dans levelQuestionsMap)
-export const allQuestions: Question[] = [
+export const allQuestions: (Question | InteractiveQuestion)[] = [
   ...allLevelQuestions,
   ...allGeneratedQuestions,
 ];
 
 // Variable pour stocker les questions chargées depuis IndexedDB
-let cachedQuestions: Question[] | null = null;
+let cachedQuestions: (Question | InteractiveQuestion)[] | null = null;
 let isInitialized = false;
 
 // Initialiser IndexedDB avec les questions du code
@@ -215,22 +226,22 @@ export async function initializeQuestions(): Promise<void> {
 }
 
 // Obtenir toutes les questions (avec fallback synchrone)
-export function getAllQuestions(): Question[] {
+export function getAllQuestions(): (Question | InteractiveQuestion)[] {
   return cachedQuestions || allQuestions;
 }
 
 // Version async pour garantir le chargement depuis IndexedDB
-export async function getAllQuestionsAsync(): Promise<Question[]> {
+export async function getAllQuestionsAsync(): Promise<(Question | InteractiveQuestion)[]> {
   await initializeQuestions();
   return cachedQuestions || allQuestions;
 }
 
-export function getQuestionsByLevel(level: string): Question[] {
+export function getQuestionsByLevel(level: string): (Question | InteractiveQuestion)[] {
   const questions = getAllQuestions();
   return questions.filter(q => q.level === level);
 }
 
-export function getQuestionsByDomain(level: string, domain: string): Question[] {
+export function getQuestionsByDomain(level: string, domain: string): (Question | InteractiveQuestion)[] {
   const questions = getAllQuestions();
   return questions.filter(q => q.level === level && q.domain === domain);
 }
@@ -246,7 +257,7 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export function getRandomQuestions(level: string, domain: string, count: number): Question[] {
+export function getRandomQuestions(level: string, domain: string, count: number): (Question | InteractiveQuestion)[] {
   const questions = getQuestionsByDomain(level, domain);
   const shuffled = shuffleArray(questions);
   return shuffled.slice(0, Math.min(count, questions.length));

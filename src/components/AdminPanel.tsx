@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Question, GradeLevel, MathDomain } from '../types';
+import { Question, GradeLevel, MathDomain, InteractiveQuestion } from '../types';
 import { getAllQuestionsAsync } from '../data/questions';
 import { updateQuestion } from '../utils/database';
 import { GRADE_LEVELS, MATH_DOMAINS } from '../data/constants';
@@ -12,12 +12,12 @@ interface Props {
 
 export default function AdminPanel(props: Readonly<Props>) {
   const { onClose } = props;
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<(Question | InteractiveQuestion)[]>([]);
+  const [filteredQuestions, setFilteredQuestions] = useState<(Question | InteractiveQuestion)[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<GradeLevel | 'ALL'>('ALL');
   const [selectedDomain, setSelectedDomain] = useState<MathDomain | 'ALL'>('ALL');
   const [searchTerm, setSearchTerm] = useState('');
-  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+  const [editingQuestion, setEditingQuestion] = useState<Question | InteractiveQuestion | null>(null);
   const [showCorrectOnly, setShowCorrectOnly] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [tab, setTab] = useState<'questions' | 'reports'>('questions');
@@ -50,7 +50,7 @@ export default function AdminPanel(props: Readonly<Props>) {
     setFilteredQuestions(filtered);
   }, [selectedLevel, selectedDomain, searchTerm, questions]);
 
-  const handleEditQuestion = (question: Question) => {
+  const handleEditQuestion = (question: Question | InteractiveQuestion) => {
     setEditingQuestion({ ...question });
   };
 

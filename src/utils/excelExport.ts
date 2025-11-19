@@ -3,7 +3,7 @@
  * Handles exporting all questions to Excel and importing new questions
  */
 
-import { Question, type GradeLevel, type MathDomain } from '../types';
+import { Question, InteractiveQuestion, type GradeLevel, type MathDomain } from '../types';
 
 /**
  * Safely convert unknown value to string with type checking
@@ -19,7 +19,7 @@ function safeString(value: unknown, fallback = ''): string {
  * Export questions to Excel format (as CSV-like data)
  * Returns data suitable for xlsx library
  */
-export function exportQuestionsToExcel(questions: Question[]) {
+export function exportQuestionsToExcel(questions: (Question | InteractiveQuestion)[]) {
   // Prepare header row
   const headers = ['ID', 'Level', 'Domain', 'Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer (0-3)', 'Explanation', 'Difficulty'];
   
@@ -131,7 +131,7 @@ export function findDuplicates(newQuestions: Question[], existingQuestions: Ques
 /**
  * Generate CSV string from questions (fallback for Excel export)
  */
-export function generateQuestionsCSV(questions: Question[]): string {
+export function generateQuestionsCSV(questions: (Question | InteractiveQuestion)[]): string {
   const { headers, rows } = exportQuestionsToExcel(questions);
   
   const csvHeaders = headers.map(h => `"${h}"`).join(',');

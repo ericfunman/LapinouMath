@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GradeLevel, MathDomain, Question } from '../types';
+import { GradeLevel, MathDomain, Question, InteractiveQuestion } from '../types';
 import { getRandomQuestions } from '../data/questions';
 import { reportQuestionError } from '../utils/database';
 import emailjs from '@emailjs/browser';
@@ -23,7 +23,7 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function QuizScreen({ level, domain, onComplete, onExit }: Readonly<Props>) {
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<(Question | InteractiveQuestion)[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);

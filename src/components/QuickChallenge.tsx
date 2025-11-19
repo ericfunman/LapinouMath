@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { GradeLevel, Question } from '../types';
+import { GradeLevel, Question, InteractiveQuestion } from '../types';
 import { getRandomQuestions } from '../data/questions';
 
 interface Props {
@@ -22,7 +22,7 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function QuickChallenge({ level, onComplete, onExit }: Readonly<Props>) {
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<(Question | InteractiveQuestion)[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -34,7 +34,7 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
 
   useEffect(() => {
     const allDomains = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre', 'Kangourou'] as const;
-    const allQuestions: Question[] = [];
+    const allQuestions: (Question | InteractiveQuestion)[] = [];
     
     for (const domain of allDomains) {
       const domainQuestions = getRandomQuestions(level, domain, 3);
