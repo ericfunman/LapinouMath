@@ -6,6 +6,16 @@
 import { Question, type GradeLevel, type MathDomain } from '../types';
 
 /**
+ * Safely convert unknown value to string with type checking
+ */
+function safeString(value: unknown, fallback = ''): string {
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return String(value);
+  if (typeof value === 'boolean') return String(value);
+  return fallback;
+}
+
+/**
  * Export questions to Excel format (as CSV-like data)
  * Returns data suitable for xlsx library
  */
@@ -69,10 +79,10 @@ export function importQuestionsFromExcel(data: unknown[][]): { questions: Questi
       }
 
       const options = [
-        (row[4] || '').toString().trim(),
-        (row[5] || '').toString().trim(),
-        (row[6] || '').toString().trim(),
-        (row[7] || '').toString().trim(),
+        safeString(row[4]).trim(),
+        safeString(row[5]).trim(),
+        safeString(row[6]).trim(),
+        safeString(row[7]).trim(),
       ];
 
       // Check that all options are non-empty
@@ -82,13 +92,13 @@ export function importQuestionsFromExcel(data: unknown[][]): { questions: Questi
       }
 
       const question: Question = {
-        id: String(row[0] || `imported-${i}`).trim(),
-        level: String(row[1] || '').trim() as GradeLevel,
-        domain: String(row[2] || '').trim() as MathDomain,
-        question: String(row[3] || '').trim(),
+        id: safeString(row[0], `imported-${i}`).trim(),
+        level: safeString(row[1]).trim() as GradeLevel,
+        domain: safeString(row[2]).trim() as MathDomain,
+        question: safeString(row[3]).trim(),
         options,
         correctAnswer: correctAnswerIndex,
-        explanation: String(row[9] || '').trim(),
+        explanation: safeString(row[9]).trim(),
         difficulty: difficulty as 1 | 2 | 3,
       };
 

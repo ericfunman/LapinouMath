@@ -9,6 +9,16 @@ import { exportQuestionsToExcel, generateQuestionsCSV } from '../utils/excelExpo
 import { saveQuestions } from '../utils/database';
 import ExcelJS from 'exceljs';
 
+/**
+ * Safely convert unknown value to string with type checking
+ */
+function safeString(value: unknown, fallback = ''): string {
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return String(value);
+  if (typeof value === 'boolean') return String(value);
+  return fallback;
+}
+
 interface Props {
   allQuestions: Question[];
   onImportComplete: (importedCount: number, duplicates: number) => void;
@@ -170,29 +180,29 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
           
           const question = q as Record<string, unknown>;
           const steps = [
-            String(question.lessonStep1 || ''),
-            String(question.lessonStep2 || ''),
-            String(question.lessonStep3 || '')
+            safeString(question.lessonStep1),
+            safeString(question.lessonStep2),
+            safeString(question.lessonStep3)
           ].filter(Boolean);
 
           return {
-            id: String(question.id || crypto.randomUUID()),
-            level: String(question.level || 'CM1') as GradeLevel,
-            domain: String(question.domain || 'Calcul') as MathDomain,
-            question: String(question.question || ''),
+            id: safeString(question.id, crypto.randomUUID()),
+            level: safeString(question.level, 'CM1') as GradeLevel,
+            domain: safeString(question.domain, 'Calcul') as MathDomain,
+            question: safeString(question.question),
             options: [
-              String(question.option1 || ''),
-              String(question.option2 || ''),
-              String(question.option3 || ''),
-              String(question.option4 || '')
+              safeString(question.option1),
+              safeString(question.option2),
+              safeString(question.option3),
+              safeString(question.option4)
             ],
-            correctAnswer: Number.parseInt(String(question.correctAnswer || '0'), 10) || 0,
-            explanation: String(question.explanation || ''),
+            correctAnswer: Number.parseInt(safeString(question.correctAnswer, '0'), 10) || 0,
+            explanation: safeString(question.explanation),
             lesson: {
-              title: String(question.lessonTitle || ''),
+              title: safeString(question.lessonTitle),
               steps
             },
-            difficulty: (Number.parseInt(String(question.difficulty || '2'), 10) || 2) as 1 | 2 | 3
+            difficulty: (Number.parseInt(safeString(question.difficulty, '2'), 10) || 2) as 1 | 2 | 3
           };
         });
 
