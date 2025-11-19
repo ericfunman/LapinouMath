@@ -1,10 +1,16 @@
 import { allGeneratedQuestions } from './generatedQuestions';
 import { questionsCE2Detailed } from './questionsCE2Detailed';
+import { questionsCE2Detailed2 } from './questionsCE2Detailed2';
 import { questionsCM1Detailed } from './questionsCM1Detailed';
+import { questionsCM1Detailed2 } from './questionsCM1Detailed2';
 import { questionsCM2Detailed } from './questionsCM2Detailed';
+import { questionsCM2Detailed2 } from './questionsCM2Detailed2';
 import { questionsSixiemeDetailed } from './questionsSixiemeDetailed';
+import { questionsSixiemeDetailed2 } from './questionsSixiemeDetailed2';
 import { questionsCinquiemeDetailed } from './questionsCinquiemeDetailed';
+import { questionsCinquiemeDetailed2 } from './questionsCinquiemeDetailed2';
 import { questionsQuatriemerDetailed } from './questionsQuatriemerDetailed';
+import { questionsQuatriemerDetailed2 } from './questionsQuatriemerDetailed2';
 import {
   ce1MentalMath, ce1Arithmetic, ce1Numbers, ce1Comparison, ce1Measures,
   ce2MentalMath, ce2Arithmetic, ce2Fractions, ce2Measurements, ce2Problems,
@@ -80,6 +86,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   // CE2 + CE2 HARD + CE2 DETAILED (NEW)
   const ce2Questions = [
     ...questionsCE2Detailed,
+    ...questionsCE2Detailed2,
     ...ce2MentalMath.map(q => mapQuestionFormat(q, 'CE2', 'Calcul mental', 1)),
     ...ce2Arithmetic.map(q => mapQuestionFormat(q, 'CE2', 'Arithmétique', 1)),
     ...ce2Fractions.map(q => mapQuestionFormat(q, 'CE2', 'Fractions/Décimaux', 1)),
@@ -95,6 +102,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   // CM1 + CM1 HARD + CM1 DETAILED (NEW)
   const cm1Questions = [
     ...questionsCM1Detailed,
+    ...questionsCM1Detailed2,
     ...cm1MentalMath.map(q => mapQuestionFormat(q, 'CM1', 'Calcul mental', 1)),
     ...cm1Arithmetic.map(q => mapQuestionFormat(q, 'CM1', 'Arithmétique', 1)),
     ...cm1Fractions.map(q => mapQuestionFormat(q, 'CM1', 'Fractions/Décimaux', 1)),
@@ -111,6 +119,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   // CM2 + CM2 HARD + CM2 DETAILED (NEW)
   const cm2Questions = [
     ...questionsCM2Detailed,
+    ...questionsCM2Detailed2,
     ...cm2MentalMath.map(q => mapQuestionFormat(q, 'CM2', 'Calcul mental', 1)),
     ...cm2Arithmetic.map(q => mapQuestionFormat(q, 'CM2', 'Arithmétique', 1)),
     ...cm2Fractions.map(q => mapQuestionFormat(q, 'CM2', 'Fractions/Décimaux', 1)),
@@ -127,6 +136,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   // 6ème + 6ème HARD + 6ème DETAILED (NEW)
   const sixiemeQuestions = [
     ...questionsSixiemeDetailed,
+    ...questionsSixiemeDetailed2,
     ...sixiemeMentalMath.map(q => mapQuestionFormat(q, '6ème', 'Calcul mental', 1)),
     ...sixiemeArithmetic.map(q => mapQuestionFormat(q, '6ème', 'Arithmétique', 1)),
     ...sixiemeFractions.map(q => mapQuestionFormat(q, '6ème', 'Fractions/Décimaux', 1)),
@@ -142,6 +152,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   // 5ème + 5ème HARD + 5ème DETAILED (NEW)
   const cinquiemeQuestions = [
     ...questionsCinquiemeDetailed,
+    ...questionsCinquiemeDetailed2,
     ...cinquiemeMentalMath.map(q => mapQuestionFormat(q, '5ème', 'Calcul mental', 1)),
     ...cinquiemeArithmetic.map(q => mapQuestionFormat(q, '5ème', 'Arithmétique', 1)),
     ...cinquiemeProportions.map(q => mapQuestionFormat(q, '5ème', 'Proportions', 1)),
@@ -157,6 +168,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   // 4ème + 4ème HARD
   const quatriemeQuestions = [
     ...questionsQuatriemerDetailed,
+    ...questionsQuatriemerDetailed2,
     ...quatriemeMentalMath.map(q => mapQuestionFormat(q, '4ème', 'Calcul mental', 1)),
     ...quatriemeTrigonometry.map(q => mapQuestionFormat(q, '4ème', 'Géométrie', 1)),
     ...quatriemeProblems.map(q => mapQuestionFormat(q, '4ème', 'Problèmes/Algèbre', 1)),
