@@ -137,7 +137,7 @@ const mentalMathQuestions = [
 // Questions réelles pour Arithmétique
 const arithmeticQuestions = [
   { q: "Quel est le résultat de 234 + 567 ?", opts: ["791", "801", "811", "821"], ans: 1, exp: "234 + 567 = 801" },
-  { q: "Quel est le résultat de 890 - 456 ?", opts: ["424", "434", "444", "454"], ans: 2, exp: "890 - 456 = 434" },
+  { q: "Quel est le résultat de 890 - 456 ?", opts: ["424", "434", "444", "454"], ans: 1, exp: "890 - 456 = 434" },
   { q: "Quel est le résultat de 23 × 15 ?", opts: ["335", "345", "355", "365"], ans: 1, exp: "23 × 15 = 345" },
   { q: "Quel est le résultat de 576 ÷ 24 ?", opts: ["22", "23", "24", "25"], ans: 2, exp: "576 ÷ 24 = 24" },
   { q: "Quel est le résultat de 1200 ÷ 15 ?", opts: ["78", "80", "82", "84"], ans: 1, exp: "1200 ÷ 15 = 80" },

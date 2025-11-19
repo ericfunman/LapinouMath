@@ -92,26 +92,27 @@ Rapport ${i + 1}:
 - Domaine: ${r.domain}
 - Question: ${r.questionText}
 - Note: ${r.userNote}
+- ID Question: ${r.questionId}
 - Date: ${new Date(r.timestamp || 0).toLocaleString()}
       `).join('\n---\n');
 
-      // Initialize EmailJS
-      emailjs.init({
-        publicKey: 'YOUR_PUBLIC_KEY_HERE', // User will need to configure this
-      });
-
-      // Send email
+      // Send email using EmailJS
       await emailjs.send(
-        'service_lapinoumath',
-        'template_error_report',
+        'service_305dfu9',
+        'template_xphq7n2',
         {
-          to_email: 'your-email@example.com', // Configure this
+          to_email: 'email@example.com',
           reports_count: reportsToSend.length,
           reports_text: reportText,
+          level: reportsToSend[0]?.level || 'N/A',
+          domain: reportsToSend[0]?.domain || 'N/A',
+          questionText: reportsToSend[0]?.questionText || 'N/A',
+          userNote: reportsToSend[0]?.userNote || 'N/A',
+          timestamp: new Date().toLocaleString(),
         }
       );
 
-      setStatusMessage(`${reportsToSend.length} rapport(s) envoyé(s) avec succès`);
+      setStatusMessage(`${reportsToSend.length} rapport(s) envoyé(s) avec succès 📧`);
       setSendStatus('success');
       
       // Delete sent reports
@@ -119,7 +120,7 @@ Rapport ${i + 1}:
       setSelectedReports(new Set());
     } catch (error) {
       console.error('Erreur lors de l\'envoi:', error);
-      setStatusMessage('Erreur: EmailJS non configuré. Veuillez configurer vos credentials EmailJS.');
+      setStatusMessage('Erreur: Impossible d\'envoyer les rapports. Vérifiez la configuration EmailJS.');
       setSendStatus('error');
     } finally {
       setSending(false);
