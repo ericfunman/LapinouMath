@@ -4,6 +4,7 @@ import { questionsCM1Detailed } from './questionsCM1Detailed';
 import { questionsCM2Detailed } from './questionsCM2Detailed';
 import { questionsSixiemeDetailed } from './questionsSixiemeDetailed';
 import { questionsCinquiemeDetailed } from './questionsCinquiemeDetailed';
+import { questionsQuatriemerDetailed } from './questionsQuatriemerDetailed';
 import {
   ce1MentalMath, ce1Arithmetic, ce1Numbers, ce1Comparison, ce1Measures,
   ce2MentalMath, ce2Arithmetic, ce2Fractions, ce2Measurements, ce2Problems,
@@ -155,6 +156,7 @@ const buildLevelQuestions = (): Record<string, Question[]> => {
   
   // 4ème + 4ème HARD
   const quatriemeQuestions = [
+    ...questionsQuatriemerDetailed,
     ...quatriemeMentalMath.map(q => mapQuestionFormat(q, '4ème', 'Calcul mental', 1)),
     ...quatriemeTrigonometry.map(q => mapQuestionFormat(q, '4ème', 'Géométrie', 1)),
     ...quatriemeProblems.map(q => mapQuestionFormat(q, '4ème', 'Problèmes/Algèbre', 1)),
