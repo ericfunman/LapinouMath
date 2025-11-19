@@ -22,10 +22,8 @@ function App() {
     async function initialize() {
       try {
         await initDB();
-        console.log('✅ Base de données initialisée');
         
         await initializeQuestions();
-        console.log('✅ Questions initialisées');
       } catch (err) {
         console.error('❌ Erreur initialisation:', err);
       } finally {

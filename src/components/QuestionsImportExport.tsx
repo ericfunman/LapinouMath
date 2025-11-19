@@ -4,7 +4,7 @@
  */
 
 import { useState, useRef } from 'react';
-import { Question } from '../types';
+import { Question, type GradeLevel, type MathDomain } from '../types';
 import { exportQuestionsToExcel, generateQuestionsCSV } from '../utils/excelExport';
 import { saveQuestions } from '../utils/database';
 import ExcelJS from 'exceljs';
@@ -165,31 +165,34 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
       const validQuestions = parsedData.filter(q => q && typeof q === 'object');
 
       if (validQuestions.length > 0) {
-        const importedQuestions = validQuestions.map((q: any) => {
+        const importedQuestions = validQuestions.map((q: unknown) => {
+          if (typeof q !== 'object' || q === null) throw new Error('Invalid question');
+          
+          const question = q as Record<string, unknown>;
           const steps = [
-            q.lessonStep1?.toString() || '',
-            q.lessonStep2?.toString() || '',
-            q.lessonStep3?.toString() || ''
+            String(question.lessonStep1 || ''),
+            String(question.lessonStep2 || ''),
+            String(question.lessonStep3 || '')
           ].filter(Boolean);
 
           return {
-            id: q.id || crypto.randomUUID(),
-            level: q.level?.toString() || 'CM1',
-            domain: q.domain?.toString() || 'Calcul',
-            question: q.question?.toString() || '',
+            id: String(question.id || crypto.randomUUID()),
+            level: String(question.level || 'CM1') as GradeLevel,
+            domain: String(question.domain || 'Calcul') as MathDomain,
+            question: String(question.question || ''),
             options: [
-              q.option1?.toString() || '',
-              q.option2?.toString() || '',
-              q.option3?.toString() || '',
-              q.option4?.toString() || ''
+              String(question.option1 || ''),
+              String(question.option2 || ''),
+              String(question.option3 || ''),
+              String(question.option4 || '')
             ],
-            correctAnswer: Number.parseInt(q.correctAnswer?.toString() || '0', 10) || 0,
-            explanation: q.explanation?.toString() || '',
+            correctAnswer: Number.parseInt(String(question.correctAnswer || '0'), 10) || 0,
+            explanation: String(question.explanation || ''),
             lesson: {
-              title: q.lessonTitle?.toString() || '',
+              title: String(question.lessonTitle || ''),
               steps
             },
-            difficulty: (Number.parseInt(q.difficulty?.toString() || '2', 10) || 2) as 1 | 2 | 3
+            difficulty: (Number.parseInt(String(question.difficulty || '2'), 10) || 2) as 1 | 2 | 3
           };
         });
 

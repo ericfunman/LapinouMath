@@ -136,7 +136,7 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
             reports_text: `Rapport d'erreur:\n- Niveau: ${level}\n- Domaine: ${domain}\n- Question: ${currentQuestion.question}\n- Date: ${new Date().toLocaleString()}`
           }
         );
-        console.log('✅ Email envoyé automatiquement');
+        // Email auto-report sent
       } catch (emailError) {
         console.warn('⚠️ Email automatique non envoyé (rapport sauvegardé en local):', emailError);
       }
