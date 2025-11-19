@@ -196,6 +196,10 @@ export interface ErrorReport {
   userNote?: string;
 }
 
+export interface StoredErrorReport extends ErrorReport {
+  id: number;
+}
+
 export const reportQuestionError = async (report: ErrorReport): Promise<void> => {
   const database = await initDB();
   return new Promise((resolve, reject) => {
@@ -211,7 +215,7 @@ export const reportQuestionError = async (report: ErrorReport): Promise<void> =>
   });
 };
 
-export const getErrorReports = async (): Promise<ErrorReport[]> => {
+export const getErrorReports = async (): Promise<StoredErrorReport[]> => {
   const database = await initDB();
   return new Promise((resolve, reject) => {
     const transaction = database.transaction([ERROR_REPORTS_STORE], 'readonly');
@@ -219,7 +223,7 @@ export const getErrorReports = async (): Promise<ErrorReport[]> => {
     const request = store.getAll();
 
     request.onsuccess = () => {
-      resolve(request.result || []);
+      resolve((request.result || []) as StoredErrorReport[]);
     };
 
     request.onerror = () => {

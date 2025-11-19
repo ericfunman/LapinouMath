@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { getErrorReports, deleteErrorReport, ErrorReport } from '../utils/database';
+import { getErrorReports, deleteErrorReport } from '../utils/database';
+import type { StoredErrorReport } from '../utils/database';
 import emailjs from '@emailjs/browser';
 import '../styles/ErrorReportsTab.css';
 
 export default function ErrorReportsTab() {
-  const [reports, setReports] = useState<ErrorReport[]>([]);
+  const [reports, setReports] = useState<StoredErrorReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [selectedReports, setSelectedReports] = useState<Set<number>>(new Set());
@@ -43,7 +44,7 @@ export default function ErrorReportsTab() {
     if (selectedReports.size === reports.length) {
       setSelectedReports(new Set());
     } else {
-      setSelectedReports(new Set(reports.map((r) => r.id!)));
+      setSelectedReports(new Set(reports.map((r) => r.id)));
     }
   };
 
@@ -203,12 +204,12 @@ Rapport ${i + 1}:
             {reports.map((report) => (
               <div 
                 key={report.id} 
-                className={`report-item ${selectedReports.has(report.id!) ? 'selected' : ''}`}
+                className={`report-item ${selectedReports.has(report.id) ? 'selected' : ''}`}
               >
                 <input
                   type="checkbox"
-                  checked={selectedReports.has(report.id!)}
-                  onChange={() => toggleReportSelection(report.id!)}
+                  checked={selectedReports.has(report.id)}
+                  onChange={() => toggleReportSelection(report.id)}
                   className="report-checkbox"
                 />
                 
