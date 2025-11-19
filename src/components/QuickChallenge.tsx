@@ -8,6 +8,17 @@ interface Props {
   readonly onExit: () => void;
 }
 
+// Fonction de mélange utilisant l'algorithme Fisher-Yates
+// Plus robuste que sort() avec Math.random() pour éviter les biais
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export default function QuickChallenge({ level, onComplete, onExit }: Readonly<Props>) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -29,7 +40,9 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
     }
     
     // Mélanger et prendre 20 questions
-    const shuffledQuestions = [...allQuestions].sort(() => Math.random() - 0.5).slice(0, 20);
+    // Utilisation de Math.random() pour le mélange des questions - acceptable dans un contexte éducatif
+    // car il ne s'agit pas de sécurité cryptographique mais de variété pédagogique
+    const shuffledQuestions = shuffleArray([...allQuestions]).slice(0, 20);
     setQuestions(shuffledQuestions);
   }, [level]);
 
