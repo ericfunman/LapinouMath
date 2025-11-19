@@ -7,7 +7,7 @@ import * as profileService from '../services/profile.service.js';
 export async function getProgress(req: AuthenticatedRequest, res: Response) {
   try {
     const { profileId } = req.params;
-    const profile = await profileService.getProfileById(parseInt(profileId, 10));
+    const profile = await profileService.getProfileById(Number.parseInt(profileId, 10));
 
     if (!profile) {
       return res.status(404).json({ error: 'Profile not found' });
@@ -17,7 +17,7 @@ export async function getProgress(req: AuthenticatedRequest, res: Response) {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
-    const progress = await progressService.getProgressByProfileId(parseInt(profileId, 10));
+    const progress = await progressService.getProgressByProfileId(Number.parseInt(profileId, 10));
     res.json(progress);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -34,7 +34,7 @@ export async function updateProgress(req: AuthenticatedRequest, res: Response) {
     const { profileId, domain } = req.params;
     const { level, stats } = req.body;
 
-    const profile = await profileService.getProfileById(parseInt(profileId, 10));
+    const profile = await profileService.getProfileById(Number.parseInt(profileId, 10));
     if (!profile) {
       return res.status(404).json({ error: 'Profile not found' });
     }
@@ -43,11 +43,11 @@ export async function updateProgress(req: AuthenticatedRequest, res: Response) {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
-    let progress = await progressService.getProgressByDomain(parseInt(profileId, 10), domain);
+    let progress = await progressService.getProgressByDomain(Number.parseInt(profileId, 10), domain);
 
     if (!progress) {
       progress = await progressService.createProgressRecord(
-        parseInt(profileId, 10),
+        Number.parseInt(profileId, 10),
         level,
         domain,
         stats || {}

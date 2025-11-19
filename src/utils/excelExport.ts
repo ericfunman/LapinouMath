@@ -56,13 +56,13 @@ export function importQuestionsFromExcel(data: any[]): { questions: Question[], 
         continue;
       }
 
-      const correctAnswerIndex = parseInt(row[8]);
-      if (isNaN(correctAnswerIndex) || correctAnswerIndex < 0 || correctAnswerIndex > 3) {
+      const correctAnswerIndex = Number.parseInt(row[8], 10);
+      if (Number.isNaN(correctAnswerIndex) || correctAnswerIndex < 0 || correctAnswerIndex > 3) {
         errors.push(`Ligne ${i + 1}: Index de réponse correcte invalide (doit être 0-3)`);
         continue;
       }
 
-      const difficulty = parseInt(row[10]) || 2;
+      const difficulty = Number.parseInt(row[10], 10) || 2;
       if (difficulty < 1 || difficulty > 3) {
         errors.push(`Ligne ${i + 1}: Difficulté invalide (doit être 1, 2 ou 3)`);
         continue;
@@ -83,8 +83,8 @@ export function importQuestionsFromExcel(data: any[]): { questions: Question[], 
 
       const question: Question = {
         id: (row[0] || `imported-${i}`).toString().trim(),
-        level: (row[1] || '').toString().trim() as any,
-        domain: (row[2] || '').toString().trim() as any,
+        level: (row[1] || '').toString().trim(),
+        domain: (row[2] || '').toString().trim(),
         question: (row[3] || '').toString().trim(),
         options,
         correctAnswer: correctAnswerIndex,

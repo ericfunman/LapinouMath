@@ -46,7 +46,7 @@ def evaluate_math_expression(expr_str: str) -> Optional[str]:
         # Safely evaluate
         result = eval(expr_str)
         return str(result)
-    except Exception as e:
+    except Exception:
         return None
 
 def extract_and_evaluate(question_text: str) -> Optional[str]:
@@ -119,7 +119,7 @@ for idx, (question_text, opts_str, ans_idx_str, explanation) in enumerate(questi
                     'ans_idx': ans_idx,
                     'options': opts,
                 })
-        except:
+        except ValueError:
             pass
 
 print("=" * 80)

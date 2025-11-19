@@ -39,7 +39,7 @@ export async function listProfiles(req: AuthenticatedRequest, res: Response) {
 export async function getProfile(req: AuthenticatedRequest, res: Response) {
   try {
     const { id } = req.params;
-    const profile = await profileService.getProfileById(parseInt(id, 10));
+    const profile = await profileService.getProfileById(Number.parseInt(id, 10));
 
     if (!profile) {
       return res.status(404).json({ error: 'Profile not found' });
@@ -58,7 +58,7 @@ export async function getProfile(req: AuthenticatedRequest, res: Response) {
 export async function updateProfile(req: AuthenticatedRequest, res: Response) {
   try {
     const { id } = req.params;
-    const profile = await profileService.getProfileById(parseInt(id, 10));
+    const profile = await profileService.getProfileById(Number.parseInt(id, 10));
 
     if (!profile) {
       return res.status(404).json({ error: 'Profile not found' });
@@ -69,7 +69,7 @@ export async function updateProfile(req: AuthenticatedRequest, res: Response) {
     }
 
     const { name, gradeLevel, totalStars } = req.body;
-    const updated = await profileService.updateProfile(parseInt(id, 10), name, gradeLevel, totalStars);
+    const updated = await profileService.updateProfile(Number.parseInt(id, 10), name, gradeLevel, totalStars);
 
     res.json(updated);
   } catch (error: any) {
@@ -80,7 +80,7 @@ export async function updateProfile(req: AuthenticatedRequest, res: Response) {
 export async function deleteProfile(req: AuthenticatedRequest, res: Response) {
   try {
     const { id } = req.params;
-    const profile = await profileService.getProfileById(parseInt(id, 10));
+    const profile = await profileService.getProfileById(Number.parseInt(id, 10));
 
     if (!profile) {
       return res.status(404).json({ error: 'Profile not found' });
@@ -90,7 +90,7 @@ export async function deleteProfile(req: AuthenticatedRequest, res: Response) {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
-    const deleted = await profileService.deleteProfile(parseInt(id, 10));
+    const deleted = await profileService.deleteProfile(Number.parseInt(id, 10));
 
     if (deleted) {
       res.status(204).send();

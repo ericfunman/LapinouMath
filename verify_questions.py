@@ -100,7 +100,7 @@ for idx, (question_text, opts_str, ans_idx_str, explanation) in enumerate(questi
                             'explanation': explanation,
                             'idx': idx
                         })
-        except:
+        except ValueError:
             pass
 
 print(f"✅ Total questions checked: {total_checked}")
