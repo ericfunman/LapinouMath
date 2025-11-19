@@ -10,6 +10,20 @@ export type MathDomain =
   | 'Bonus - Défi Rapide'
   | 'Kangourou';
 
+export type InteractionType = 'click' | 'draw' | 'select' | 'drag' | 'measure';
+
+export interface InteractiveElement {
+  id: string;
+  type: 'point' | 'line' | 'circle' | 'polygon' | 'angle' | 'segment';
+  x?: number;
+  y?: number;
+  radius?: number;
+  points?: { x: number; y: number }[];
+  label?: string;
+  color?: string;
+  interactive?: boolean;
+}
+
 export interface Question {
   id: string;
   level: GradeLevel;
@@ -24,7 +38,24 @@ export interface Question {
     images?: string[];
   };
   difficulty: 1 | 2 | 3;
+  isInteractive?: false;
 }
+
+export type InteractiveQuestion = Omit<Question, 'isInteractive'> & {
+  isInteractive: true;
+  interactionType: InteractionType;
+  canvas: {
+    width: number;
+    height: number;
+    elements: InteractiveElement[];
+    grid?: boolean;
+  };
+  expectedInteraction: {
+    type: InteractionType;
+    targetElement?: string;
+    description: string;
+  };
+};
 
 export interface UserProfile {
   id: string;
