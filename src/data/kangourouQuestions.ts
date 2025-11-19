@@ -3208,7 +3208,7 @@ export const allKangourouQuestions = [
     opts: ["43", "44", "42", "53"],
     ans: 0,
     exp: "28 + 15 = 43.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3216,7 +3216,7 @@ export const allKangourouQuestions = [
     opts: ["69", "71", "67", "79"],
     ans: 0,
     exp: "26 + 43 = 69.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3224,7 +3224,7 @@ export const allKangourouQuestions = [
     opts: ["59", "61", "56", "68"],
     ans: 0,
     exp: "40 + 19 = 59.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3232,7 +3232,7 @@ export const allKangourouQuestions = [
     opts: ["62", "67", "57", "70"],
     ans: 0,
     exp: "28 + 34 = 62.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3240,7 +3240,7 @@ export const allKangourouQuestions = [
     opts: ["100", "103", "98", "107"],
     ans: 0,
     exp: "50 + 50 = 100.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3248,7 +3248,7 @@ export const allKangourouQuestions = [
     opts: ["86", "89", "84", "95"],
     ans: 0,
     exp: "39 + 47 = 86.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3256,7 +3256,7 @@ export const allKangourouQuestions = [
     opts: ["60", "64", "59", "67"],
     ans: 0,
     exp: "40 + 20 = 60.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3264,7 +3264,7 @@ export const allKangourouQuestions = [
     opts: ["85", "90", "83", "92"],
     ans: 0,
     exp: "49 + 36 = 85.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3272,7 +3272,7 @@ export const allKangourouQuestions = [
     opts: ["16", "19", "11", "23"],
     ans: 0,
     exp: "1 + 15 = 16.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3280,7 +3280,7 @@ export const allKangourouQuestions = [
     opts: ["83", "87", "82", "89"],
     ans: 0,
     exp: "48 + 35 = 83.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3288,7 +3288,7 @@ export const allKangourouQuestions = [
     opts: ["32", "33", "28", "40"],
     ans: 0,
     exp: "28 + 4 = 32.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3296,7 +3296,7 @@ export const allKangourouQuestions = [
     opts: ["61", "66", "58", "68"],
     ans: 0,
     exp: "25 + 36 = 61.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3304,7 +3304,7 @@ export const allKangourouQuestions = [
     opts: ["47", "48", "46", "53"],
     ans: 0,
     exp: "2 + 45 = 47.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3312,7 +3312,7 @@ export const allKangourouQuestions = [
     opts: ["48", "49", "45", "57"],
     ans: 0,
     exp: "25 + 23 = 48.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3320,7 +3320,7 @@ export const allKangourouQuestions = [
     opts: ["90", "91", "85", "98"],
     ans: 0,
     exp: "48 + 42 = 90.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3328,7 +3328,7 @@ export const allKangourouQuestions = [
     opts: ["42", "43", "39", "52"],
     ans: 0,
     exp: "19 + 23 = 42.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3336,7 +3336,7 @@ export const allKangourouQuestions = [
     opts: ["62", "65", "59", "68"],
     ans: 0,
     exp: "33 + 29 = 62.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3344,7 +3344,7 @@ export const allKangourouQuestions = [
     opts: ["23", "28", "18", "32"],
     ans: 0,
     exp: "6 + 17 = 23.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3352,7 +3352,7 @@ export const allKangourouQuestions = [
     opts: ["90", "94", "86", "96"],
     ans: 0,
     exp: "49 + 41 = 90.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3360,7 +3360,7 @@ export const allKangourouQuestions = [
     opts: ["65", "67", "63", "74"],
     ans: 0,
     exp: "17 + 48 = 65.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3368,7 +3368,7 @@ export const allKangourouQuestions = [
     opts: ["54", "56", "51", "61"],
     ans: 0,
     exp: "9 + 45 = 54.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3376,7 +3376,7 @@ export const allKangourouQuestions = [
     opts: ["77", "78", "75", "84"],
     ans: 0,
     exp: "44 + 33 = 77.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3384,7 +3384,7 @@ export const allKangourouQuestions = [
     opts: ["66", "70", "64", "75"],
     ans: 0,
     exp: "40 + 26 = 66.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3392,7 +3392,7 @@ export const allKangourouQuestions = [
     opts: ["42", "44", "37", "49"],
     ans: 0,
     exp: "6 + 36 = 42.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3400,7 +3400,7 @@ export const allKangourouQuestions = [
     opts: ["40", "45", "37", "49"],
     ans: 0,
     exp: "8 + 32 = 40.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3408,7 +3408,7 @@ export const allKangourouQuestions = [
     opts: ["68", "70", "67", "75"],
     ans: 0,
     exp: "42 + 26 = 68.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3416,7 +3416,7 @@ export const allKangourouQuestions = [
     opts: ["30", "35", "25", "40"],
     ans: 0,
     exp: "13 + 17 = 30.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3424,7 +3424,7 @@ export const allKangourouQuestions = [
     opts: ["77", "80", "76", "83"],
     ans: 0,
     exp: "29 + 48 = 77.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3432,7 +3432,7 @@ export const allKangourouQuestions = [
     opts: ["26", "28", "22", "35"],
     ans: 0,
     exp: "6 + 20 = 26.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3440,7 +3440,7 @@ export const allKangourouQuestions = [
     opts: ["70", "74", "67", "77"],
     ans: 0,
     exp: "33 + 37 = 70.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3448,7 +3448,7 @@ export const allKangourouQuestions = [
     opts: ["88", "91", "84", "98"],
     ans: 0,
     exp: "45 + 43 = 88.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3456,7 +3456,7 @@ export const allKangourouQuestions = [
     opts: ["4", "7", "2", "10"],
     ans: 0,
     exp: "2 + 2 = 4.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3464,7 +3464,7 @@ export const allKangourouQuestions = [
     opts: ["44", "45", "40", "50"],
     ans: 0,
     exp: "36 + 8 = 44.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3472,7 +3472,7 @@ export const allKangourouQuestions = [
     opts: ["55", "60", "50", "64"],
     ans: 0,
     exp: "26 + 29 = 55.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3480,7 +3480,7 @@ export const allKangourouQuestions = [
     opts: ["43", "46", "40", "50"],
     ans: 0,
     exp: "33 + 10 = 43.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3488,7 +3488,7 @@ export const allKangourouQuestions = [
     opts: ["51", "53", "47", "59"],
     ans: 0,
     exp: "38 + 13 = 51.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3496,7 +3496,7 @@ export const allKangourouQuestions = [
     opts: ["60", "61", "56", "70"],
     ans: 0,
     exp: "43 + 17 = 60.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3504,7 +3504,7 @@ export const allKangourouQuestions = [
     opts: ["45", "47", "42", "53"],
     ans: 0,
     exp: "30 + 15 = 45.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3512,7 +3512,7 @@ export const allKangourouQuestions = [
     opts: ["37", "40", "33", "46"],
     ans: 0,
     exp: "1 + 36 = 37.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3520,7 +3520,7 @@ export const allKangourouQuestions = [
     opts: ["65", "69", "64", "74"],
     ans: 0,
     exp: "21 + 44 = 65.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3528,7 +3528,7 @@ export const allKangourouQuestions = [
     opts: ["20", "23", "19", "28"],
     ans: 0,
     exp: "9 + 11 = 20.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3536,7 +3536,7 @@ export const allKangourouQuestions = [
     opts: ["51", "55", "49", "60"],
     ans: 0,
     exp: "1 + 50 = 51.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3544,7 +3544,7 @@ export const allKangourouQuestions = [
     opts: ["26", "30", "22", "32"],
     ans: 0,
     exp: "14 + 12 = 26.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3552,7 +3552,7 @@ export const allKangourouQuestions = [
     opts: ["24", "25", "23", "34"],
     ans: 0,
     exp: "11 + 13 = 24.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3560,7 +3560,7 @@ export const allKangourouQuestions = [
     opts: ["14", "16", "12", "22"],
     ans: 0,
     exp: "1 + 13 = 14.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3568,7 +3568,7 @@ export const allKangourouQuestions = [
     opts: ["25", "27", "20", "32"],
     ans: 0,
     exp: "13 + 12 = 25.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3576,7 +3576,7 @@ export const allKangourouQuestions = [
     opts: ["92", "93", "89", "102"],
     ans: 0,
     exp: "46 + 46 = 92.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3584,7 +3584,7 @@ export const allKangourouQuestions = [
     opts: ["59", "63", "54", "66"],
     ans: 0,
     exp: "10 + 49 = 59.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3592,7 +3592,7 @@ export const allKangourouQuestions = [
     opts: ["59", "60", "54", "66"],
     ans: 0,
     exp: "27 + 32 = 59.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3600,7 +3600,7 @@ export const allKangourouQuestions = [
     opts: ["49", "54", "44", "57"],
     ans: 0,
     exp: "43 + 6 = 49.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3608,7 +3608,7 @@ export const allKangourouQuestions = [
     opts: ["57", "58", "53", "63"],
     ans: 0,
     exp: "19 + 38 = 57.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3616,7 +3616,7 @@ export const allKangourouQuestions = [
     opts: ["33", "37", "32", "43"],
     ans: 0,
     exp: "21 + 12 = 33.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3624,7 +3624,7 @@ export const allKangourouQuestions = [
     opts: ["32", "37", "31", "41"],
     ans: 0,
     exp: "29 + 3 = 32.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3632,7 +3632,7 @@ export const allKangourouQuestions = [
     opts: ["88", "92", "84", "98"],
     ans: 0,
     exp: "38 + 50 = 88.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3640,7 +3640,7 @@ export const allKangourouQuestions = [
     opts: ["28", "30", "25", "34"],
     ans: 0,
     exp: "9 + 19 = 28.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3648,7 +3648,7 @@ export const allKangourouQuestions = [
     opts: ["8", "11", "5", "17"],
     ans: 0,
     exp: "6 + 2 = 8.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3656,7 +3656,7 @@ export const allKangourouQuestions = [
     opts: ["70", "74", "67", "80"],
     ans: 0,
     exp: "22 + 48 = 70.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3664,7 +3664,7 @@ export const allKangourouQuestions = [
     opts: ["57", "58", "52", "65"],
     ans: 0,
     exp: "31 + 26 = 57.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3672,7 +3672,7 @@ export const allKangourouQuestions = [
     opts: ["49", "52", "44", "55"],
     ans: 0,
     exp: "28 + 21 = 49.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3680,7 +3680,7 @@ export const allKangourouQuestions = [
     opts: ["27", "30", "25", "37"],
     ans: 0,
     exp: "24 + 3 = 27.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3688,7 +3688,7 @@ export const allKangourouQuestions = [
     opts: ["68", "70", "63", "74"],
     ans: 0,
     exp: "43 + 25 = 68.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3696,7 +3696,7 @@ export const allKangourouQuestions = [
     opts: ["21", "25", "20", "31"],
     ans: 0,
     exp: "16 + 5 = 21.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3704,7 +3704,7 @@ export const allKangourouQuestions = [
     opts: ["45", "47", "42", "54"],
     ans: 0,
     exp: "13 + 32 = 45.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3712,7 +3712,7 @@ export const allKangourouQuestions = [
     opts: ["61", "65", "57", "68"],
     ans: 0,
     exp: "35 + 26 = 61.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3720,7 +3720,7 @@ export const allKangourouQuestions = [
     opts: ["48", "52", "44", "55"],
     ans: 0,
     exp: "27 + 21 = 48.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3728,7 +3728,7 @@ export const allKangourouQuestions = [
     opts: ["64", "65", "61", "73"],
     ans: 0,
     exp: "48 + 16 = 64.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3736,7 +3736,7 @@ export const allKangourouQuestions = [
     opts: ["50", "55", "45", "59"],
     ans: 0,
     exp: "24 + 26 = 50.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3744,7 +3744,7 @@ export const allKangourouQuestions = [
     opts: ["54", "59", "53", "61"],
     ans: 0,
     exp: "40 + 14 = 54.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3752,7 +3752,7 @@ export const allKangourouQuestions = [
     opts: ["47", "50", "46", "56"],
     ans: 0,
     exp: "17 + 30 = 47.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3760,7 +3760,7 @@ export const allKangourouQuestions = [
     opts: ["56", "61", "53", "62"],
     ans: 0,
     exp: "8 + 48 = 56.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3768,7 +3768,7 @@ export const allKangourouQuestions = [
     opts: ["39", "40", "36", "48"],
     ans: 0,
     exp: "34 + 5 = 39.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3776,7 +3776,7 @@ export const allKangourouQuestions = [
     opts: ["47", "50", "43", "54"],
     ans: 0,
     exp: "4 + 43 = 47.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3784,7 +3784,7 @@ export const allKangourouQuestions = [
     opts: ["23", "26", "18", "29"],
     ans: 0,
     exp: "5 + 18 = 23.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3792,7 +3792,7 @@ export const allKangourouQuestions = [
     opts: ["53", "58", "48", "63"],
     ans: 0,
     exp: "40 + 13 = 53.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3800,7 +3800,7 @@ export const allKangourouQuestions = [
     opts: ["85", "90", "84", "91"],
     ans: 0,
     exp: "48 + 37 = 85.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3808,7 +3808,7 @@ export const allKangourouQuestions = [
     opts: ["37", "38", "33", "45"],
     ans: 0,
     exp: "2 + 35 = 37.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3816,7 +3816,7 @@ export const allKangourouQuestions = [
     opts: ["16", "18", "11", "22"],
     ans: 0,
     exp: "1 + 15 = 16.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3824,7 +3824,7 @@ export const allKangourouQuestions = [
     opts: ["66", "68", "63", "73"],
     ans: 0,
     exp: "35 + 31 = 66.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3832,7 +3832,7 @@ export const allKangourouQuestions = [
     opts: ["43", "48", "41", "51"],
     ans: 0,
     exp: "25 + 18 = 43.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3840,7 +3840,7 @@ export const allKangourouQuestions = [
     opts: ["30", "31", "29", "40"],
     ans: 0,
     exp: "25 + 5 = 30.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3848,7 +3848,7 @@ export const allKangourouQuestions = [
     opts: ["16", "21", "14", "24"],
     ans: 0,
     exp: "4 + 12 = 16.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3856,7 +3856,7 @@ export const allKangourouQuestions = [
     opts: ["67", "71", "62", "74"],
     ans: 0,
     exp: "24 + 43 = 67.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3864,7 +3864,7 @@ export const allKangourouQuestions = [
     opts: ["39", "43", "35", "48"],
     ans: 0,
     exp: "21 + 18 = 39.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3872,7 +3872,7 @@ export const allKangourouQuestions = [
     opts: ["49", "54", "48", "57"],
     ans: 0,
     exp: "1 + 48 = 49.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3880,7 +3880,7 @@ export const allKangourouQuestions = [
     opts: ["33", "35", "30", "41"],
     ans: 0,
     exp: "24 + 9 = 33.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3888,7 +3888,7 @@ export const allKangourouQuestions = [
     opts: ["75", "80", "72", "85"],
     ans: 0,
     exp: "50 + 25 = 75.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3896,7 +3896,7 @@ export const allKangourouQuestions = [
     opts: ["49", "53", "48", "55"],
     ans: 0,
     exp: "16 + 33 = 49.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3904,7 +3904,7 @@ export const allKangourouQuestions = [
     opts: ["53", "58", "49", "62"],
     ans: 0,
     exp: "20 + 33 = 53.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3912,7 +3912,7 @@ export const allKangourouQuestions = [
     opts: ["43", "44", "40", "50"],
     ans: 0,
     exp: "22 + 21 = 43.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3920,7 +3920,7 @@ export const allKangourouQuestions = [
     opts: ["3", "8", "0", "13"],
     ans: 0,
     exp: "1 + 2 = 3.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3928,7 +3928,7 @@ export const allKangourouQuestions = [
     opts: ["34", "39", "32", "44"],
     ans: 0,
     exp: "33 + 1 = 34.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3936,7 +3936,7 @@ export const allKangourouQuestions = [
     opts: ["86", "91", "82", "93"],
     ans: 0,
     exp: "44 + 42 = 86.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3944,7 +3944,7 @@ export const allKangourouQuestions = [
     opts: ["46", "50", "42", "53"],
     ans: 0,
     exp: "32 + 14 = 46.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3952,7 +3952,7 @@ export const allKangourouQuestions = [
     opts: ["27", "30", "23", "35"],
     ans: 0,
     exp: "2 + 25 = 27.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3960,7 +3960,7 @@ export const allKangourouQuestions = [
     opts: ["14", "19", "12", "21"],
     ans: 0,
     exp: "4 + 10 = 14.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3968,7 +3968,7 @@ export const allKangourouQuestions = [
     opts: ["69", "73", "67", "78"],
     ans: 0,
     exp: "31 + 38 = 69.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3976,7 +3976,7 @@ export const allKangourouQuestions = [
     opts: ["72", "73", "68", "79"],
     ans: 0,
     exp: "27 + 45 = 72.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3984,7 +3984,7 @@ export const allKangourouQuestions = [
     opts: ["54", "55", "53", "62"],
     ans: 0,
     exp: "38 + 16 = 54.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -3992,7 +3992,7 @@ export const allKangourouQuestions = [
     opts: ["61", "62", "56", "71"],
     ans: 0,
     exp: "17 + 44 = 61.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -4000,7 +4000,7 @@ export const allKangourouQuestions = [
     opts: ["24", "27", "19", "33"],
     ans: 0,
     exp: "16 + 8 = 24.",
-    level: "6e",
+    level: "6ème",
     difficulty: 3
   },
   {
@@ -4008,7 +4008,7 @@ export const allKangourouQuestions = [
     opts: ["65", "66", "60", "74"],
     ans: 0,
     exp: "48 + 17 = 65.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4016,7 +4016,7 @@ export const allKangourouQuestions = [
     opts: ["60", "62", "57", "66"],
     ans: 0,
     exp: "17 + 43 = 60.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4024,7 +4024,7 @@ export const allKangourouQuestions = [
     opts: ["57", "61", "52", "66"],
     ans: 0,
     exp: "12 + 45 = 57.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4032,7 +4032,7 @@ export const allKangourouQuestions = [
     opts: ["31", "34", "30", "41"],
     ans: 0,
     exp: "23 + 8 = 31.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4040,7 +4040,7 @@ export const allKangourouQuestions = [
     opts: ["77", "82", "75", "86"],
     ans: 0,
     exp: "46 + 31 = 77.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4048,7 +4048,7 @@ export const allKangourouQuestions = [
     opts: ["21", "23", "19", "31"],
     ans: 0,
     exp: "20 + 1 = 21.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4056,7 +4056,7 @@ export const allKangourouQuestions = [
     opts: ["43", "45", "40", "51"],
     ans: 0,
     exp: "8 + 35 = 43.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4064,7 +4064,7 @@ export const allKangourouQuestions = [
     opts: ["58", "61", "57", "65"],
     ans: 0,
     exp: "25 + 33 = 58.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4072,7 +4072,7 @@ export const allKangourouQuestions = [
     opts: ["43", "47", "40", "52"],
     ans: 0,
     exp: "15 + 28 = 43.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4080,7 +4080,7 @@ export const allKangourouQuestions = [
     opts: ["75", "76", "74", "83"],
     ans: 0,
     exp: "31 + 44 = 75.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4088,7 +4088,7 @@ export const allKangourouQuestions = [
     opts: ["31", "32", "26", "37"],
     ans: 0,
     exp: "4 + 27 = 31.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4096,7 +4096,7 @@ export const allKangourouQuestions = [
     opts: ["49", "53", "45", "57"],
     ans: 0,
     exp: "17 + 32 = 49.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4104,7 +4104,7 @@ export const allKangourouQuestions = [
     opts: ["64", "69", "59", "72"],
     ans: 0,
     exp: "43 + 21 = 64.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4112,7 +4112,7 @@ export const allKangourouQuestions = [
     opts: ["69", "74", "65", "79"],
     ans: 0,
     exp: "48 + 21 = 69.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4120,7 +4120,7 @@ export const allKangourouQuestions = [
     opts: ["68", "73", "64", "74"],
     ans: 0,
     exp: "20 + 48 = 68.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4128,7 +4128,7 @@ export const allKangourouQuestions = [
     opts: ["50", "51", "45", "60"],
     ans: 0,
     exp: "45 + 5 = 50.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4136,7 +4136,7 @@ export const allKangourouQuestions = [
     opts: ["38", "40", "37", "44"],
     ans: 0,
     exp: "13 + 25 = 38.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4144,7 +4144,7 @@ export const allKangourouQuestions = [
     opts: ["42", "45", "39", "48"],
     ans: 0,
     exp: "9 + 33 = 42.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4152,7 +4152,7 @@ export const allKangourouQuestions = [
     opts: ["59", "62", "54", "69"],
     ans: 0,
     exp: "36 + 23 = 59.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4160,7 +4160,7 @@ export const allKangourouQuestions = [
     opts: ["44", "46", "40", "51"],
     ans: 0,
     exp: "41 + 3 = 44.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4168,7 +4168,7 @@ export const allKangourouQuestions = [
     opts: ["43", "45", "41", "50"],
     ans: 0,
     exp: "10 + 33 = 43.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4176,7 +4176,7 @@ export const allKangourouQuestions = [
     opts: ["71", "76", "69", "77"],
     ans: 0,
     exp: "41 + 30 = 71.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4184,7 +4184,7 @@ export const allKangourouQuestions = [
     opts: ["26", "31", "23", "34"],
     ans: 0,
     exp: "17 + 9 = 26.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4192,7 +4192,7 @@ export const allKangourouQuestions = [
     opts: ["39", "42", "36", "49"],
     ans: 0,
     exp: "35 + 4 = 39.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4200,7 +4200,7 @@ export const allKangourouQuestions = [
     opts: ["57", "61", "55", "63"],
     ans: 0,
     exp: "33 + 24 = 57.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4208,7 +4208,7 @@ export const allKangourouQuestions = [
     opts: ["72", "75", "70", "82"],
     ans: 0,
     exp: "33 + 39 = 72.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4216,7 +4216,7 @@ export const allKangourouQuestions = [
     opts: ["9", "13", "4", "17"],
     ans: 0,
     exp: "1 + 8 = 9.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4224,7 +4224,7 @@ export const allKangourouQuestions = [
     opts: ["45", "49", "40", "52"],
     ans: 0,
     exp: "28 + 17 = 45.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4232,7 +4232,7 @@ export const allKangourouQuestions = [
     opts: ["67", "71", "63", "74"],
     ans: 0,
     exp: "17 + 50 = 67.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4240,7 +4240,7 @@ export const allKangourouQuestions = [
     opts: ["61", "63", "57", "68"],
     ans: 0,
     exp: "46 + 15 = 61.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4248,7 +4248,7 @@ export const allKangourouQuestions = [
     opts: ["33", "38", "31", "41"],
     ans: 0,
     exp: "9 + 24 = 33.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4256,7 +4256,7 @@ export const allKangourouQuestions = [
     opts: ["14", "15", "9", "20"],
     ans: 0,
     exp: "4 + 10 = 14.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4264,7 +4264,7 @@ export const allKangourouQuestions = [
     opts: ["42", "45", "41", "49"],
     ans: 0,
     exp: "28 + 14 = 42.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4272,7 +4272,7 @@ export const allKangourouQuestions = [
     opts: ["77", "80", "74", "86"],
     ans: 0,
     exp: "46 + 31 = 77.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4280,7 +4280,7 @@ export const allKangourouQuestions = [
     opts: ["24", "28", "20", "30"],
     ans: 0,
     exp: "14 + 10 = 24.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4288,7 +4288,7 @@ export const allKangourouQuestions = [
     opts: ["24", "28", "22", "33"],
     ans: 0,
     exp: "23 + 1 = 24.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4296,7 +4296,7 @@ export const allKangourouQuestions = [
     opts: ["40", "45", "36", "47"],
     ans: 0,
     exp: "17 + 23 = 40.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4304,7 +4304,7 @@ export const allKangourouQuestions = [
     opts: ["56", "60", "53", "63"],
     ans: 0,
     exp: "46 + 10 = 56.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4312,7 +4312,7 @@ export const allKangourouQuestions = [
     opts: ["61", "65", "57", "69"],
     ans: 0,
     exp: "49 + 12 = 61.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4320,7 +4320,7 @@ export const allKangourouQuestions = [
     opts: ["35", "39", "33", "41"],
     ans: 0,
     exp: "22 + 13 = 35.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4328,7 +4328,7 @@ export const allKangourouQuestions = [
     opts: ["44", "47", "43", "51"],
     ans: 0,
     exp: "41 + 3 = 44.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4336,7 +4336,7 @@ export const allKangourouQuestions = [
     opts: ["9", "13", "6", "16"],
     ans: 0,
     exp: "3 + 6 = 9.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4344,7 +4344,7 @@ export const allKangourouQuestions = [
     opts: ["44", "49", "39", "54"],
     ans: 0,
     exp: "3 + 41 = 44.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4352,7 +4352,7 @@ export const allKangourouQuestions = [
     opts: ["41", "45", "36", "49"],
     ans: 0,
     exp: "4 + 37 = 41.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4360,7 +4360,7 @@ export const allKangourouQuestions = [
     opts: ["84", "89", "83", "91"],
     ans: 0,
     exp: "45 + 39 = 84.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4368,7 +4368,7 @@ export const allKangourouQuestions = [
     opts: ["82", "83", "80", "89"],
     ans: 0,
     exp: "41 + 41 = 82.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4376,7 +4376,7 @@ export const allKangourouQuestions = [
     opts: ["41", "44", "36", "50"],
     ans: 0,
     exp: "36 + 5 = 41.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4384,7 +4384,7 @@ export const allKangourouQuestions = [
     opts: ["30", "33", "28", "37"],
     ans: 0,
     exp: "22 + 8 = 30.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4392,7 +4392,7 @@ export const allKangourouQuestions = [
     opts: ["47", "48", "44", "54"],
     ans: 0,
     exp: "36 + 11 = 47.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4400,7 +4400,7 @@ export const allKangourouQuestions = [
     opts: ["74", "79", "72", "83"],
     ans: 0,
     exp: "45 + 29 = 74.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4408,7 +4408,7 @@ export const allKangourouQuestions = [
     opts: ["52", "56", "47", "61"],
     ans: 0,
     exp: "7 + 45 = 52.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4416,7 +4416,7 @@ export const allKangourouQuestions = [
     opts: ["90", "91", "89", "99"],
     ans: 0,
     exp: "44 + 46 = 90.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4424,7 +4424,7 @@ export const allKangourouQuestions = [
     opts: ["42", "44", "39", "51"],
     ans: 0,
     exp: "9 + 33 = 42.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4432,7 +4432,7 @@ export const allKangourouQuestions = [
     opts: ["47", "52", "46", "55"],
     ans: 0,
     exp: "1 + 46 = 47.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4440,7 +4440,7 @@ export const allKangourouQuestions = [
     opts: ["34", "38", "30", "43"],
     ans: 0,
     exp: "7 + 27 = 34.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4448,7 +4448,7 @@ export const allKangourouQuestions = [
     opts: ["28", "31", "26", "34"],
     ans: 0,
     exp: "25 + 3 = 28.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4456,7 +4456,7 @@ export const allKangourouQuestions = [
     opts: ["77", "80", "73", "85"],
     ans: 0,
     exp: "42 + 35 = 77.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4464,7 +4464,7 @@ export const allKangourouQuestions = [
     opts: ["51", "53", "49", "60"],
     ans: 0,
     exp: "20 + 31 = 51.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4472,7 +4472,7 @@ export const allKangourouQuestions = [
     opts: ["69", "72", "66", "78"],
     ans: 0,
     exp: "38 + 31 = 69.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4480,7 +4480,7 @@ export const allKangourouQuestions = [
     opts: ["66", "70", "62", "76"],
     ans: 0,
     exp: "36 + 30 = 66.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4488,7 +4488,7 @@ export const allKangourouQuestions = [
     opts: ["24", "28", "22", "32"],
     ans: 0,
     exp: "9 + 15 = 24.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4496,7 +4496,7 @@ export const allKangourouQuestions = [
     opts: ["45", "49", "43", "52"],
     ans: 0,
     exp: "23 + 22 = 45.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4504,7 +4504,7 @@ export const allKangourouQuestions = [
     opts: ["81", "84", "80", "89"],
     ans: 0,
     exp: "33 + 48 = 81.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4512,7 +4512,7 @@ export const allKangourouQuestions = [
     opts: ["45", "48", "40", "52"],
     ans: 0,
     exp: "6 + 39 = 45.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4520,7 +4520,7 @@ export const allKangourouQuestions = [
     opts: ["33", "36", "31", "42"],
     ans: 0,
     exp: "15 + 18 = 33.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4528,7 +4528,7 @@ export const allKangourouQuestions = [
     opts: ["20", "25", "17", "27"],
     ans: 0,
     exp: "15 + 5 = 20.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4536,7 +4536,7 @@ export const allKangourouQuestions = [
     opts: ["42", "46", "39", "50"],
     ans: 0,
     exp: "26 + 16 = 42.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4544,7 +4544,7 @@ export const allKangourouQuestions = [
     opts: ["28", "29", "24", "38"],
     ans: 0,
     exp: "22 + 6 = 28.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4552,7 +4552,7 @@ export const allKangourouQuestions = [
     opts: ["73", "75", "71", "82"],
     ans: 0,
     exp: "29 + 44 = 73.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4560,7 +4560,7 @@ export const allKangourouQuestions = [
     opts: ["25", "30", "20", "33"],
     ans: 0,
     exp: "3 + 22 = 25.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4568,7 +4568,7 @@ export const allKangourouQuestions = [
     opts: ["84", "87", "82", "94"],
     ans: 0,
     exp: "46 + 38 = 84.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4576,7 +4576,7 @@ export const allKangourouQuestions = [
     opts: ["64", "67", "62", "74"],
     ans: 0,
     exp: "18 + 46 = 64.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4584,7 +4584,7 @@ export const allKangourouQuestions = [
     opts: ["21", "25", "16", "28"],
     ans: 0,
     exp: "5 + 16 = 21.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4592,7 +4592,7 @@ export const allKangourouQuestions = [
     opts: ["52", "56", "49", "58"],
     ans: 0,
     exp: "38 + 14 = 52.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4600,7 +4600,7 @@ export const allKangourouQuestions = [
     opts: ["30", "34", "26", "40"],
     ans: 0,
     exp: "2 + 28 = 30.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4608,7 +4608,7 @@ export const allKangourouQuestions = [
     opts: ["57", "62", "55", "66"],
     ans: 0,
     exp: "49 + 8 = 57.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4616,7 +4616,7 @@ export const allKangourouQuestions = [
     opts: ["33", "38", "31", "43"],
     ans: 0,
     exp: "21 + 12 = 33.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4624,7 +4624,7 @@ export const allKangourouQuestions = [
     opts: ["19", "20", "14", "27"],
     ans: 0,
     exp: "3 + 16 = 19.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4632,7 +4632,7 @@ export const allKangourouQuestions = [
     opts: ["43", "44", "40", "51"],
     ans: 0,
     exp: "4 + 39 = 43.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4640,7 +4640,7 @@ export const allKangourouQuestions = [
     opts: ["46", "50", "45", "55"],
     ans: 0,
     exp: "17 + 29 = 46.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4648,7 +4648,7 @@ export const allKangourouQuestions = [
     opts: ["46", "49", "42", "53"],
     ans: 0,
     exp: "8 + 38 = 46.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4656,7 +4656,7 @@ export const allKangourouQuestions = [
     opts: ["58", "61", "56", "66"],
     ans: 0,
     exp: "30 + 28 = 58.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4664,7 +4664,7 @@ export const allKangourouQuestions = [
     opts: ["51", "54", "47", "61"],
     ans: 0,
     exp: "50 + 1 = 51.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4672,7 +4672,7 @@ export const allKangourouQuestions = [
     opts: ["50", "51", "47", "57"],
     ans: 0,
     exp: "29 + 21 = 50.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4680,7 +4680,7 @@ export const allKangourouQuestions = [
     opts: ["82", "86", "78", "90"],
     ans: 0,
     exp: "37 + 45 = 82.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4688,7 +4688,7 @@ export const allKangourouQuestions = [
     opts: ["62", "65", "60", "68"],
     ans: 0,
     exp: "46 + 16 = 62.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4696,7 +4696,7 @@ export const allKangourouQuestions = [
     opts: ["71", "74", "66", "77"],
     ans: 0,
     exp: "45 + 26 = 71.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4704,7 +4704,7 @@ export const allKangourouQuestions = [
     opts: ["31", "33", "27", "39"],
     ans: 0,
     exp: "29 + 2 = 31.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4712,7 +4712,7 @@ export const allKangourouQuestions = [
     opts: ["52", "54", "51", "61"],
     ans: 0,
     exp: "26 + 26 = 52.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4720,7 +4720,7 @@ export const allKangourouQuestions = [
     opts: ["39", "40", "34", "48"],
     ans: 0,
     exp: "31 + 8 = 39.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4728,7 +4728,7 @@ export const allKangourouQuestions = [
     opts: ["31", "32", "27", "41"],
     ans: 0,
     exp: "2 + 29 = 31.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4736,7 +4736,7 @@ export const allKangourouQuestions = [
     opts: ["55", "57", "54", "64"],
     ans: 0,
     exp: "45 + 10 = 55.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4744,7 +4744,7 @@ export const allKangourouQuestions = [
     opts: ["55", "59", "52", "64"],
     ans: 0,
     exp: "33 + 22 = 55.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4752,7 +4752,7 @@ export const allKangourouQuestions = [
     opts: ["3", "6", "1", "9"],
     ans: 0,
     exp: "1 + 2 = 3.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4760,7 +4760,7 @@ export const allKangourouQuestions = [
     opts: ["62", "64", "60", "69"],
     ans: 0,
     exp: "33 + 29 = 62.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4768,7 +4768,7 @@ export const allKangourouQuestions = [
     opts: ["65", "67", "63", "74"],
     ans: 0,
     exp: "34 + 31 = 65.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4776,7 +4776,7 @@ export const allKangourouQuestions = [
     opts: ["57", "60", "52", "67"],
     ans: 0,
     exp: "37 + 20 = 57.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4784,7 +4784,7 @@ export const allKangourouQuestions = [
     opts: ["43", "48", "38", "51"],
     ans: 0,
     exp: "32 + 11 = 43.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4792,7 +4792,7 @@ export const allKangourouQuestions = [
     opts: ["55", "58", "54", "61"],
     ans: 0,
     exp: "5 + 50 = 55.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4800,7 +4800,7 @@ export const allKangourouQuestions = [
     opts: ["44", "49", "39", "50"],
     ans: 0,
     exp: "4 + 40 = 44.",
-    level: "5e",
+    level: "5ème",
     difficulty: 4
   },
   {
@@ -4808,7 +4808,7 @@ export const allKangourouQuestions = [
     opts: ["61", "65", "58", "69"],
     ans: 0,
     exp: "39 + 22 = 61.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4816,7 +4816,7 @@ export const allKangourouQuestions = [
     opts: ["57", "62", "52", "65"],
     ans: 0,
     exp: "46 + 11 = 57.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4824,7 +4824,7 @@ export const allKangourouQuestions = [
     opts: ["69", "71", "68", "76"],
     ans: 0,
     exp: "22 + 47 = 69.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4832,7 +4832,7 @@ export const allKangourouQuestions = [
     opts: ["15", "16", "12", "24"],
     ans: 0,
     exp: "7 + 8 = 15.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4840,7 +4840,7 @@ export const allKangourouQuestions = [
     opts: ["87", "92", "86", "96"],
     ans: 0,
     exp: "48 + 39 = 87.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4848,7 +4848,7 @@ export const allKangourouQuestions = [
     opts: ["68", "73", "67", "76"],
     ans: 0,
     exp: "21 + 47 = 68.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4856,7 +4856,7 @@ export const allKangourouQuestions = [
     opts: ["27", "29", "26", "37"],
     ans: 0,
     exp: "3 + 24 = 27.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4864,7 +4864,7 @@ export const allKangourouQuestions = [
     opts: ["40", "43", "37", "50"],
     ans: 0,
     exp: "17 + 23 = 40.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4872,7 +4872,7 @@ export const allKangourouQuestions = [
     opts: ["20", "21", "16", "30"],
     ans: 0,
     exp: "12 + 8 = 20.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4880,7 +4880,7 @@ export const allKangourouQuestions = [
     opts: ["42", "47", "41", "48"],
     ans: 0,
     exp: "30 + 12 = 42.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4888,7 +4888,7 @@ export const allKangourouQuestions = [
     opts: ["76", "80", "74", "84"],
     ans: 0,
     exp: "44 + 32 = 76.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4896,7 +4896,7 @@ export const allKangourouQuestions = [
     opts: ["64", "65", "61", "74"],
     ans: 0,
     exp: "14 + 50 = 64.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4904,7 +4904,7 @@ export const allKangourouQuestions = [
     opts: ["21", "24", "19", "28"],
     ans: 0,
     exp: "14 + 7 = 21.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4912,7 +4912,7 @@ export const allKangourouQuestions = [
     opts: ["64", "68", "63", "71"],
     ans: 0,
     exp: "26 + 38 = 64.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4920,7 +4920,7 @@ export const allKangourouQuestions = [
     opts: ["61", "64", "57", "70"],
     ans: 0,
     exp: "13 + 48 = 61.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4928,7 +4928,7 @@ export const allKangourouQuestions = [
     opts: ["67", "72", "62", "73"],
     ans: 0,
     exp: "32 + 35 = 67.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4936,7 +4936,7 @@ export const allKangourouQuestions = [
     opts: ["19", "21", "15", "28"],
     ans: 0,
     exp: "12 + 7 = 19.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4944,7 +4944,7 @@ export const allKangourouQuestions = [
     opts: ["18", "23", "13", "27"],
     ans: 0,
     exp: "10 + 8 = 18.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4952,7 +4952,7 @@ export const allKangourouQuestions = [
     opts: ["51", "52", "48", "60"],
     ans: 0,
     exp: "7 + 44 = 51.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4960,7 +4960,7 @@ export const allKangourouQuestions = [
     opts: ["50", "53", "45", "57"],
     ans: 0,
     exp: "17 + 33 = 50.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4968,7 +4968,7 @@ export const allKangourouQuestions = [
     opts: ["45", "46", "43", "53"],
     ans: 0,
     exp: "9 + 36 = 45.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4976,7 +4976,7 @@ export const allKangourouQuestions = [
     opts: ["68", "73", "66", "78"],
     ans: 0,
     exp: "32 + 36 = 68.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4984,7 +4984,7 @@ export const allKangourouQuestions = [
     opts: ["92", "97", "87", "102"],
     ans: 0,
     exp: "44 + 48 = 92.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -4992,7 +4992,7 @@ export const allKangourouQuestions = [
     opts: ["32", "33", "29", "39"],
     ans: 0,
     exp: "3 + 29 = 32.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5000,7 +5000,7 @@ export const allKangourouQuestions = [
     opts: ["72", "77", "67", "79"],
     ans: 0,
     exp: "41 + 31 = 72.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5008,7 +5008,7 @@ export const allKangourouQuestions = [
     opts: ["32", "34", "30", "40"],
     ans: 0,
     exp: "30 + 2 = 32.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5016,7 +5016,7 @@ export const allKangourouQuestions = [
     opts: ["27", "30", "25", "35"],
     ans: 0,
     exp: "10 + 17 = 27.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5024,7 +5024,7 @@ export const allKangourouQuestions = [
     opts: ["30", "35", "29", "39"],
     ans: 0,
     exp: "27 + 3 = 30.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5032,7 +5032,7 @@ export const allKangourouQuestions = [
     opts: ["93", "96", "88", "103"],
     ans: 0,
     exp: "44 + 49 = 93.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5040,7 +5040,7 @@ export const allKangourouQuestions = [
     opts: ["80", "84", "78", "88"],
     ans: 0,
     exp: "34 + 46 = 80.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5048,7 +5048,7 @@ export const allKangourouQuestions = [
     opts: ["49", "51", "48", "55"],
     ans: 0,
     exp: "32 + 17 = 49.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5056,7 +5056,7 @@ export const allKangourouQuestions = [
     opts: ["83", "87", "80", "91"],
     ans: 0,
     exp: "36 + 47 = 83.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5064,7 +5064,7 @@ export const allKangourouQuestions = [
     opts: ["35", "36", "34", "41"],
     ans: 0,
     exp: "1 + 34 = 35.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5072,7 +5072,7 @@ export const allKangourouQuestions = [
     opts: ["16", "21", "12", "25"],
     ans: 0,
     exp: "1 + 15 = 16.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5080,7 +5080,7 @@ export const allKangourouQuestions = [
     opts: ["60", "64", "56", "67"],
     ans: 0,
     exp: "34 + 26 = 60.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5088,7 +5088,7 @@ export const allKangourouQuestions = [
     opts: ["52", "53", "51", "62"],
     ans: 0,
     exp: "18 + 34 = 52.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5096,7 +5096,7 @@ export const allKangourouQuestions = [
     opts: ["48", "49", "47", "57"],
     ans: 0,
     exp: "35 + 13 = 48.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5104,7 +5104,7 @@ export const allKangourouQuestions = [
     opts: ["78", "83", "74", "88"],
     ans: 0,
     exp: "38 + 40 = 78.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5112,7 +5112,7 @@ export const allKangourouQuestions = [
     opts: ["22", "24", "21", "31"],
     ans: 0,
     exp: "15 + 7 = 22.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5120,7 +5120,7 @@ export const allKangourouQuestions = [
     opts: ["3", "5", "0", "9"],
     ans: 0,
     exp: "2 + 1 = 3.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5128,7 +5128,7 @@ export const allKangourouQuestions = [
     opts: ["93", "96", "90", "102"],
     ans: 0,
     exp: "45 + 48 = 93.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5136,7 +5136,7 @@ export const allKangourouQuestions = [
     opts: ["21", "24", "18", "31"],
     ans: 0,
     exp: "8 + 13 = 21.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5144,7 +5144,7 @@ export const allKangourouQuestions = [
     opts: ["98", "102", "94", "107"],
     ans: 0,
     exp: "50 + 48 = 98.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5152,7 +5152,7 @@ export const allKangourouQuestions = [
     opts: ["71", "73", "66", "80"],
     ans: 0,
     exp: "35 + 36 = 71.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5160,7 +5160,7 @@ export const allKangourouQuestions = [
     opts: ["59", "63", "57", "65"],
     ans: 0,
     exp: "31 + 28 = 59.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5168,7 +5168,7 @@ export const allKangourouQuestions = [
     opts: ["16", "21", "13", "26"],
     ans: 0,
     exp: "11 + 5 = 16.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5176,7 +5176,7 @@ export const allKangourouQuestions = [
     opts: ["53", "58", "51", "60"],
     ans: 0,
     exp: "34 + 19 = 53.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5184,7 +5184,7 @@ export const allKangourouQuestions = [
     opts: ["36", "37", "32", "45"],
     ans: 0,
     exp: "1 + 35 = 36.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5192,7 +5192,7 @@ export const allKangourouQuestions = [
     opts: ["20", "22", "18", "27"],
     ans: 0,
     exp: "10 + 10 = 20.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5200,7 +5200,7 @@ export const allKangourouQuestions = [
     opts: ["52", "53", "49", "58"],
     ans: 0,
     exp: "16 + 36 = 52.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5208,7 +5208,7 @@ export const allKangourouQuestions = [
     opts: ["64", "68", "59", "72"],
     ans: 0,
     exp: "34 + 30 = 64.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5216,7 +5216,7 @@ export const allKangourouQuestions = [
     opts: ["36", "39", "32", "44"],
     ans: 0,
     exp: "32 + 4 = 36.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5224,7 +5224,7 @@ export const allKangourouQuestions = [
     opts: ["99", "102", "95", "105"],
     ans: 0,
     exp: "50 + 49 = 99.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5232,7 +5232,7 @@ export const allKangourouQuestions = [
     opts: ["14", "19", "9", "20"],
     ans: 0,
     exp: "8 + 6 = 14.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5240,7 +5240,7 @@ export const allKangourouQuestions = [
     opts: ["20", "25", "15", "27"],
     ans: 0,
     exp: "15 + 5 = 20.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5248,7 +5248,7 @@ export const allKangourouQuestions = [
     opts: ["52", "55", "47", "60"],
     ans: 0,
     exp: "26 + 26 = 52.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5256,7 +5256,7 @@ export const allKangourouQuestions = [
     opts: ["64", "67", "63", "71"],
     ans: 0,
     exp: "22 + 42 = 64.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5264,7 +5264,7 @@ export const allKangourouQuestions = [
     opts: ["45", "47", "41", "55"],
     ans: 0,
     exp: "37 + 8 = 45.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5272,7 +5272,7 @@ export const allKangourouQuestions = [
     opts: ["46", "47", "41", "56"],
     ans: 0,
     exp: "34 + 12 = 46.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5280,7 +5280,7 @@ export const allKangourouQuestions = [
     opts: ["53", "54", "51", "61"],
     ans: 0,
     exp: "40 + 13 = 53.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5288,7 +5288,7 @@ export const allKangourouQuestions = [
     opts: ["25", "27", "23", "31"],
     ans: 0,
     exp: "11 + 14 = 25.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5296,7 +5296,7 @@ export const allKangourouQuestions = [
     opts: ["27", "29", "23", "35"],
     ans: 0,
     exp: "24 + 3 = 27.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5304,7 +5304,7 @@ export const allKangourouQuestions = [
     opts: ["39", "42", "36", "45"],
     ans: 0,
     exp: "35 + 4 = 39.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5312,7 +5312,7 @@ export const allKangourouQuestions = [
     opts: ["35", "40", "31", "44"],
     ans: 0,
     exp: "26 + 9 = 35.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5320,7 +5320,7 @@ export const allKangourouQuestions = [
     opts: ["63", "67", "58", "69"],
     ans: 0,
     exp: "21 + 42 = 63.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5328,7 +5328,7 @@ export const allKangourouQuestions = [
     opts: ["51", "55", "50", "59"],
     ans: 0,
     exp: "40 + 11 = 51.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5336,7 +5336,7 @@ export const allKangourouQuestions = [
     opts: ["39", "42", "34", "45"],
     ans: 0,
     exp: "28 + 11 = 39.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5344,7 +5344,7 @@ export const allKangourouQuestions = [
     opts: ["55", "56", "54", "61"],
     ans: 0,
     exp: "38 + 17 = 55.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5352,7 +5352,7 @@ export const allKangourouQuestions = [
     opts: ["88", "90", "85", "96"],
     ans: 0,
     exp: "42 + 46 = 88.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5360,7 +5360,7 @@ export const allKangourouQuestions = [
     opts: ["36", "38", "34", "42"],
     ans: 0,
     exp: "14 + 22 = 36.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5368,7 +5368,7 @@ export const allKangourouQuestions = [
     opts: ["65", "70", "64", "73"],
     ans: 0,
     exp: "45 + 20 = 65.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5376,7 +5376,7 @@ export const allKangourouQuestions = [
     opts: ["70", "71", "66", "76"],
     ans: 0,
     exp: "27 + 43 = 70.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5384,7 +5384,7 @@ export const allKangourouQuestions = [
     opts: ["77", "81", "74", "85"],
     ans: 0,
     exp: "43 + 34 = 77.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5392,7 +5392,7 @@ export const allKangourouQuestions = [
     opts: ["22", "24", "21", "30"],
     ans: 0,
     exp: "12 + 10 = 22.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5400,7 +5400,7 @@ export const allKangourouQuestions = [
     opts: ["71", "76", "68", "80"],
     ans: 0,
     exp: "39 + 32 = 71.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5408,7 +5408,7 @@ export const allKangourouQuestions = [
     opts: ["69", "73", "66", "78"],
     ans: 0,
     exp: "45 + 24 = 69.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5416,7 +5416,7 @@ export const allKangourouQuestions = [
     opts: ["81", "84", "79", "89"],
     ans: 0,
     exp: "31 + 50 = 81.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5424,7 +5424,7 @@ export const allKangourouQuestions = [
     opts: ["29", "30", "26", "39"],
     ans: 0,
     exp: "8 + 21 = 29.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5432,7 +5432,7 @@ export const allKangourouQuestions = [
     opts: ["16", "17", "11", "24"],
     ans: 0,
     exp: "4 + 12 = 16.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5440,7 +5440,7 @@ export const allKangourouQuestions = [
     opts: ["77", "80", "73", "85"],
     ans: 0,
     exp: "45 + 32 = 77.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5448,7 +5448,7 @@ export const allKangourouQuestions = [
     opts: ["60", "65", "59", "69"],
     ans: 0,
     exp: "29 + 31 = 60.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5456,7 +5456,7 @@ export const allKangourouQuestions = [
     opts: ["86", "88", "81", "95"],
     ans: 0,
     exp: "36 + 50 = 86.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5464,7 +5464,7 @@ export const allKangourouQuestions = [
     opts: ["45", "48", "40", "51"],
     ans: 0,
     exp: "11 + 34 = 45.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5472,7 +5472,7 @@ export const allKangourouQuestions = [
     opts: ["75", "76", "72", "81"],
     ans: 0,
     exp: "40 + 35 = 75.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5480,7 +5480,7 @@ export const allKangourouQuestions = [
     opts: ["84", "88", "80", "94"],
     ans: 0,
     exp: "49 + 35 = 84.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5488,7 +5488,7 @@ export const allKangourouQuestions = [
     opts: ["26", "28", "25", "36"],
     ans: 0,
     exp: "14 + 12 = 26.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5496,7 +5496,7 @@ export const allKangourouQuestions = [
     opts: ["33", "36", "32", "39"],
     ans: 0,
     exp: "24 + 9 = 33.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5504,7 +5504,7 @@ export const allKangourouQuestions = [
     opts: ["87", "91", "82", "96"],
     ans: 0,
     exp: "44 + 43 = 87.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5512,7 +5512,7 @@ export const allKangourouQuestions = [
     opts: ["56", "59", "53", "64"],
     ans: 0,
     exp: "46 + 10 = 56.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5520,7 +5520,7 @@ export const allKangourouQuestions = [
     opts: ["8", "13", "6", "15"],
     ans: 0,
     exp: "3 + 5 = 8.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5528,7 +5528,7 @@ export const allKangourouQuestions = [
     opts: ["84", "89", "83", "92"],
     ans: 0,
     exp: "37 + 47 = 84.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5536,7 +5536,7 @@ export const allKangourouQuestions = [
     opts: ["83", "85", "78", "93"],
     ans: 0,
     exp: "44 + 39 = 83.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5544,7 +5544,7 @@ export const allKangourouQuestions = [
     opts: ["85", "88", "81", "92"],
     ans: 0,
     exp: "45 + 40 = 85.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5552,7 +5552,7 @@ export const allKangourouQuestions = [
     opts: ["37", "39", "35", "43"],
     ans: 0,
     exp: "6 + 31 = 37.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5560,7 +5560,7 @@ export const allKangourouQuestions = [
     opts: ["92", "96", "87", "102"],
     ans: 0,
     exp: "49 + 43 = 92.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5568,7 +5568,7 @@ export const allKangourouQuestions = [
     opts: ["68", "71", "65", "78"],
     ans: 0,
     exp: "23 + 45 = 68.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5576,7 +5576,7 @@ export const allKangourouQuestions = [
     opts: ["65", "69", "60", "74"],
     ans: 0,
     exp: "25 + 40 = 65.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5584,7 +5584,7 @@ export const allKangourouQuestions = [
     opts: ["31", "34", "26", "38"],
     ans: 0,
     exp: "5 + 26 = 31.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5592,7 +5592,7 @@ export const allKangourouQuestions = [
     opts: ["59", "62", "56", "65"],
     ans: 0,
     exp: "16 + 43 = 59.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
   {
@@ -5600,7 +5600,7 @@ export const allKangourouQuestions = [
     opts: ["15", "18", "10", "23"],
     ans: 0,
     exp: "1 + 14 = 15.",
-    level: "4e",
+    level: "4ème",
     difficulty: 4
   },
 ];
