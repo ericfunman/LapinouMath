@@ -1,6 +1,6 @@
 // IndexedDB pour une persistance robuste des données
 const DB_NAME = 'LapinouMathDB';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 const PROFILES_STORE = 'profiles';
 const QUESTIONS_STORE = 'questions';
 const ERROR_REPORTS_STORE = 'errorReports';
