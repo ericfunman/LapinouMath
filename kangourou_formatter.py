@@ -7,6 +7,61 @@ import json
 from pathlib import Path
 from typing import List, Dict, Optional
 
+VALID_LEVELS = ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']
+VALID_DIFFICULTIES = [1, 2, 3]
+
+def get_question_text() -> Optional[str]:
+    """Get question text from user input"""
+    question_text = input("\n📝 Énoncé de la question:\n> ").strip()
+    return question_text if question_text else None
+
+def get_options() -> Optional[List[str]]:
+    """Get 4 options from user input"""
+    print("\n4 options (tapez chacune sur une ligne):")
+    options = []
+    for letter in ['A', 'B', 'C', 'D']:
+        opt = input(f"  {letter}) ").strip()
+        if not opt:
+            print("❌ Erreur: toutes les options sont requises")
+            return None
+        options.append(opt)
+    return options
+
+def get_correct_answer() -> int:
+    """Get correct answer index (0-3) from user input"""
+    while True:
+        try:
+            correct = int(input("\n✓ Numéro de la bonne réponse (0=A, 1=B, 2=C, 3=D): "))
+            if correct in [0, 1, 2, 3]:
+                return correct
+            raise ValueError
+        except ValueError:
+            print("❌ Veuillez entrer 0, 1, 2 ou 3")
+
+def get_explanation() -> str:
+    """Get explanation from user input"""
+    explanation = input("\n💡 Explication courte (optionnel):\n> ").strip()
+    return explanation or "Voir le corrigé Kangourou"
+
+def get_level() -> str:
+    """Get level from user input"""
+    while True:
+        level = input(f"\n📚 Niveau ({'/'.join(VALID_LEVELS)}): ").strip()
+        if level in VALID_LEVELS:
+            return level
+        print("❌ Niveau invalide")
+
+def get_difficulty() -> int:
+    """Get difficulty (1-3) from user input"""
+    while True:
+        try:
+            difficulty = int(input("\n⭐ Difficulté (1=facile, 2=moyen, 3=difficile): "))
+            if difficulty in VALID_DIFFICULTIES:
+                return difficulty
+            raise ValueError
+        except ValueError:
+            print("❌ Veuillez entrer 1, 2 ou 3")
+
 def create_question() -> Optional[Dict]:
     """Interactively create a single question"""
     print("\n" + "="*60)
@@ -14,44 +69,18 @@ def create_question() -> Optional[Dict]:
     print("="*60)
     
     try:
-        question_text = input("\n📝 Énoncé de la question:\n> ").strip()
+        question_text = get_question_text()
         if not question_text:
             return None
         
-        print("\n4 options (tapez chacune sur une ligne):")
-        options = []
-        for i, letter in enumerate(['A', 'B', 'C', 'D']):
-            opt = input(f"  {letter}) ").strip()
-            if not opt:
-                print("❌ Erreur: toutes les options sont requises")
-                return None
-            options.append(opt)
+        options = get_options()
+        if not options:
+            return None
         
-        while True:
-            try:
-                correct = int(input("\n✓ Numéro de la bonne réponse (0=A, 1=B, 2=C, 3=D): "))
-                if correct not in [0, 1, 2, 3]:
-                    raise ValueError
-                break
-            except ValueError:
-                print("❌ Veuillez entrer 0, 1, 2 ou 3")
-        
-        explanation = input("\n💡 Explication courte (optionnel):\n> ").strip() or "Voir le corrigé Kangourou"
-        
-        level = None
-        while level not in ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']:
-            level = input("\n📚 Niveau (CE1/CE2/CM1/CM2/6ème/5ème/4ème/3ème): ").strip()
-            if level not in ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème', '3ème']:
-                print("❌ Niveau invalide")
-        
-        difficulty = None
-        while difficulty not in [1, 2, 3]:
-            try:
-                difficulty = int(input("\n⭐ Difficulté (1=facile, 2=moyen, 3=difficile): "))
-                if difficulty not in [1, 2, 3]:
-                    raise ValueError
-            except ValueError:
-                print("❌ Veuillez entrer 1, 2 ou 3")
+        correct = get_correct_answer()
+        explanation = get_explanation()
+        level = get_level()
+        difficulty = get_difficulty()
         
         return {
             "question": question_text,

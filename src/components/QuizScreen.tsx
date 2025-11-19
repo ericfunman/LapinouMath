@@ -11,6 +11,16 @@ interface Props {
   onExit: () => void;
 }
 
+// Fonction de mélange Fisher-Yates pour éviter les biais de Math.random() - 0.5
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export default function QuizScreen({ level, domain, onComplete, onExit }: Readonly<Props>) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -34,8 +44,8 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
       const options = [...question.options];
       const correctOption = options[question.correctAnswer];
       
-      // Mélanger les options
-      const shuffled = [...options].sort(() => Math.random() - 0.5);
+      // Mélanger les options avec Fisher-Yates
+      const shuffled = shuffleArray([...options]);
       setShuffledOptions(shuffled);
       const newCorrectIndex = shuffled.indexOf(correctOption);
       setCorrectAnswerIndex(newCorrectIndex);

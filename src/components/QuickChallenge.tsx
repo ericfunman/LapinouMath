@@ -72,7 +72,7 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
       const options = [...question.options];
       const correctOption = options[question.correctAnswer];
       
-      const shuffledOpts = [...options].sort(() => Math.random() - 0.5);
+      const shuffledOpts = shuffleArray([...options]);
       setShuffledOptions(shuffledOpts);
       const newCorrectIndex = shuffledOpts.indexOf(correctOption);
       setCorrectAnswerIndex(newCorrectIndex);

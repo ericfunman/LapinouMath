@@ -53,6 +53,29 @@ def finalize_question(current_q: Dict, q_num: int) -> Optional[Dict]:
         return final_q
     return None
 
+def handle_question_start(questions: List[Dict], current_q: Dict, q_num: int, level: str, year: int, question_text: str) -> tuple[Dict, int]:
+    """Handle the start of a new question"""
+    final_q = finalize_question(current_q, q_num)
+    if final_q:
+        questions.append(final_q)
+    
+    new_q = create_new_question(level, year)
+    new_q['question'] = question_text
+    return new_q, q_num + 1
+
+def handle_option_line(current_q: Dict, option_text: str) -> bool:
+    """Handle an option line, return True if option was added"""
+    current_q['options'].append(option_text)
+    return True
+
+def handle_explanation_line(current_q: Dict, line: str, in_options: bool) -> bool:
+    """Handle potential explanation line, return new in_options state"""
+    if in_options and line and not line.startswith('('):
+        if not re.match(r'Réponse|Answer', line, re.IGNORECASE):
+            current_q['explanation'] = line[:200]
+        return False
+    return in_options
+
 def process_page_lines(lines: List[str], level: str, year: int) -> List[Dict]:
     """Process lines from a page and extract questions"""
     questions = []
@@ -64,12 +87,7 @@ def process_page_lines(lines: List[str], level: str, year: int) -> List[Dict]:
         is_start, question_text = is_question_start(line)
         
         if is_start:
-            final_q = finalize_question(current_q, q_num)
-            if final_q:
-                questions.append(final_q)
-            q_num += 1
-            current_q = create_new_question(level, year)
-            current_q['question'] = question_text
+            current_q, q_num = handle_question_start(questions, current_q, q_num, level, year, question_text)
             in_options = False
             continue
         
@@ -78,12 +96,9 @@ def process_page_lines(lines: List[str], level: str, year: int) -> List[Dict]:
             
         is_option, option_text = is_option_line(line)
         if is_option:
-            current_q['options'].append(option_text)
-            in_options = True
-        elif in_options and line and not line.startswith('('):
-            in_options = False
-            if not re.match(r'Réponse|Answer', line, re.IGNORECASE):
-                current_q['explanation'] = line[:200]
+            in_options = handle_option_line(current_q, option_text)
+        else:
+            in_options = handle_explanation_line(current_q, line, in_options)
     
     final_q = finalize_question(current_q, q_num)
     if final_q:

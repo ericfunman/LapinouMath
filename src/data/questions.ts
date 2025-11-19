@@ -210,9 +210,19 @@ export function getQuestionsByDomain(level: string, domain: string): Question[] 
   return questions.filter(q => q.level === level && q.domain === domain);
 }
 
+// Fonction de mélange Fisher-Yates (utilisée pour éviter les biais de Math.random() - 0.5)
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export function getRandomQuestions(level: string, domain: string, count: number): Question[] {
   const questions = getQuestionsByDomain(level, domain);
-  const shuffled = [...questions].sort(() => Math.random() - 0.5);
+  const shuffled = shuffleArray(questions);
   return shuffled.slice(0, Math.min(count, questions.length));
 }
 
