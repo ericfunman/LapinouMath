@@ -785,7 +785,6 @@ describe('AdminPanel', () => {
       expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
     });
 
-    const buttons = document.querySelectorAll('button');
     const selects = document.querySelectorAll('select');
     const inputs = document.querySelectorAll('input[type="text"]');
 
