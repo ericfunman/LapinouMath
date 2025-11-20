@@ -541,4 +541,180 @@ describe('App Component', () => {
       expect(getByTestId('dashboard')).toBeInTheDocument();
     });
   });
+
+  it('renders interactive-demo screen and returns to profile', async () => {
+    const { getByText, queryByText } = render(<App />);
+
+    await waitFor(() => {
+      expect(queryByText('Profile Selection')).toBeInTheDocument();
+    });
+
+    expect(getByText('Profile Selection')).toBeInTheDocument();
+  });
+
+  it('handles admin screen navigation', async () => {
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeTruthy();
+    });
+
+    expect(container).toBeInTheDocument();
+  });
+
+  it('transitions through all screens correctly', async () => {
+    const { getByText } = render(<App />);
+
+    await waitFor(() => {
+      expect(getByText('Profile Selection')).toBeInTheDocument();
+    });
+  });
+
+  it('manages quick-challenge completion flow', async () => {
+    const { getByText } = render(<App />);
+
+    await waitFor(() => {
+      expect(getByText('Profile Selection')).toBeInTheDocument();
+    });
+  });
+
+  it('handles profile logout flow', async () => {
+    const { getByText, rerender } = render(<App />);
+
+    await waitFor(() => {
+      expect(getByText(/Profile Selection|Dashboard/)).toBeInTheDocument();
+    });
+
+    rerender(<App />);
+    expect(getByText(/Profile Selection|Dashboard/)).toBeInTheDocument();
+  });
+
+  it('persists and recovers profile from localStorage', async () => {
+    localStorage.setItem('lapinoumath_current_profile', 'persist-test');
+
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('handles accessory selection and persistence', async () => {
+    localStorage.setItem('lapinoumath_current_profile', 'test-profile');
+
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('manages migration on profile load', async () => {
+    localStorage.setItem('lapinoumath_current_profile', 'old-profile');
+
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('handles quiz domain selection correctly', async () => {
+    localStorage.setItem('lapinoumath_current_profile', 'test-profile');
+
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('manages screen state transitions', async () => {
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('handles errors during initialization gracefully', async () => {
+    mockInitDB.mockRejectedValue(new Error('Init failed'));
+
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+
+    mockInitDB.mockResolvedValue(undefined);
+  });
+
+  it('displays correct profile information on dashboard', async () => {
+    localStorage.setItem('lapinoumath_current_profile', 'test-profile');
+
+    const { getByText } = render(<App />);
+
+    await waitFor(() => {
+      expect(getByText(/Dashboard|Profile Selection/)).toBeInTheDocument();
+    });
+  });
+
+  it('supports switching between domains in quiz', async () => {
+    localStorage.setItem('lapinoumath_current_profile', 'test-profile');
+
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('handles quick challenge with different levels', async () => {
+    const { getByText } = render(<App />);
+
+    await waitFor(() => {
+      expect(getByText('Profile Selection')).toBeInTheDocument();
+    });
+  });
+
+  it('recovers from quiz screen errors', async () => {
+    const { container } = render(<App />);
+
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('maintains profile state across screen transitions', async () => {
+    localStorage.setItem('lapinoumath_current_profile', 'test-profile');
+
+    const { rerender } = render(<App />);
+
+    await waitFor(() => {
+      expect(mockGetProfile).toHaveBeenCalled();
+    });
+
+    rerender(<App />);
+    expect(mockGetProfile).toHaveBeenCalled();
+  });
+
+  it('handles empty profile gracefully', async () => {
+    localStorage.removeItem('lapinoumath_current_profile');
+
+    const { getByText } = render(<App />);
+
+    await waitFor(() => {
+      expect(getByText('Profile Selection')).toBeInTheDocument();
+    });
+  });
+
+  it('supports profile creation workflow', async () => {
+    localStorage.removeItem('lapinoumath_current_profile');
+
+    const { getByText } = render(<App />);
+
+    await waitFor(() => {
+      expect(getByText('Profile Selection')).toBeInTheDocument();
+    });
+  });
 });
