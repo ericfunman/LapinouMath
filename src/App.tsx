@@ -236,6 +236,10 @@ function App() {
               onOpenAdmin={handleOpenAdmin}
               onOpenInteractiveDemo={() => setCurrentScreen('interactive-demo')}
               onSelectAccessory={handleSelectAccessory}
+              onUpdateProfile={(updatedProfile) => {
+                setCurrentProfile(updatedProfile);
+                saveProfile(updatedProfile);
+              }}
             />
           )}
           
@@ -245,6 +249,7 @@ function App() {
               domain={selectedDomain.domain}
               onComplete={handleQuizComplete}
               onExit={() => setCurrentScreen('dashboard')}
+              rabbitCustomization={currentProfile.rabbitCustomization}
             />
           )}
 
@@ -253,6 +258,7 @@ function App() {
               level={selectedDomain.level}
               onComplete={handleQuickChallengeComplete}
               onExit={() => setCurrentScreen('dashboard')}
+              rabbitCustomization={currentProfile.rabbitCustomization}
             />
           )}
 

@@ -7,6 +7,11 @@ interface Props {
   readonly level: GradeLevel;
   readonly onComplete: (correctCount: number, totalCount: number) => void;
   readonly onExit: () => void;
+  readonly rabbitCustomization?: {
+    variant: 'classic' | 'white' | 'gray' | 'brown';
+    accessories: string[];
+    adjustments?: Record<string, { offsetX: number; offsetY: number; scale: number }>;
+  };
 }
 
 // Fonction de mélange utilisant l'algorithme Fisher-Yates
@@ -22,7 +27,7 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export default function QuickChallenge({ level, onComplete, onExit }: Readonly<Props>) {
+export default function QuickChallenge({ level, onComplete, onExit, rabbitCustomization }: Readonly<Props>) {
   const [questions, setQuestions] = useState<(Question | InteractiveQuestion)[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -170,10 +175,11 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
       {/* Rabbit Avatar */}
       <div className="fixed top-4 right-4 z-50">
         <RabbitAvatar
-          variant="classic"
+          variant={rabbitCustomization?.variant || 'classic'}
           expression={getRabbitExpression()}
           animation={rabbitAnimation}
-          accessories={['hat-party', 'glasses-star']}
+          accessories={rabbitCustomization?.accessories || ['hat-party', 'glasses-star']}
+          accessoryAdjustments={rabbitCustomization?.adjustments}
           size={100}
         />
       </div>

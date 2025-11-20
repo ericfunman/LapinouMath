@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { UserProfile, GradeLevel, MathDomain } from '../types';
 import { getQuestionStats } from '../utils/questionStats';
-import { getNextAccessoryToUnlock, getCalcuLapinDisplay } from '../data/accessories';
+import { getNextAccessoryToUnlock } from '../data/accessories';
 import { getAvailableDomains } from '../data/questions';
 import AccessoryShop from './AccessoryShop';
+import RabbitShop from './RabbitShop';
+import RabbitAvatar from './RabbitAvatar';
 
 interface Props {
   profile: UserProfile;
@@ -31,11 +33,25 @@ const getDomainEmoji = (domain: string): string => {
 };
 
 export default function Dashboard(props: Readonly<Props>) {
-  const { profile, onStartQuiz, onLogout, onOpenAdmin, onOpenInteractiveDemo } = props;
+  const { profile, onStartQuiz, onLogout, onOpenAdmin, onOpenInteractiveDemo, onUpdateProfile } = props;
   const [showAccessoryShop, setShowAccessoryShop] = useState(false);
+  const [showRabbitShop, setShowRabbitShop] = useState(false);
   const currentLevelProgress = profile.progress?.[profile.currentLevel];
   const questionStats = getQuestionStats();
   const nextAccessory = getNextAccessoryToUnlock(profile.totalStars);
+
+  const handleSaveRabbitCustomization = (customization: {
+    variant: 'classic' | 'white' | 'gray' | 'brown';
+    accessories: string[];
+    adjustments: Record<string, { offsetX: number; offsetY: number; scale: number }>;
+  }) => {
+    if (onUpdateProfile) {
+      onUpdateProfile({
+        ...profile,
+        rabbitCustomization: customization,
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen p-4 md:p-8">
@@ -44,7 +60,20 @@ export default function Dashboard(props: Readonly<Props>) {
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <span className="text-6xl">{getCalcuLapinDisplay(profile.selectedAccessory, profile.totalStars)}</span>
+              <button 
+                className="cursor-pointer hover:scale-110 transition-transform bg-transparent border-none p-0" 
+                onClick={() => setShowRabbitShop(true)}
+                aria-label="Personnaliser CalcuLapin"
+              >
+                <RabbitAvatar
+                  variant={profile.rabbitCustomization?.variant || 'classic'}
+                  expression="happy"
+                  animation="idle"
+                  accessories={profile.rabbitCustomization?.accessories || []}
+                  accessoryAdjustments={profile.rabbitCustomization?.adjustments}
+                  size={80}
+                />
+              </button>
               <div>
                 <h1 className="text-3xl font-bold text-gray-800">
                   Bonjour {profile.name} ! 👋
@@ -58,10 +87,16 @@ export default function Dashboard(props: Readonly<Props>) {
               </div>
               <div className="flex flex-col gap-2">
                 <button
+                  onClick={() => setShowRabbitShop(true)}
+                  className="text-sm bg-pink-500 text-white px-3 py-1 rounded-lg hover:bg-pink-600 font-semibold"
+                >
+                  🐰 Personnaliser CalcuLapin
+                </button>
+                <button
                   onClick={() => setShowAccessoryShop(!showAccessoryShop)}
                   className="text-sm bg-yellow-400 text-gray-800 px-3 py-1 rounded-lg hover:bg-yellow-500 font-semibold"
                 >
-                  🏪 Accessoires ({profile.unlockedAccessories.length})
+                  🏪 Anciens Accessoires ({profile.unlockedAccessories.length})
                 </button>
                 {onOpenInteractiveDemo && (
                   <button
@@ -306,6 +341,15 @@ export default function Dashboard(props: Readonly<Props>) {
           </div>
         )}
       </div>
+
+      {/* Rabbit Shop Modal */}
+      {showRabbitShop && (
+        <RabbitShop
+          profile={profile}
+          onSaveCustomization={handleSaveRabbitCustomization}
+          onClose={() => setShowRabbitShop(false)}
+        />
+      )}
 
       {/* Accessory Shop Modal */}
       {showAccessoryShop && (

@@ -11,6 +11,11 @@ interface Props {
   domain: MathDomain;
   onComplete: (correctCount: number, totalCount: number) => void;
   onExit: () => void;
+  rabbitCustomization?: {
+    variant: 'classic' | 'white' | 'gray' | 'brown';
+    accessories: string[];
+    adjustments?: Record<string, { offsetX: number; offsetY: number; scale: number }>;
+  };
 }
 
 // Fonction de mélange Fisher-Yates pour éviter les biais de Math.random() - 0.5
@@ -24,7 +29,7 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export default function QuizScreen({ level, domain, onComplete, onExit }: Readonly<Props>) {
+export default function QuizScreen({ level, domain, onComplete, onExit, rabbitCustomization }: Readonly<Props>) {
   const [questions, setQuestions] = useState<(Question | InteractiveQuestion)[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -168,10 +173,11 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
       {/* Rabbit Avatar */}
       <div className="fixed top-4 right-4 z-50">
         <RabbitAvatar
-          variant="classic"
+          variant={rabbitCustomization?.variant || 'classic'}
           expression={getRabbitExpression()}
           animation={rabbitAnimation}
-          accessories={['hat-wizard']}
+          accessories={rabbitCustomization?.accessories || ['hat-wizard']}
+          accessoryAdjustments={rabbitCustomization?.adjustments}
           size={120}
         />
       </div>

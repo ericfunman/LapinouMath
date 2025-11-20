@@ -75,6 +75,12 @@ export interface UserProfile {
   accessories: string[];
   unlockedAccessories: string[];
   selectedAccessory?: string; // ID of the currently selected accessory
+  // Configuration du lapin personnalisé
+  rabbitCustomization?: {
+    variant: 'classic' | 'white' | 'gray' | 'brown';
+    accessories: string[]; // IDs des accessoires sélectionnés
+    adjustments: Record<string, { offsetX: number; offsetY: number; scale: number }>;
+  };
   totalStars: number;
   createdAt: Date;
 }
