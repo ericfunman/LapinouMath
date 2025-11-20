@@ -125,8 +125,8 @@ export default function RabbitDemo() {
                     </label>
                     <input
                       type="range"
-                      min="-30"
-                      max="30"
+                      min="-100"
+                      max="100"
                       value={accessoryOffsetX}
                       onChange={(e) => setAccessoryOffsetX(Number(e.target.value))}
                       className="w-full"
@@ -140,8 +140,8 @@ export default function RabbitDemo() {
                     </label>
                     <input
                       type="range"
-                      min="-30"
-                      max="30"
+                      min="-100"
+                      max="100"
                       value={accessoryOffsetY}
                       onChange={(e) => setAccessoryOffsetY(Number(e.target.value))}
                       className="w-full"
