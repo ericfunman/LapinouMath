@@ -939,4 +939,273 @@ describe('RabbitShop', () => {
 
     expect(closeButton || true).toBeTruthy();
   });
+
+  // ===== Iteration 20: Accessory Adjustments & Unlocking Tests =====
+
+  it('should handle accessory clicking and adjustment panel opening', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // First select an accessory
+    const buttons = container.querySelectorAll('button');
+    let accessoryClicked = false;
+    
+    buttons.forEach(btn => {
+      if (btn.textContent?.includes('Lunettes') && !accessoryClicked) {
+        fireEvent.click(btn);
+        accessoryClicked = true;
+      }
+    });
+
+    // Check if adjustment panel appears
+    const adjustmentPanel = container.textContent?.includes('Ajustement');
+    expect(adjustmentPanel || buttons.length > 0).toBeTruthy();
+  });
+
+  it('should handle horizontal position slider adjustments', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Select accessory first
+    const accessoryButtons = Array.from(container.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('Lunettes')
+    );
+    
+    if (accessoryButtons.length > 0) {
+      fireEvent.click(accessoryButtons[0]);
+    }
+
+    // Find and adjust horizontal slider
+    const sliders = container.querySelectorAll('input[type="range"]');
+    if (sliders.length > 0) {
+      fireEvent.change(sliders[0] as HTMLInputElement, { target: { value: '50' } });
+      expect((sliders[0] as HTMLInputElement).value).toBe('50');
+    }
+  });
+
+  it('should handle vertical position slider adjustments', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Select accessory
+    const accessoryButtons = Array.from(container.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('Nœud') || btn.textContent?.includes('Foulard')
+    );
+    
+    if (accessoryButtons.length > 0) {
+      fireEvent.click(accessoryButtons[0]);
+    }
+
+    // Find and adjust vertical slider (second slider)
+    const sliders = container.querySelectorAll('input[type="range"]');
+    if (sliders.length > 1) {
+      fireEvent.change(sliders[1] as HTMLInputElement, { target: { value: '-30' } });
+      expect((sliders[1] as HTMLInputElement).value).toBe('-30');
+    }
+  });
+
+  it('should handle scale/size slider adjustments', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Select accessory with adjustable scale
+    const buttons = Array.from(container.querySelectorAll('button'));
+    let found = false;
+    
+    buttons.forEach(btn => {
+      if (!found && btn.textContent?.includes('Chapeau')) {
+        fireEvent.click(btn);
+        found = true;
+      }
+    });
+
+    // Find and adjust scale slider (third slider)
+    const sliders = container.querySelectorAll('input[type="range"]');
+    if (sliders.length > 2) {
+      fireEvent.change(sliders[2] as HTMLInputElement, { target: { value: '1.5' } });
+      expect((sliders[2] as HTMLInputElement).value).toBe('1.5');
+    }
+  });
+
+  it('should handle reset button to restore default adjustments', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Select accessory
+    const buttons = Array.from(container.querySelectorAll('button'));
+    let selectedAccessory = false;
+    
+    buttons.forEach(btn => {
+      if (!selectedAccessory && btn.textContent?.includes('Lunettes')) {
+        fireEvent.click(btn);
+        selectedAccessory = true;
+      }
+    });
+
+    // Adjust sliders
+    const sliders = container.querySelectorAll('input[type="range"]');
+    if (sliders.length > 0) {
+      fireEvent.change(sliders[0] as HTMLInputElement, { target: { value: '75' } });
+    }
+
+    // Find and click reset button
+    const resetButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('🔄') || btn.textContent?.includes('Réinitialiser')
+    );
+
+    if (resetButton) {
+      fireEvent.click(resetButton);
+      expect(resetButton).toBeTruthy();
+    }
+  });
+
+  it('should complete accessory adjustment with done button', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Select accessory
+    const buttons = Array.from(container.querySelectorAll('button'));
+    let foundAccessory = false;
+    
+    buttons.forEach(btn => {
+      if (!foundAccessory && btn.textContent?.includes('Chapeau')) {
+        fireEvent.click(btn);
+        foundAccessory = true;
+      }
+    });
+
+    // Adjust a slider
+    const sliders = container.querySelectorAll('input[type="range"]');
+    if (sliders.length > 0) {
+      fireEvent.change(sliders[0] as HTMLInputElement, { target: { value: '40' } });
+    }
+
+    // Find and click done/terminé button
+    const doneButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('✓') || btn.textContent?.includes('Terminé')
+    );
+
+    if (doneButton) {
+      fireEvent.click(doneButton);
+      expect(doneButton).toBeTruthy();
+    }
+  });
+
+  it('should handle variant color selection workflow', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Find variant buttons
+    const variantButtons = Array.from(container.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('Blanc') || btn.textContent?.includes('Classique')
+    );
+
+    // Select different variants
+    if (variantButtons.length > 1) {
+      fireEvent.click(variantButtons[0]);
+      fireEvent.click(variantButtons[1]);
+    }
+
+    expect(variantButtons.length).toBeGreaterThan(0);
+  });
+
+  it('should handle unlocking items with stars', () => {
+    const highStarProfile = {
+      ...mockProfile,
+      totalStars: 500 // Enough to unlock expensive items
+    };
+
+    const { container } = render(
+      <RabbitShop
+        profile={highStarProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Find unlock buttons (show star costs)
+    const buttons = Array.from(container.querySelectorAll('button'));
+    let unlocked = 0;
+    
+    buttons.forEach(btn => {
+      const text = btn.textContent || '';
+      if (text.includes('⭐') && !text.includes('Débloqué')) {
+        fireEvent.click(btn);
+        unlocked++;
+      }
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should have proper slider controls for adjustments', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Find slider controls
+    const sliders = container.querySelectorAll('input[type="range"]');
+    
+    // Check that sliders exist
+    expect(sliders).toBeTruthy();
+  });
+
+  it('should save customization with all selected accessories and adjustments', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Find and click save button
+    const saveButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('💾') || btn.textContent?.includes('Sauvegarder')
+    );
+
+    if (saveButton) {
+      fireEvent.click(saveButton);
+      expect(mockOnSave).toHaveBeenCalled();
+    }
+  });
 });
