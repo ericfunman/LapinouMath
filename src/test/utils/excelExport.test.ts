@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { exportQuestionsToExcel, generateQuestionsCSV, importQuestionsFromExcel } from '../../utils/excelExport';
+import { exportQuestionsToExcel, generateQuestionsCSV, importQuestionsFromExcel, findDuplicates } from '../../utils/excelExport';
 import { Question } from '../../types';
 
 describe('excelExport', () => {
@@ -195,6 +195,259 @@ describe('excelExport', () => {
 
       // Should skip empty row
       expect(result.questions).toHaveLength(1);
+    });
+
+    it('should handle missing cells in row data', () => {
+      const excelData = [
+        ['ID', 'Level', 'Domain', 'Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer', 'Explanation', 'Difficulty'],
+        ['test-1', 'CE1'] // Only 2 cells instead of 11
+      ];
+
+      const result = importQuestionsFromExcel(excelData);
+
+      expect(result.questions).toHaveLength(0);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors[0]).toContain('Données incomplètes');
+    });
+
+    it('should handle non-numeric correct answer index', () => {
+      const excelData = [
+        ['ID', 'Level', 'Domain', 'Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer', 'Explanation', 'Difficulty'],
+        ['test-1', 'CE1', 'Calcul', 'Question ?', 'A', 'B', 'C', 'D', 'abc', 'Explication', '1']
+      ];
+
+      const result = importQuestionsFromExcel(excelData);
+
+      expect(result.questions).toHaveLength(0);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors[0]).toContain('Index de réponse correcte invalide');
+    });
+
+    it('should handle empty options in imported data', () => {
+      const excelData = [
+        ['ID', 'Level', 'Domain', 'Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer', 'Explanation', 'Difficulty'],
+        ['test-1', 'CE1', 'Calcul', 'Question ?', 'A', '', 'C', 'D', '0', 'Explication', '1']
+      ];
+
+      const result = importQuestionsFromExcel(excelData);
+
+      expect(result.questions).toHaveLength(0);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors[0]).toContain('vides');
+    });
+
+    it('should handle difficulty as string that converts to number', () => {
+      const excelData = [
+        ['ID', 'Level', 'Domain', 'Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer', 'Explanation', 'Difficulty'],
+        ['test-1', 'CE1', 'Calcul', 'Question ?', 'A', 'B', 'C', 'D', '0', 'Explication', '2']
+      ];
+
+      const result = importQuestionsFromExcel(excelData);
+
+      expect(result.questions).toHaveLength(1);
+      expect(result.questions[0].difficulty).toBe(2);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should handle missing difficulty field', () => {
+      const excelData = [
+        ['ID', 'Level', 'Domain', 'Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer', 'Explanation']
+      ];
+
+      const result = importQuestionsFromExcel(excelData);
+
+      expect(result.questions).toHaveLength(0);
+    });
+
+    it('should trim whitespace from imported fields', () => {
+      const excelData = [
+        ['ID', 'Level', 'Domain', 'Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer', 'Explanation', 'Difficulty'],
+        ['  test-1  ', '  CE1  ', '  Calcul  ', '  Question ?  ', '  A  ', '  B  ', '  C  ', '  D  ', '0', '  Explication  ', '1']
+      ];
+
+      const result = importQuestionsFromExcel(excelData);
+
+      expect(result.questions).toHaveLength(1);
+      expect(result.questions[0].id).toBe('test-1');
+      expect(result.questions[0].level).toBe('CE1');
+      expect(result.questions[0].question).toBe('Question ?');
+    });
+
+    it('should handle exception during row processing', () => {
+      const excelData = [
+        ['ID', 'Level', 'Domain', 'Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer', 'Explanation', 'Difficulty'],
+        [
+          'test-1',
+          'CE1',
+          'Calcul',
+          'Question ?',
+          'A',
+          'B',
+          'C',
+          'D',
+          Symbol('invalid') as any, // This will cause an error when converting
+          'Explication',
+          '1'
+        ]
+      ];
+
+      const result = importQuestionsFromExcel(excelData);
+
+      // Should catch error and add to errors array
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('findDuplicates', () => {
+    const existingQuestions: Question[] = [
+      {
+        id: 'existing-1',
+        level: 'CE1',
+        domain: 'Calcul mental',
+        question: 'Existing question',
+        options: ['A', 'B', 'C', 'D'],
+        correctAnswer: 0,
+        explanation: 'Explanation',
+        difficulty: 1,
+      }
+    ];
+
+    it('should find duplicate questions by id', () => {
+      const newQuestions: Question[] = [
+        {
+          id: 'existing-1', // Duplicate ID
+          level: 'CE1',
+          domain: 'Calcul mental',
+          question: 'New question',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 0,
+          explanation: 'New explanation',
+          difficulty: 2,
+        },
+        {
+          id: 'new-1',
+          level: 'CE2',
+          domain: 'Arithmétique',
+          question: 'Another new question',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 1,
+          explanation: 'Another explanation',
+          difficulty: 2,
+        }
+      ];
+
+      const duplicates = findDuplicates(newQuestions, existingQuestions);
+
+      expect(duplicates).toHaveLength(1);
+      expect(duplicates[0]).toBe('existing-1');
+    });
+
+    it('should return empty array when no duplicates', () => {
+      const newQuestions: Question[] = [
+        {
+          id: 'new-1',
+          level: 'CE1',
+          domain: 'Calcul mental',
+          question: 'New unique question',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 0,
+          explanation: 'Explanation',
+          difficulty: 1,
+        }
+      ];
+
+      const duplicates = findDuplicates(newQuestions, existingQuestions);
+
+      expect(duplicates).toHaveLength(0);
+    });
+
+    it('should handle empty new questions', () => {
+      const duplicates = findDuplicates([], existingQuestions);
+
+      expect(duplicates).toHaveLength(0);
+    });
+
+    it('should handle empty existing questions', () => {
+      const newQuestions: Question[] = [
+        {
+          id: 'new-1',
+          level: 'CE1',
+          domain: 'Calcul mental',
+          question: 'Question',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 0,
+          explanation: 'Explanation',
+          difficulty: 1,
+        }
+      ];
+
+      const duplicates = findDuplicates(newQuestions, []);
+
+      expect(duplicates).toHaveLength(0);
+    });
+
+    it('should find multiple duplicates', () => {
+      const existingQs: Question[] = [
+        {
+          id: 'dup-1',
+          level: 'CE1',
+          domain: 'Calcul mental',
+          question: 'Q1',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 0,
+          explanation: 'E1',
+          difficulty: 1,
+        },
+        {
+          id: 'dup-2',
+          level: 'CE1',
+          domain: 'Calcul mental',
+          question: 'Q2',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 1,
+          explanation: 'E2',
+          difficulty: 1,
+        }
+      ];
+
+      const newQs: Question[] = [
+        {
+          id: 'dup-1',
+          level: 'CE1',
+          domain: 'Calcul mental',
+          question: 'Q1 mod',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 0,
+          explanation: 'E1',
+          difficulty: 1,
+        },
+        {
+          id: 'new-1',
+          level: 'CE1',
+          domain: 'Arithmétique',
+          question: 'Q new',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 0,
+          explanation: 'E new',
+          difficulty: 1,
+        },
+        {
+          id: 'dup-2',
+          level: 'CE1',
+          domain: 'Calcul mental',
+          question: 'Q2 mod',
+          options: ['A', 'B', 'C', 'D'],
+          correctAnswer: 1,
+          explanation: 'E2',
+          difficulty: 1,
+        }
+      ];
+
+      const duplicates = findDuplicates(newQs, existingQs);
+
+      expect(duplicates).toHaveLength(2);
+      expect(duplicates).toContain('dup-1');
+      expect(duplicates).toContain('dup-2');
     });
   });
 });
