@@ -8,9 +8,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
-    testTimeout: 20000,
-    hookTimeout: 20000,
+    testTimeout: 15000,
+    hookTimeout: 15000,
     isolate: false,
+    bail: 1,
     threads: {
       singleThread: true,
     },
