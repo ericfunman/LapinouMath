@@ -7,6 +7,11 @@ export default function RabbitDemo() {
   const [animation, setAnimation] = useState<AnimationType>('idle');
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([]);
   const [size, setSize] = useState(150);
+  
+  // Contrôles d'ajustement des accessoires (valeur par défaut -7px pour corriger décalage)
+  const [accessoryOffsetX, setAccessoryOffsetX] = useState(-7);
+  const [accessoryOffsetY, setAccessoryOffsetY] = useState(0);
+  const [accessoryScale, setAccessoryScale] = useState(1);
 
   // Liste complète des accessoires disponibles
   const allAccessories = {
@@ -84,6 +89,9 @@ export default function RabbitDemo() {
                 size={size}
                 animation={animation}
                 onAnimationComplete={handleAnimationComplete}
+                accessoryOffsetX={accessoryOffsetX}
+                accessoryOffsetY={accessoryOffsetY}
+                accessoryScale={accessoryScale}
               />
             </div>
 
@@ -101,6 +109,75 @@ export default function RabbitDemo() {
                 className="w-full"
               />
             </div>
+
+            {/* Accessory Adjustment Controls */}
+            {selectedAccessories.length > 0 && (
+              <div className="mt-6 p-4 bg-yellow-50 rounded-lg border-2 border-yellow-300">
+                <h3 className="text-sm font-bold text-gray-800 mb-3">
+                  ⚙️ Ajustement des Accessoires
+                </h3>
+                
+                <div className="space-y-3">
+                  {/* Horizontal Offset */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">
+                      Position Horizontale: {accessoryOffsetX}px
+                    </label>
+                    <input
+                      type="range"
+                      min="-30"
+                      max="30"
+                      value={accessoryOffsetX}
+                      onChange={(e) => setAccessoryOffsetX(Number(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+
+                  {/* Vertical Offset */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">
+                      Position Verticale: {accessoryOffsetY}px
+                    </label>
+                    <input
+                      type="range"
+                      min="-30"
+                      max="30"
+                      value={accessoryOffsetY}
+                      onChange={(e) => setAccessoryOffsetY(Number(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+
+                  {/* Scale */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">
+                      Taille Accessoires: {accessoryScale.toFixed(2)}x
+                    </label>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="2.0"
+                      step="0.1"
+                      value={accessoryScale}
+                      onChange={(e) => setAccessoryScale(Number(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+
+                  {/* Reset Button */}
+                  <button
+                    onClick={() => {
+                      setAccessoryOffsetX(0);
+                      setAccessoryOffsetY(0);
+                      setAccessoryScale(1);
+                    }}
+                    className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded-lg transition-colors text-xs"
+                  >
+                    🔄 Réinitialiser Position
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Quick Actions */}
             <div className="grid grid-cols-2 gap-3 mt-6">
@@ -243,7 +320,7 @@ export default function RabbitDemo() {
           <h3 className="text-xl font-bold text-gray-800 mb-4">
             📊 Configuration Actuelle
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center mb-4">
             <div className="bg-purple-50 rounded-lg p-4">
               <div className="text-2xl font-bold text-purple-600">{variant}</div>
               <div className="text-xs text-gray-600 mt-1">Type</div>
@@ -265,6 +342,23 @@ export default function RabbitDemo() {
               <div className="text-xs text-gray-600 mt-1">Taille</div>
             </div>
           </div>
+
+          {/* Afficher les valeurs d'ajustement si modifiées */}
+          {(accessoryOffsetX !== 0 || accessoryOffsetY !== 0 || accessoryScale !== 1) && (
+            <div className="bg-orange-50 border-2 border-orange-300 rounded-lg p-4 mt-4">
+              <h4 className="text-sm font-bold text-orange-800 mb-2">
+                🔧 Valeurs d'ajustement (pour copier dans le code)
+              </h4>
+              <pre className="bg-white p-3 rounded text-xs overflow-x-auto">
+                {`accessoryOffsetX={${accessoryOffsetX}}
+accessoryOffsetY={${accessoryOffsetY}}
+accessoryScale={${accessoryScale}}`}
+              </pre>
+              <p className="text-xs text-orange-700 mt-2">
+                💡 Ces valeurs peuvent être appliquées directement dans RabbitAvatar
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

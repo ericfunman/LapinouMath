@@ -12,6 +12,9 @@ interface RabbitAvatarProps {
   size?: number;
   animation?: AnimationType;
   onAnimationComplete?: () => void;
+  accessoryOffsetX?: number; // Décalage horizontal en pixels
+  accessoryOffsetY?: number; // Décalage vertical en pixels
+  accessoryScale?: number;   // Multiplicateur de taille (1.0 = normal)
 }
 
 // Couleurs pour chaque variant de lapin - Améliorées avec contours et joues
@@ -151,6 +154,9 @@ export default function RabbitAvatar({
   size = 120,
   animation = 'idle',
   onAnimationComplete,
+  accessoryOffsetX = 0,
+  accessoryOffsetY = 0,
+  accessoryScale = 1,
 }: Readonly<RabbitAvatarProps>) {
   const colors = RABBIT_COLORS[variant];
   const face = EXPRESSIONS[expression];
@@ -368,13 +374,18 @@ export default function RabbitAvatar({
             const config = ACCESSORY_CONFIG[type] || ACCESSORY_CONFIG.hat;
             const fontSize = size * config.scale;
             
+            const adjustedFontSize = fontSize * accessoryScale;
+            const transformWithOffset = config.transform 
+              ? `${config.transform} translate(${accessoryOffsetX}px, ${accessoryOffsetY}px)`
+              : `translate(${accessoryOffsetX}px, ${accessoryOffsetY}px)`;
+            
             const positionStyle: React.CSSProperties = {
               top: config.top,
               left: config.left,
               right: config.right,
-              transform: config.transform,
+              transform: transformWithOffset,
               zIndex: config.zIndex,
-              fontSize: `${fontSize}px`,
+              fontSize: `${adjustedFontSize}px`,
               lineHeight: '1',
             };
             
