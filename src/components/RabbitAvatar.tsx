@@ -399,6 +399,12 @@ export default function RabbitAvatar({
             const adjustedFontSize = fontSize * adjustment.scale;
             const isSelected = selectedAccessory === accessoryId;
             
+            // Rendre les ajustements proportionnels à la taille du lapin
+            // Base de référence: 200px (taille de la boutique)
+            const scaleFactor = size / 200;
+            const scaledOffsetX = adjustment.offsetX * scaleFactor;
+            const scaledOffsetY = adjustment.offsetY * scaleFactor;
+            
             // Construire le style avec les offsets appliqués via margin
             const positionStyle: React.CSSProperties = {
               top: config.top,
@@ -408,8 +414,8 @@ export default function RabbitAvatar({
               zIndex: config.zIndex,
               fontSize: `${adjustedFontSize}px`,
               lineHeight: '1',
-              marginLeft: `${adjustment.offsetX}px`,
-              marginTop: `${adjustment.offsetY}px`,
+              marginLeft: `${scaledOffsetX}px`,
+              marginTop: `${scaledOffsetY}px`,
               cursor: onAccessoryClick ? 'pointer' : 'default',
               // Highlight si sélectionné
               filter: isSelected ? 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.8))' : 'none',

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { UserProfile, GradeLevel, MathDomain } from '../types';
-import { getQuestionStats } from '../utils/questionStats';
 import { getNextAccessoryToUnlock } from '../data/accessories';
 import { getAvailableDomains } from '../data/questions';
 import AccessoryShop from './AccessoryShop';
@@ -37,7 +36,6 @@ export default function Dashboard(props: Readonly<Props>) {
   const [showAccessoryShop, setShowAccessoryShop] = useState(false);
   const [showRabbitShop, setShowRabbitShop] = useState(false);
   const currentLevelProgress = profile.progress?.[profile.currentLevel];
-  const questionStats = getQuestionStats();
   const nextAccessory = getNextAccessoryToUnlock(profile.totalStars);
 
   const handleSaveRabbitCustomization = (customization: {
@@ -125,31 +123,6 @@ export default function Dashboard(props: Readonly<Props>) {
                   ⚙️ Admin
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CalcuLapin mascotte */}
-        <div className="bg-white rounded-3xl shadow-xl p-6 mb-6">
-          <div className="flex items-center gap-4">
-            <div className="text-7xl">🐰</div>
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold text-primary mb-2">
-                CalcuLapin dit :
-              </h2>
-              <p className="text-lg text-gray-700">
-                "Bravo pour ton travail ! Choisis un domaine pour continuer à apprendre 🌟"
-              </p>
-              <p className="text-sm text-gray-600 mt-2">
-                💡 Astuce : Obtiens au moins <strong>1 étoile</strong> (50% de réussite sur 5 questions) 
-                pour débloquer le domaine suivant !
-              </p>
-              <p className="text-sm text-primary font-semibold mt-1">
-                🎓 Obtiens <strong>2 étoiles dans tous les domaines</strong> pour passer au niveau supérieur !
-              </p>
-              <p className="text-xs text-gray-500 mt-2">
-                📚 {questionStats.total} questions disponibles au total • {questionStats.byLevel[profile.currentLevel] || 0} pour ton niveau
-              </p>
             </div>
           </div>
         </div>
