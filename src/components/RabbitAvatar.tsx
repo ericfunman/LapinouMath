@@ -186,31 +186,78 @@ export default function RabbitAvatar({
   // Mapping des IDs d'accessoires vers les emojis SVG
   const getAccessoryEmoji = (accessoryId: string): string => {
     const emojiMap: Record<string, string> = {
-      // Chapeaux
+      // Chapeaux - Débutant
       'hat-top': '🎩',
       'hat-party': '🎉',
-      'hat-crown': '👑',
-      'hat-wizard': '🧙',
       'hat-santa': '🎅',
+      'hat-baseball': '🧢',
       
-      // Lunettes
+      // Chapeaux - Intermédiaire
+      'hat-crown': '👑',
+      'hat-pirate': '🏴‍☠️',
+      'hat-chef': '👨‍🍳',
+      'hat-cowboy': '🤠',
+      
+      // Chapeaux - Avancé
+      'hat-wizard': '🧙',
+      'hat-graduate': '🎓',
+      'hat-astronaut': '👨‍🚀',
+      
+      // Chapeaux - Légendaire
+      'hat-king': '👑',
+      
+      // Lunettes - Débutant
       'glasses-round': '👓',
+      'glasses-square': '🕶️',
+      
+      // Lunettes - Intermédiaire
       'glasses-cool': '😎',
       'glasses-star': '⭐',
+      'glasses-heart': '❤️',
+      'glasses-3d': '🎬',
       
-      // Nœuds
+      // Lunettes - Avancé
+      'glasses-monocle': '🧐',
+      'glasses-laser': '🔴',
+      
+      // Nœuds - Débutant
       'bow-pink': '🎀',
       'bow-blue': '💙',
+      'bow-red': '❤️',
+      
+      // Nœuds - Intermédiaire
+      'bow-gold': '🏆',
+      'bow-silver': '🥈',
+      
+      // Nœuds - Avancé
       'bow-rainbow': '🌈',
+      'bow-diamond': '💎',
       
-      // Foulards
+      // Foulards - Débutant
       'scarf-red': '🧣',
-      'scarf-winter': '❄️',
+      'scarf-blue': '🔵',
       
-      // Backgrounds
+      // Foulards - Intermédiaire
+      'scarf-winter': '❄️',
+      'scarf-stripe': '🎪',
+      'scarf-wool': '🧶',
+      
+      // Foulards - Avancé
+      'scarf-magic': '✨',
+      'scarf-stars': '⭐',
+      
+      // Backgrounds - Intermédiaire
       'bg-stars': '✨',
       'bg-hearts': '💕',
+      
+      // Backgrounds - Avancé
       'bg-sparkles': '🌟',
+      'bg-confetti': '🎊',
+      'bg-rainbow': '🌈',
+      
+      // Backgrounds - Légendaire
+      'bg-galaxy': '🌌',
+      'bg-fire': '🔥',
     };
     return emojiMap[accessoryId] || '🎁';
   };

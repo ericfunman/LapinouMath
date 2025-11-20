@@ -15,31 +15,78 @@ interface Props {
 
 // Accessoires débloquables avec leurs coûts en étoiles
 const SHOP_ACCESSORIES = [
-  // Chapeaux
+  // Chapeaux - Niveau Débutant
   { id: 'hat-top', name: 'Chapeau Haut-de-forme', cost: 10, category: 'Chapeaux' },
   { id: 'hat-party', name: 'Chapeau de Fête', cost: 10, category: 'Chapeaux' },
-  { id: 'hat-crown', name: 'Couronne Royale', cost: 50, category: 'Chapeaux' },
-  { id: 'hat-wizard', name: 'Chapeau de Magicien', cost: 100, category: 'Chapeaux' },
-  { id: 'hat-santa', name: 'Bonnet de Noël', cost: 30, category: 'Chapeaux' },
+  { id: 'hat-santa', name: 'Bonnet de Noël', cost: 15, category: 'Chapeaux' },
+  { id: 'hat-baseball', name: 'Casquette de Sport', cost: 12, category: 'Chapeaux' },
   
-  // Lunettes
-  { id: 'glasses-round', name: 'Lunettes Rondes', cost: 10, category: 'Lunettes' },
-  { id: 'glasses-cool', name: 'Lunettes Cool', cost: 20, category: 'Lunettes' },
-  { id: 'glasses-star', name: 'Lunettes Étoiles', cost: 40, category: 'Lunettes' },
+  // Chapeaux - Niveau Intermédiaire
+  { id: 'hat-crown', name: 'Couronne Royale', cost: 40, category: 'Chapeaux' },
+  { id: 'hat-pirate', name: 'Chapeau de Pirate', cost: 35, category: 'Chapeaux' },
+  { id: 'hat-chef', name: 'Toque de Chef', cost: 38, category: 'Chapeaux' },
+  { id: 'hat-cowboy', name: 'Chapeau de Cowboy', cost: 42, category: 'Chapeaux' },
   
-  // Nœuds
+  // Chapeaux - Niveau Avancé
+  { id: 'hat-wizard', name: 'Chapeau de Magicien', cost: 80, category: 'Chapeaux' },
+  { id: 'hat-graduate', name: 'Chapeau de Diplômé', cost: 85, category: 'Chapeaux' },
+  { id: 'hat-astronaut', name: 'Casque d\'Astronaute', cost: 90, category: 'Chapeaux' },
+  
+  // Chapeaux - Légendaire
+  { id: 'hat-king', name: 'Couronne Impériale', cost: 150, category: 'Chapeaux' },
+  
+  // Lunettes - Niveau Débutant
+  { id: 'glasses-round', name: 'Lunettes Rondes', cost: 8, category: 'Lunettes' },
+  { id: 'glasses-square', name: 'Lunettes Carrées', cost: 8, category: 'Lunettes' },
+  
+  // Lunettes - Niveau Intermédiaire
+  { id: 'glasses-cool', name: 'Lunettes de Soleil', cost: 25, category: 'Lunettes' },
+  { id: 'glasses-star', name: 'Lunettes Étoiles', cost: 30, category: 'Lunettes' },
+  { id: 'glasses-heart', name: 'Lunettes Cœur', cost: 28, category: 'Lunettes' },
+  { id: 'glasses-3d', name: 'Lunettes 3D', cost: 32, category: 'Lunettes' },
+  
+  // Lunettes - Niveau Avancé
+  { id: 'glasses-monocle', name: 'Monocle Chic', cost: 60, category: 'Lunettes' },
+  { id: 'glasses-laser', name: 'Lunettes Laser', cost: 75, category: 'Lunettes' },
+  
+  // Nœuds - Niveau Débutant
   { id: 'bow-pink', name: 'Nœud Rose', cost: 10, category: 'Nœuds' },
   { id: 'bow-blue', name: 'Nœud Bleu', cost: 10, category: 'Nœuds' },
-  { id: 'bow-rainbow', name: 'Nœud Arc-en-ciel', cost: 60, category: 'Nœuds' },
+  { id: 'bow-red', name: 'Nœud Rouge', cost: 10, category: 'Nœuds' },
   
-  // Foulards
-  { id: 'scarf-red', name: 'Foulard Rouge', cost: 15, category: 'Foulards' },
-  { id: 'scarf-winter', name: 'Foulard d\'Hiver', cost: 25, category: 'Foulards' },
+  // Nœuds - Niveau Intermédiaire
+  { id: 'bow-gold', name: 'Nœud Doré', cost: 45, category: 'Nœuds' },
+  { id: 'bow-silver', name: 'Nœud Argenté', cost: 45, category: 'Nœuds' },
   
-  // Backgrounds
-  { id: 'bg-stars', name: 'Étoiles', cost: 80, category: 'Backgrounds' },
-  { id: 'bg-hearts', name: 'Cœurs', cost: 80, category: 'Backgrounds' },
-  { id: 'bg-sparkles', name: 'Étincelles', cost: 100, category: 'Backgrounds' },
+  // Nœuds - Niveau Avancé
+  { id: 'bow-rainbow', name: 'Nœud Arc-en-ciel', cost: 70, category: 'Nœuds' },
+  { id: 'bow-diamond', name: 'Nœud Diamant', cost: 100, category: 'Nœuds' },
+  
+  // Foulards - Niveau Débutant
+  { id: 'scarf-red', name: 'Foulard Rouge', cost: 12, category: 'Foulards' },
+  { id: 'scarf-blue', name: 'Foulard Bleu', cost: 12, category: 'Foulards' },
+  
+  // Foulards - Niveau Intermédiaire
+  { id: 'scarf-winter', name: 'Écharpe d\'Hiver', cost: 35, category: 'Foulards' },
+  { id: 'scarf-stripe', name: 'Foulard Rayé', cost: 38, category: 'Foulards' },
+  { id: 'scarf-wool', name: 'Écharpe en Laine', cost: 40, category: 'Foulards' },
+  
+  // Foulards - Niveau Avancé
+  { id: 'scarf-magic', name: 'Foulard Magique', cost: 65, category: 'Foulards' },
+  { id: 'scarf-stars', name: 'Écharpe Étoilée', cost: 70, category: 'Foulards' },
+  
+  // Backgrounds - Niveau Intermédiaire
+  { id: 'bg-stars', name: 'Fond Étoiles', cost: 50, category: 'Effets' },
+  { id: 'bg-hearts', name: 'Fond Cœurs', cost: 50, category: 'Effets' },
+  
+  // Backgrounds - Niveau Avancé
+  { id: 'bg-sparkles', name: 'Étincelles Magiques', cost: 80, category: 'Effets' },
+  { id: 'bg-confetti', name: 'Confettis Festifs', cost: 85, category: 'Effets' },
+  { id: 'bg-rainbow', name: 'Arc-en-ciel', cost: 90, category: 'Effets' },
+  
+  // Backgrounds - Légendaire
+  { id: 'bg-galaxy', name: 'Galaxie Cosmique', cost: 150, category: 'Effets' },
+  { id: 'bg-fire', name: 'Flammes Épiques', cost: 160, category: 'Effets' },
 ];
 
 const VARIANTS = [
@@ -341,7 +388,7 @@ export default function RabbitShop({ profile, onSaveCustomization, onClose }: Re
                   {category === 'Lunettes' && '👓'}
                   {category === 'Nœuds' && '🎀'}
                   {category === 'Foulards' && '🧣'}
-                  {category === 'Backgrounds' && '✨'}
+                  {category === 'Effets' && '✨'}
                   {' '}{category}
                 </h3>
                 <div className="grid grid-cols-2 gap-3">

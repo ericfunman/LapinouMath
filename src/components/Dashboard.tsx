@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { UserProfile, GradeLevel, MathDomain } from '../types';
 import { getNextAccessoryToUnlock } from '../data/accessories';
 import { getAvailableDomains } from '../data/questions';
-import AccessoryShop from './AccessoryShop';
 import RabbitShop from './RabbitShop';
 import RabbitAvatar from './RabbitAvatar';
 
@@ -33,7 +32,6 @@ const getDomainEmoji = (domain: string): string => {
 
 export default function Dashboard(props: Readonly<Props>) {
   const { profile, onStartQuiz, onLogout, onOpenAdmin, onOpenInteractiveDemo, onUpdateProfile } = props;
-  const [showAccessoryShop, setShowAccessoryShop] = useState(false);
   const [showRabbitShop, setShowRabbitShop] = useState(false);
   const currentLevelProgress = profile.progress?.[profile.currentLevel];
   const nextAccessory = getNextAccessoryToUnlock(profile.totalStars);
@@ -94,13 +92,7 @@ export default function Dashboard(props: Readonly<Props>) {
                   onClick={() => setShowRabbitShop(true)}
                   className="text-sm bg-pink-500 text-white px-3 py-1 rounded-lg hover:bg-pink-600 font-semibold"
                 >
-                  🐰 Personnaliser CalcuLapin
-                </button>
-                <button
-                  onClick={() => setShowAccessoryShop(!showAccessoryShop)}
-                  className="text-sm bg-yellow-400 text-gray-800 px-3 py-1 rounded-lg hover:bg-yellow-500 font-semibold"
-                >
-                  🏪 Anciens Accessoires ({profile.unlockedAccessories.length})
+                  🐰 Boutique CalcuLapin
                 </button>
                 {onOpenInteractiveDemo && (
                   <button
@@ -311,7 +303,7 @@ export default function Dashboard(props: Readonly<Props>) {
                 </div>
               </div>
               <button
-                onClick={() => setShowAccessoryShop(true)}
+                onClick={() => setShowRabbitShop(true)}
                 className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold whitespace-nowrap transition-colors"
               >
                 Voir la boutique →
@@ -327,18 +319,6 @@ export default function Dashboard(props: Readonly<Props>) {
           profile={profile}
           onSaveCustomization={handleSaveRabbitCustomization}
           onClose={() => setShowRabbitShop(false)}
-        />
-      )}
-
-      {/* Accessory Shop Modal */}
-      {showAccessoryShop && (
-        <AccessoryShop
-          profile={profile}
-          onSelectAccessory={(accessoryId) => {
-            props.onSelectAccessory?.(accessoryId);
-            setShowAccessoryShop(false);
-          }}
-          onClose={() => setShowAccessoryShop(false)}
         />
       )}
     </div>
