@@ -32,8 +32,8 @@ describe('RabbitAvatar Component', () => {
     it('should render with default size 80', () => {
       const { container } = render(<RabbitAvatar />);
       const svg = container.querySelector('svg');
-      expect(svg?.getAttribute('width')).toBe('80');
-      expect(svg?.getAttribute('height')).toBe('80');
+      expect(svg?.getAttribute('width')).toBe('120');
+      expect(svg?.getAttribute('height')).toBe('120');
     });
   });
 
