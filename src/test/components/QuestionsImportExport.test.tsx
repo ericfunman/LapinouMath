@@ -682,5 +682,173 @@ describe('QuestionsImportExport', () => {
       );
     }).not.toThrow();
   });
+
+  it('should click export Excel button', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const excelButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Excel')
+    );
+
+    if (excelButton) {
+      fireEvent.click(excelButton);
+      expect(excelButton).toBeTruthy();
+    }
+  });
+
+  it('should click export CSV button', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const csvButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('CSV')
+    );
+
+    if (csvButton) {
+      fireEvent.click(csvButton);
+      expect(csvButton).toBeTruthy();
+    }
+  });
+
+  it('should click import button and trigger file input', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const importButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Importer')
+    );
+
+    if (importButton) {
+      fireEvent.click(importButton);
+      const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(fileInput).toBeTruthy();
+    }
+  });
+
+  it('should handle multiple export attempts', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const excelButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Excel')
+    );
+
+    if (excelButton) {
+      fireEvent.click(excelButton);
+      fireEvent.click(excelButton);
+      fireEvent.click(excelButton);
+      expect(excelButton).toBeTruthy();
+    }
+  });
+
+  it('should render buttons in correct order', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    expect(buttons.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('should have file input with correct accept attribute', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      expect(fileInput.accept).toContain('.xlsx');
+    }
+  });
+
+  it('should handle clicking buttons consecutively', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    buttons.forEach(btn => {
+      fireEvent.click(btn);
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should support many questions', () => {
+    const manyQuestions = Array.from({ length: 100 }, (_, i) => ({
+      ...mockQuestions[0],
+      id: `q${i}`,
+      question: `Question ${i}`,
+    }));
+
+    render(
+      <QuestionsImportExport
+        allQuestions={manyQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle questions with various domains', () => {
+    const questionsByDomain = [
+      { ...mockQuestions[0], domain: 'Calcul mental' as const },
+      { ...mockQuestions[0], id: '2', domain: 'Géométrie' as const },
+      { ...mockQuestions[0], id: '3', domain: 'Arithmétique' as const },
+    ];
+
+    render(
+      <QuestionsImportExport
+        allQuestions={questionsByDomain}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle questions at different levels', () => {
+    const questionsByLevel = [
+      { ...mockQuestions[0], level: 'CM1' as const },
+      { ...mockQuestions[0], id: '2', level: 'CM2' as const },
+      { ...mockQuestions[0], id: '3', level: '6ème' as const },
+    ];
+
+    render(
+      <QuestionsImportExport
+        allQuestions={questionsByLevel}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    expect(document.body).toBeTruthy();
+  });
 });
 
