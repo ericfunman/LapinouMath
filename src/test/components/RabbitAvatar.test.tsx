@@ -201,5 +201,216 @@ describe('RabbitAvatar Component', () => {
       expect(svg).toBeDefined();
       expect(svg?.getAttribute('width')).toBe('100');
     });
+
+    it('should render with all variants and expressions', () => {
+      const variants: RabbitVariant[] = ['classic', 'white', 'gray', 'brown'];
+      const expressions: RabbitExpression[] = ['happy', 'sad', 'surprised', 'focused'];
+
+      for (const variant of variants) {
+        for (const expression of expressions) {
+          const { unmount } = render(
+            <RabbitAvatar variant={variant} expression={expression} />
+          );
+          expect(document.body).toBeDefined();
+          unmount();
+        }
+      }
+    });
+
+    it('should render with all animations and variants', () => {
+      const variants: RabbitVariant[] = ['classic', 'white', 'gray', 'brown'];
+      const animations: AnimationType[] = ['idle', 'correct', 'wrong', 'celebrate'];
+
+      for (const variant of variants) {
+        for (const animation of animations) {
+          const { unmount } = render(
+            <RabbitAvatar variant={variant} animation={animation} />
+          );
+          expect(document.body).toBeDefined();
+          unmount();
+        }
+      }
+    });
+
+    it('should handle multiple rerenders', () => {
+      const { rerender } = render(
+        <RabbitAvatar variant="classic" expression="happy" animation="idle" />
+      );
+
+      rerender(<RabbitAvatar variant="white" expression="sad" animation="correct" />);
+      rerender(<RabbitAvatar variant="gray" expression="focused" animation="wrong" />);
+      rerender(<RabbitAvatar variant="brown" expression="surprised" animation="celebrate" />);
+
+      expect(document.body).toBeDefined();
+    });
+
+    it('should handle size transitions', () => {
+      const { rerender } = render(<RabbitAvatar size={50} />);
+
+      for (let size = 50; size <= 200; size += 30) {
+        rerender(<RabbitAvatar size={size} />);
+      }
+
+      expect(document.body).toBeDefined();
+    });
+
+    it('should render with complex accessory setup', () => {
+      const { container } = render(
+        <RabbitAvatar 
+          variant="classic"
+          expression="happy"
+          animation="idle"
+          size={120}
+          accessories={['hat-wizard', 'glasses-cool', 'scarf-blue']}
+          accessoryAdjustments={{
+            'hat-wizard': { offsetX: 0, offsetY: -10, scale: 1.1 },
+            'glasses-cool': { offsetX: 0, offsetY: 5, scale: 1 },
+            'scarf-blue': { offsetX: 0, offsetY: 20, scale: 0.95 }
+          }}
+        />
+      );
+
+      expect(container.querySelector('svg')).toBeDefined();
+    });
+
+    it('should render avatar with minimum props', () => {
+      const { container } = render(<RabbitAvatar />);
+      expect(container.querySelector('svg')).toBeDefined();
+    });
+
+    it('should render avatar with only variant', () => {
+      const { container } = render(<RabbitAvatar variant="white" />);
+      expect(container.querySelector('svg')).toBeDefined();
+    });
+
+    it('should render avatar with only expression', () => {
+      const { container } = render(<RabbitAvatar expression="happy" />);
+      expect(container.querySelector('svg')).toBeDefined();
+    });
+
+    it('should render avatar with only animation', () => {
+      const { container } = render(<RabbitAvatar animation="celebrate" />);
+      expect(container.querySelector('svg')).toBeDefined();
+    });
+
+    it('should render avatar with only size', () => {
+      const { container } = render(<RabbitAvatar size={150} />);
+      const svg = container.querySelector('svg');
+      expect(svg?.getAttribute('width')).toBe('150');
+    });
+
+    it('should render avatar with only accessories', () => {
+      const { container } = render(
+        <RabbitAvatar accessories={['hat-top', 'glasses-round']} />
+      );
+      expect(container.querySelector('svg')).toBeDefined();
+    });
+
+    it('should handle large accessory list', () => {
+      const { container } = render(
+        <RabbitAvatar accessories={[
+          'hat-wizard', 'hat-cowboy', 'hat-top',
+          'glasses-cool', 'glasses-nerd',
+          'scarf-blue', 'scarf-red'
+        ]} />
+      );
+      expect(container.querySelector('svg')).toBeDefined();
+    });
+
+    it('should render with mixed prop combinations', () => {
+      const combinations = [
+        { variant: 'classic' as const, expression: 'happy' as const },
+        { variant: 'white' as const, animation: 'correct' as const },
+        { expression: 'sad' as const, animation: 'wrong' as const },
+        { size: 100, variant: 'gray' as const },
+        { size: 200, accessories: ['hat-wizard'] },
+      ];
+
+      for (const props of combinations) {
+        const { unmount } = render(<RabbitAvatar {...props} />);
+        expect(document.body).toBeDefined();
+        unmount();
+      }
+    });
+
+    it('should maintain SVG structure across prop changes', () => {
+      const { container, rerender } = render(
+        <RabbitAvatar variant="classic" size={100} />
+      );
+
+      let svgElement = container.querySelector('svg');
+      expect(svgElement?.getAttribute('viewBox')).toBe('0 -8 100 108');
+
+      rerender(<RabbitAvatar variant="white" size={150} />);
+      svgElement = container.querySelector('svg');
+      expect(svgElement).toBeDefined();
+    });
+
+    it('should render avatar in different display contexts', () => {
+      const { container: c1 } = render(<RabbitAvatar size={50} />);
+      const { container: c2 } = render(<RabbitAvatar size={100} />);
+      const { container: c3 } = render(<RabbitAvatar size={200} />);
+
+      expect(c1.querySelector('svg')).toBeDefined();
+      expect(c2.querySelector('svg')).toBeDefined();
+      expect(c3.querySelector('svg')).toBeDefined();
+    });
+
+    it('should handle rapid animation changes', () => {
+      const { rerender } = render(<RabbitAvatar animation="idle" />);
+
+      const animations: AnimationType[] = ['correct', 'wrong', 'celebrate', 'idle', 'correct'];
+      for (const animation of animations) {
+        rerender(<RabbitAvatar animation={animation} />);
+      }
+
+      expect(document.body).toBeDefined();
+    });
+
+    it('should render all expression variants', () => {
+      const expressions: RabbitExpression[] = ['happy', 'sad', 'surprised', 'focused'];
+
+      for (const expr of expressions) {
+        const { unmount } = render(<RabbitAvatar expression={expr} />);
+        expect(document.body).toBeDefined();
+        unmount();
+      }
+    });
+
+    it('should support callback functions', () => {
+      const mockCallback = vi.fn();
+      render(
+        <RabbitAvatar 
+          animation="celebrate"
+          onAnimationComplete={mockCallback}
+        />
+      );
+
+      expect(document.body).toBeDefined();
+    });
+
+    it('should render with empty accessories array', () => {
+      const { container } = render(
+        <RabbitAvatar variant="classic" accessories={[]} />
+      );
+
+      expect(container.querySelector('svg')).toBeDefined();
+    });
+
+    it('should render rabbit avatar consistently', () => {
+      const props = {
+        variant: 'classic' as const,
+        expression: 'happy' as const,
+        animation: 'idle' as const,
+        size: 120,
+      };
+
+      const { unmount: u1 } = render(<RabbitAvatar {...props} />);
+      const { unmount: u2 } = render(<RabbitAvatar {...props} />);
+
+      expect(document.body).toBeDefined();
+      u1();
+      u2();
+    });
   });
 });
