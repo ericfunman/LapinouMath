@@ -81,6 +81,8 @@ export interface UserProfile {
     accessories: string[]; // IDs des accessoires sélectionnés
     adjustments: Record<string, { offsetX: number; offsetY: number; scale: number }>;
   };
+  // Items débloqués dans la boutique lapin
+  unlockedRabbitItems?: string[];
   totalStars: number;
   createdAt: Date;
 }

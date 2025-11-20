@@ -44,11 +44,17 @@ export default function Dashboard(props: Readonly<Props>) {
     variant: 'classic' | 'white' | 'gray' | 'brown';
     accessories: string[];
     adjustments: Record<string, { offsetX: number; offsetY: number; scale: number }>;
+    unlockedItems: string[];
   }) => {
     if (onUpdateProfile) {
       onUpdateProfile({
         ...profile,
-        rabbitCustomization: customization,
+        rabbitCustomization: {
+          variant: customization.variant,
+          accessories: customization.accessories,
+          adjustments: customization.adjustments,
+        },
+        unlockedRabbitItems: customization.unlockedItems,
       });
     }
   };

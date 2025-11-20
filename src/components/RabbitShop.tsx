@@ -8,6 +8,7 @@ interface Props {
     variant: RabbitVariant;
     accessories: string[];
     adjustments: Record<string, AccessoryAdjustment>;
+    unlockedItems: string[];
   }) => void;
   onClose: () => void;
 }
@@ -64,7 +65,7 @@ export default function RabbitShop({ profile, onSaveCustomization, onClose }: Re
   const [tempScale, setTempScale] = useState(1);
   const [unlockedItems, setUnlockedItems] = useState<string[]>([
     'classic', // Variant de base toujours débloqué
-    ...profile.unlockedAccessories || []
+    ...(profile.unlockedRabbitItems || [])
   ]);
 
   const canAfford = (cost: number) => profile.totalStars >= cost;
@@ -73,8 +74,9 @@ export default function RabbitShop({ profile, onSaveCustomization, onClose }: Re
 
   const handleUnlock = (id: string, cost: number) => {
     if (canAfford(cost) && !isUnlocked(id)) {
-      setUnlockedItems([...unlockedItems, id]);
-      // Note: Dans une vraie app, il faudrait déduire les étoiles du profil
+      const newUnlockedItems = [...unlockedItems, id];
+      setUnlockedItems(newUnlockedItems);
+      // Mettre à jour immédiatement pour que l'utilisateur puisse utiliser l'item
     }
   };
 
@@ -115,6 +117,7 @@ export default function RabbitShop({ profile, onSaveCustomization, onClose }: Re
       variant: selectedVariant,
       accessories: selectedAccessories,
       adjustments: accessoryAdjustments,
+      unlockedItems: unlockedItems,
     });
     onClose();
   };
@@ -124,6 +127,32 @@ export default function RabbitShop({ profile, onSaveCustomization, onClose }: Re
     acc[item.category].push(item);
     return acc;
   }, {} as Record<string, typeof SHOP_ACCESSORIES>);
+
+  const getButtonClassName = (isSelected: boolean, unlocked: boolean, affordable: boolean) => {
+    if (isSelected) {
+      return 'bg-gradient-to-br from-green-400 to-green-500 text-white ring-2 ring-green-600';
+    }
+    if (unlocked) {
+      return 'bg-white hover:bg-green-50 border-2 border-green-300';
+    }
+    if (affordable) {
+      return 'bg-white hover:bg-yellow-50 border-2 border-yellow-400';
+    }
+    return 'bg-gray-200 opacity-50 cursor-not-allowed';
+  };
+
+  const getAccessoryButtonClassName = (isSelected: boolean, unlocked: boolean, affordable: boolean) => {
+    if (isSelected) {
+      return 'bg-gradient-to-br from-blue-400 to-blue-500 text-white ring-2 ring-blue-600';
+    }
+    if (unlocked) {
+      return 'bg-white hover:bg-blue-50 border-2 border-blue-300';
+    }
+    if (affordable) {
+      return 'bg-white hover:bg-yellow-50 border-2 border-yellow-400';
+    }
+    return 'bg-gray-200 opacity-50 cursor-not-allowed';
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
@@ -287,15 +316,7 @@ export default function RabbitShop({ profile, onSaveCustomization, onClose }: Re
                           setSelectedVariant(variant.id as RabbitVariant);
                         }
                       }}
-                      className={`p-3 rounded-xl transition-all ${
-                        isSelected
-                          ? 'bg-gradient-to-br from-green-400 to-green-500 text-white ring-2 ring-green-600'
-                          : unlocked
-                          ? 'bg-white hover:bg-green-50 border-2 border-green-300'
-                          : affordable
-                          ? 'bg-white hover:bg-yellow-50 border-2 border-yellow-400'
-                          : 'bg-gray-200 opacity-50 cursor-not-allowed'
-                      }`}
+                      className={`p-3 rounded-xl transition-all ${getButtonClassName(isSelected, unlocked, affordable)}`}
                       disabled={!unlocked && !affordable}
                     >
                       <div className="text-sm font-semibold">{variant.name}</div>
@@ -340,15 +361,7 @@ export default function RabbitShop({ profile, onSaveCustomization, onClose }: Re
                             toggleAccessory(item.id);
                           }
                         }}
-                        className={`p-3 rounded-xl transition-all ${
-                          isSelected
-                            ? 'bg-gradient-to-br from-blue-400 to-blue-500 text-white ring-2 ring-blue-600'
-                            : unlocked
-                            ? 'bg-white hover:bg-blue-50 border-2 border-blue-300'
-                            : affordable
-                            ? 'bg-white hover:bg-yellow-50 border-2 border-yellow-400'
-                            : 'bg-gray-200 opacity-50 cursor-not-allowed'
-                        }`}
+                        className={`p-3 rounded-xl transition-all ${getAccessoryButtonClassName(isSelected, unlocked, affordable)}`}
                         disabled={!unlocked && !affordable}
                       >
                         <div className="text-sm font-semibold">{item.name}</div>
