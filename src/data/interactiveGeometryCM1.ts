@@ -59,6 +59,7 @@ function generateCM1Questions(): InteractiveQuestion[] {
   // Parallel and Perpendicular lines (16-25)
   for (let i = 0; i < 10; i++) {
     const isPerpendicular = i % 2 === 0;
+    const correctIndex = i % 4; // Distribute correct answers across A, B, C, D
 
     questions.push({
       id: `cm1-geom-${String(id++).padStart(3, '0')}`,
@@ -68,7 +69,7 @@ function generateCM1Questions(): InteractiveQuestion[] {
         ? `Identifiez les lignes perpendiculaires (question ${i + 16}).`
         : `Identifiez les lignes parallèles (question ${i + 16}).`,
       options: ['Paire A', 'Paire B', 'Paire C', 'Paire D'],
-      correctAnswer: 0,
+      correctAnswer: correctIndex,
       explanation: isPerpendicular 
         ? 'Les lignes perpendiculaires forment un angle droit (90°).'
         : 'Les lignes parallèles ne se croisent jamais.',
@@ -79,27 +80,27 @@ function generateCM1Questions(): InteractiveQuestion[] {
         width: 400,
         height: 280,
         grid: false,
-        elements: isPerpendicular
-          ? [
-              // Perpendicular pair A
-              { id: `perp-a-${i}`, type: 'line', points: [{ x: 50, y: 100 }, { x: 90, y: 100 }], color: '#e74c3c', interactive: true },
-              { id: `perp-a2-${i}`, type: 'line', points: [{ x: 70, y: 60 }, { x: 70, y: 140 }], color: '#e74c3c', interactive: true },
-              { id: `la-perp-${i}`, type: 'point', x: 70, y: 160, label: 'A (perpendiculaires)', color: '#000' },
-              // Parallel pair B
-              { id: `par-b-${i}`, type: 'line', points: [{ x: 160, y: 80 }, { x: 220, y: 80 }], color: '#3498db' },
-              { id: `par-b2-${i}`, type: 'line', points: [{ x: 160, y: 120 }, { x: 220, y: 120 }], color: '#3498db' },
-              { id: `lb-perp-${i}`, type: 'point', x: 190, y: 140, label: 'B (parallèles)', color: '#000' },
-            ]
-          : [
-              // Parallel pair A
-              { id: `par-a-${i}`, type: 'line', points: [{ x: 50, y: 80 }, { x: 110, y: 80 }], color: '#e74c3c', interactive: true },
-              { id: `par-a2-${i}`, type: 'line', points: [{ x: 50, y: 120 }, { x: 110, y: 120 }], color: '#e74c3c', interactive: true },
-              { id: `la-par-${i}`, type: 'point', x: 80, y: 140, label: 'A (parallèles)', color: '#000' },
-              // Perpendicular pair B
-              { id: `perp-b-${i}`, type: 'line', points: [{ x: 180, y: 100 }, { x: 240, y: 100 }], color: '#3498db' },
-              { id: `perp-b2-${i}`, type: 'line', points: [{ x: 210, y: 60 }, { x: 210, y: 140 }], color: '#3498db' },
-              { id: `lb-par-${i}`, type: 'point', x: 210, y: 150, label: 'B (perpendiculaires)', color: '#000' },
-            ],
+        elements: [
+          // Pair A - correct based on question type
+          { id: `pair-a1-${i}`, type: 'line', points: [{ x: 40, y: 80 }, { x: 80, y: 80 }], color: correctIndex === 0 ? '#e74c3c' : '#95a5a6', interactive: correctIndex === 0 },
+          { id: `pair-a2-${i}`, type: 'line', points: [{ x: 60, y: 40 }, { x: 60, y: 120 }], color: correctIndex === 0 ? '#e74c3c' : '#95a5a6', interactive: correctIndex === 0 },
+          { id: `label-a-${i}`, type: 'point', x: 60, y: 135, label: 'A', color: '#000' },
+          
+          // Pair B
+          { id: `pair-b1-${i}`, type: 'line', points: [{ x: 120, y: 60 }, { x: 180, y: 60 }], color: correctIndex === 1 ? '#e74c3c' : '#95a5a6', interactive: correctIndex === 1 },
+          { id: `pair-b2-${i}`, type: 'line', points: [{ x: 120, y: 100 }, { x: 180, y: 100 }], color: correctIndex === 1 ? '#e74c3c' : '#95a5a6', interactive: correctIndex === 1 },
+          { id: `label-b-${i}`, type: 'point', x: 150, y: 115, label: 'B', color: '#000' },
+          
+          // Pair C
+          { id: `pair-c1-${i}`, type: 'line', points: [{ x: 240, y: 80 }, { x: 280, y: 80 }], color: correctIndex === 2 ? '#e74c3c' : '#95a5a6', interactive: correctIndex === 2 },
+          { id: `pair-c2-${i}`, type: 'line', points: [{ x: 260, y: 40 }, { x: 260, y: 120 }], color: correctIndex === 2 ? '#e74c3c' : '#95a5a6', interactive: correctIndex === 2 },
+          { id: `label-c-${i}`, type: 'point', x: 260, y: 135, label: 'C', color: '#000' },
+          
+          // Pair D
+          { id: `pair-d1-${i}`, type: 'line', points: [{ x: 320, y: 60 }, { x: 380, y: 60 }], color: correctIndex === 3 ? '#e74c3c' : '#95a5a6', interactive: correctIndex === 3 },
+          { id: `pair-d2-${i}`, type: 'line', points: [{ x: 320, y: 100 }, { x: 380, y: 100 }], color: correctIndex === 3 ? '#e74c3c' : '#95a5a6', interactive: correctIndex === 3 },
+          { id: `label-d-${i}`, type: 'point', x: 350, y: 115, label: 'D', color: '#000' },
+        ],
       },
       expectedInteraction: {
         type: 'click',
@@ -114,6 +115,7 @@ function generateCM1Questions(): InteractiveQuestion[] {
   for (let i = 0; i < 10; i++) {
     const triangleTypes = ['rectangle', 'isocèle', 'équilatéral', 'scalène'];
     const triType = triangleTypes[i % 4];
+    const correctIndex = i % 4; // Each triangle type gets a turn being correct
 
     questions.push({
       id: `cm1-geom-${String(id++).padStart(3, '0')}`,
@@ -121,8 +123,14 @@ function generateCM1Questions(): InteractiveQuestion[] {
       domain: 'Géométrie',
       question: `Identifiez le triangle ${triType} (question ${i + 26}).`,
       options: ['Triangle A', 'Triangle B', 'Triangle C', 'Triangle D'],
-      correctAnswer: 0,
-      explanation: `Le triangle ${triType} a ses caractéristiques spécifiques.`,
+      correctAnswer: correctIndex,
+      explanation: triType === 'rectangle' 
+        ? 'Un triangle rectangle a un angle droit.'
+        : triType === 'isocèle'
+        ? 'Un triangle isocèle a deux côtés de même longueur.'
+        : triType === 'équilatéral'
+        ? 'Un triangle équilatéral a trois côtés de même longueur.'
+        : 'Un triangle scalène a trois côtés de longueurs différentes.',
       difficulty: 2,
       isInteractive: true,
       interactionType: 'click',
@@ -131,15 +139,21 @@ function generateCM1Questions(): InteractiveQuestion[] {
         height: 280,
         grid: false,
         elements: [
-          // Right triangle
-          { id: `tri-rect-${i}`, type: 'polygon', points: [{ x: 60, y: 80 }, { x: 120, y: 80 }, { x: 120, y: 140 }], color: '#e74c3c', interactive: true },
-          { id: `ltr-${i}`, type: 'point', x: 90, y: 160, label: 'A (rectangle)', color: '#000' },
-          // Isosceles
-          { id: `tri-iso-${i}`, type: 'polygon', points: [{ x: 200, y: 80 }, { x: 260, y: 80 }, { x: 230, y: 140 }], color: '#3498db' },
-          { id: `lti-${i}`, type: 'point', x: 230, y: 160, label: 'B (isocèle)', color: '#000' },
-          // Equilateral
-          { id: `tri-eq-${i}`, type: 'polygon', points: [{ x: 310, y: 90 }, { x: 360, y: 90 }, { x: 335, y: 140 }], color: '#27ae60' },
-          { id: `lte-${i}`, type: 'point', x: 335, y: 160, label: 'C (équilatéral)', color: '#000' },
+          // Triangle A - rectangle
+          { id: `tri-a-${i}`, type: 'polygon', points: [{ x: 40, y: 60 }, { x: 100, y: 60 }, { x: 100, y: 120 }], color: correctIndex === 0 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-a-${i}`, type: 'point', x: 70, y: 135, label: 'A', color: '#000' },
+          
+          // Triangle B - isocèle
+          { id: `tri-b-${i}`, type: 'polygon', points: [{ x: 140, y: 60 }, { x: 200, y: 60 }, { x: 170, y: 120 }], color: correctIndex === 1 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-b-${i}`, type: 'point', x: 170, y: 135, label: 'B', color: '#000' },
+          
+          // Triangle C - équilatéral
+          { id: `tri-c-${i}`, type: 'polygon', points: [{ x: 240, y: 70 }, { x: 290, y: 70 }, { x: 265, y: 120 }], color: correctIndex === 2 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-c-${i}`, type: 'point', x: 265, y: 135, label: 'C', color: '#000' },
+          
+          // Triangle D - scalène
+          { id: `tri-d-${i}`, type: 'polygon', points: [{ x: 320, y: 50 }, { x: 380, y: 70 }, { x: 350, y: 120 }], color: correctIndex === 3 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-d-${i}`, type: 'point', x: 350, y: 135, label: 'D', color: '#000' },
         ],
       },
       expectedInteraction: {
@@ -153,6 +167,7 @@ function generateCM1Questions(): InteractiveQuestion[] {
   for (let i = 0; i < 10; i++) {
     const quadTypes = ['trapèze', 'parallélogramme', 'losange', 'rectangle'];
     const quadType = quadTypes[i % 4];
+    const correctIndex = i % 4; // Each quadrilateral type gets a turn being correct
 
     questions.push({
       id: `cm1-geom-${String(id++).padStart(3, '0')}`,
@@ -160,8 +175,14 @@ function generateCM1Questions(): InteractiveQuestion[] {
       domain: 'Géométrie',
       question: `Trouvez le ${quadType} (question ${i + 36}).`,
       options: ['Figure A', 'Figure B', 'Figure C', 'Figure D'],
-      correctAnswer: 0,
-      explanation: `Le ${quadType} a ses propriétés géométriques.`,
+      correctAnswer: correctIndex,
+      explanation: quadType === 'trapèze' 
+        ? 'Un trapèze a au moins une paire de côtés parallèles.'
+        : quadType === 'parallélogramme'
+        ? 'Un parallélogramme a ses côtés opposés parallèles et de même longueur.'
+        : quadType === 'losange'
+        ? 'Un losange a quatre côtés de même longueur.'
+        : 'Un rectangle a quatre angles droits.',
       difficulty: 2,
       isInteractive: true,
       interactionType: 'click',
@@ -170,8 +191,21 @@ function generateCM1Questions(): InteractiveQuestion[] {
         height: 280,
         grid: false,
         elements: [
-          { id: `quad-a-${i}`, type: 'polygon', points: [{ x: 40, y: 80 }, { x: 120, y: 80 }, { x: 100, y: 140 }, { x: 20, y: 140 }], color: '#e74c3c', interactive: true },
-          { id: `lq1-${i}`, type: 'point', x: 70, y: 160, label: 'A', color: '#000' },
+          // Figure A - trapèze
+          { id: `quad-a-${i}`, type: 'polygon', points: [{ x: 20, y: 80 }, { x: 100, y: 80 }, { x: 80, y: 140 }, { x: 40, y: 140 }], color: correctIndex === 0 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-a-${i}`, type: 'point', x: 60, y: 160, label: 'A', color: '#000' },
+          
+          // Figure B - parallélogramme
+          { id: `quad-b-${i}`, type: 'polygon', points: [{ x: 130, y: 80 }, { x: 200, y: 80 }, { x: 180, y: 140 }, { x: 110, y: 140 }], color: correctIndex === 1 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-b-${i}`, type: 'point', x: 155, y: 160, label: 'B', color: '#000' },
+          
+          // Figure C - losange
+          { id: `quad-c-${i}`, type: 'polygon', points: [{ x: 240, y: 90 }, { x: 290, y: 70 }, { x: 340, y: 90 }, { x: 290, y: 140 }], color: correctIndex === 2 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-c-${i}`, type: 'point', x: 290, y: 160, label: 'C', color: '#000' },
+          
+          // Figure D - rectangle
+          { id: `quad-d-${i}`, type: 'polygon', points: [{ x: 360, y: 80 }, { x: 400, y: 80 }, { x: 400, y: 140 }, { x: 360, y: 140 }], color: correctIndex === 3 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-d-${i}`, type: 'point', x: 380, y: 160, label: 'D', color: '#000' },
         ],
       },
       expectedInteraction: {
@@ -199,12 +233,14 @@ function generateCM1Questions(): InteractiveQuestion[] {
         height: 280,
         grid: false,
         elements: [
-          { id: `area-a-${i}`, type: 'polygon', points: [{ x: 30, y: 80 }, { x: 90, y: 80 }, { x: 90, y: 140 }, { x: 30, y: 140 }], color: '#e74c3c', interactive: true },
-          { id: `la-area-${i}`, type: 'point', x: 60, y: 160, label: 'A (12)', color: '#000' },
-          { id: `area-b-${i}`, type: 'polygon', points: [{ x: 150, y: 85 }, { x: 200, y: 85 }, { x: 200, y: 140 }, { x: 150, y: 140 }], color: '#3498db' },
-          { id: `lb-area-${i}`, type: 'point', x: 175, y: 160, label: 'B (12)', color: '#000' },
-          { id: `area-c-${i}`, type: 'polygon', points: [{ x: 270, y: 70 }, { x: 380, y: 70 }, { x: 380, y: 90 }, { x: 270, y: 90 }], color: '#27ae60' },
-          { id: `lc-area-${i}`, type: 'point', x: 325, y: 110, label: 'C (12)', color: '#000' },
+          { id: `area-a-${i}`, type: 'polygon', points: [{ x: 20, y: 80 }, { x: 80, y: 80 }, { x: 80, y: 140 }, { x: 20, y: 140 }], color: '#e74c3c', interactive: true },
+          { id: `la-area-${i}`, type: 'point', x: 50, y: 160, label: 'A (12)', color: '#000' },
+          { id: `area-b-${i}`, type: 'polygon', points: [{ x: 120, y: 85 }, { x: 170, y: 85 }, { x: 170, y: 140 }, { x: 120, y: 140 }], color: '#3498db' },
+          { id: `lb-area-${i}`, type: 'point', x: 145, y: 160, label: 'B (12)', color: '#000' },
+          { id: `area-c-${i}`, type: 'polygon', points: [{ x: 220, y: 70 }, { x: 340, y: 70 }, { x: 340, y: 90 }, { x: 220, y: 90 }], color: '#27ae60' },
+          { id: `lc-area-${i}`, type: 'point', x: 280, y: 110, label: 'C (12)', color: '#000' },
+          { id: `area-d-${i}`, type: 'polygon', points: [{ x: 20, y: 180 }, { x: 120, y: 180 }, { x: 120, y: 200 }, { x: 20, y: 200 }], color: '#95a5a6' },
+          { id: `ld-area-${i}`, type: 'point', x: 70, y: 220, label: 'D (10)', color: '#000' },
         ],
       },
       expectedInteraction: {

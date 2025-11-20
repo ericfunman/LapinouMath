@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { GradeLevel, MathDomain, Question, InteractiveQuestion } from '../types';
 import { getRandomQuestions } from '../data/questions';
 import { reportQuestionError } from '../utils/database';
+import GeometryCanvas from './interactive/GeometryCanvas';
 import emailjs from '@emailjs/browser';
 
 interface Props {
@@ -181,6 +182,9 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
 
         {/* Question card */}
         <div className="bg-white rounded-3xl shadow-2xl p-8 mb-6">
+          <div className="flex justify-end mb-2">
+            <span className="text-xs text-gray-500 font-mono">{currentQuestion.id}</span>
+          </div>
           <div className="flex items-start justify-between gap-4 mb-6">
             <div className="flex items-start gap-4 flex-1">
               <span className="text-6xl">🐰</span>
@@ -208,6 +212,19 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
               </div>
             )}
           </div>
+
+          {/* Interactive Canvas (if applicable) */}
+          {(currentQuestion as InteractiveQuestion).isInteractive && (
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <h4 className="text-sm font-semibold text-gray-700 mb-3">
+                {(currentQuestion as InteractiveQuestion).expectedInteraction?.description || 'Interagissez avec le diagramme'}
+              </h4>
+              <GeometryCanvas
+                question={currentQuestion as InteractiveQuestion}
+                onInteraction={(elementId) => console.log('Interaction détectée:', elementId)}
+              />
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {shuffledOptions.map((option, index) => {

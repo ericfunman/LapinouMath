@@ -5,6 +5,7 @@ import { updateQuestion } from '../utils/database';
 import { GRADE_LEVELS, MATH_DOMAINS } from '../data/constants';
 import QuestionsImportExport from './QuestionsImportExport';
 import ErrorReportsTab from './ErrorReportsTab';
+import { GeometryCanvas } from './interactive/GeometryCanvas';
 
 interface Props {
   onClose: () => void;
@@ -24,6 +25,9 @@ export default function AdminPanel(props: Readonly<Props>) {
 
   useEffect(() => {
     getAllQuestionsAsync().then(allQuestions => {
+      console.log('📋 Questions chargées:', allQuestions.length, 'questions');
+      console.log('🔍 Premiers IDs:', allQuestions.slice(0, 5).map(q => q.id));
+      console.log('📊 Domaines uniques:', [...new Set(allQuestions.map(q => q.domain))]);
       setQuestions(allQuestions);
       setFilteredQuestions(allQuestions);
     });
@@ -42,11 +46,13 @@ export default function AdminPanel(props: Readonly<Props>) {
 
     if (searchTerm) {
       filtered = filtered.filter(q => 
+        q.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         q.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
         q.options.some(opt => opt.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
+    console.log('Filtre appliqué:', { selectedLevel, selectedDomain, searchTerm, total: filtered.length });
     setFilteredQuestions(filtered);
   }, [selectedLevel, selectedDomain, searchTerm, questions]);
 
@@ -108,9 +114,7 @@ export default function AdminPanel(props: Readonly<Props>) {
               ❌ Fermer
             </button>
           </div>
-
-          {/* Tabs */}
-          <div className="flex gap-4 border-b border-gray-200">
+          <div className="flex gap-2 mb-6">
             <button
               onClick={() => setTab('questions')}
               className={`px-6 py-3 font-bold rounded-t-xl transition ${
@@ -151,7 +155,7 @@ export default function AdminPanel(props: Readonly<Props>) {
                   <p className="text-2xl font-bold text-green-600">{stats.byLevel[level]}</p>
                 </div>
               ))}
-            </div>
+            </div>)
 
             {/* Import/Export Section */}
             <div className="my-6">
@@ -192,7 +196,7 @@ export default function AdminPanel(props: Readonly<Props>) {
 
               <input
                 type="text"
-                placeholder="🔍 Rechercher..."
+                placeholder="🔍 Rechercher par texte ou ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="px-4 py-2 rounded-xl border-2 border-gray-300 focus:border-primary focus:outline-none"
@@ -209,129 +213,145 @@ export default function AdminPanel(props: Readonly<Props>) {
               </label>
             </div>
 
-            {/* Liste des questions */}
+            {/* Liste des questions + loader + message explicite */}
             <div className="space-y-4">
-              {filteredQuestions.map((question) => (
-                <div key={question.id} className="bg-white rounded-2xl shadow-xl p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg text-sm font-bold">
-                          {question.level}
-                        </span>
-                        <span className="bg-green-100 text-green-800 px-3 py-1 rounded-lg text-sm font-bold">
-                          {question.domain}
-                        </span>
-                        <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-lg text-sm font-bold">
-                          Difficulté {question.difficulty}/3
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">{question.question}</h3>
-                      
-                      {/* Options */}
-                      <div className="grid grid-cols-2 gap-2 mb-3">
-                        {question.options.map((option, idx) => (
-                          <div
-                            key={`option-${question.id}-${idx}`}
-                            className={`p-3 rounded-lg border-2 ${
-                              idx === question.correctAnswer
-                                ? 'bg-green-100 border-green-500 font-bold'
-                                : 'bg-gray-50 border-gray-300'
-                            }`}
-                          >
-                            {idx === question.correctAnswer && '✅ '}
-                            {option}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Explication */}
-                      {showCorrectOnly && (
-                        <div className="bg-blue-50 p-3 rounded-lg">
-                          <p className="text-sm text-gray-700"><strong>Explication:</strong> {question.explanation}</p>
-                        </div>
-                      )}
-                    </div>
-
-                    <button
-                      onClick={() => handleEditQuestion(question)}
-                      className="ml-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-bold"
-                    >
-                      ✏️ Éditer
-                    </button>
-                  </div>
+              {questions.length === 0 ? (
+                <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
+                  <p className="text-2xl text-gray-500">Chargement des questions...</p>
                 </div>
-              ))}
-            </div>
+              ) : filteredQuestions.length === 0 ? (
+                <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
+                  <p className="text-2xl text-gray-500">Aucune question trouvée pour ce filtre</p>
+                </div>
+              ) : (
+                filteredQuestions.map((question) => (
+                  <div key={question.id} className="bg-white rounded-2xl shadow-xl p-6">
+                    <div className="flex justify-end mb-2">
+                      <span className="text-xs text-gray-500 font-mono">{question.id}</span>
+                    </div>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg text-sm font-bold">
+                            {question.level}
+                          </span>
+                          <span className="bg-green-100 text-green-800 px-3 py-1 rounded-lg text-sm font-bold">
+                            {question.domain}
+                          </span>
+                          <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-lg text-sm font-bold">
+                            Difficulté {question.difficulty}/3
+                          </span>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-800 mb-3">{question.question}</h3>
+                        
+                        {/* Options */}
+                        <div className="grid grid-cols-2 gap-2 mb-3">
+                          {question.options.map((option, idx) => (
+                            <div
+                              key={`option-${question.id}-${idx}`}
+                              className={`p-3 rounded-lg border-2 ${
+                                idx === question.correctAnswer
+                                  ? 'bg-green-100 border-green-500 font-bold'
+                                  : 'bg-gray-50 border-gray-300'
+                              }`}
+                            >
+                              {idx === question.correctAnswer && '✅ '}
+                              {option}
+                            </div>
+                          ))}
+                        </div>
 
-            {filteredQuestions.length === 0 && (
-              <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-                <p className="text-2xl text-gray-500">Aucune question trouvée</p>
-              </div>
-            )}
+                        {/* Explication */}
+                        {showCorrectOnly && (
+                          <div className="bg-blue-50 p-3 rounded-lg">
+                            <p className="text-sm text-gray-700"><strong>Explication:</strong> {question.explanation}</p>
+                          </div>
+                        )}
+
+                        {/* Canvas pour questions interactives */}
+                        {(question as InteractiveQuestion).isInteractive && (question as InteractiveQuestion).canvas && (
+                          <div className="border-2 border-blue-300 rounded-lg p-4 mt-4 bg-blue-50">
+                            <p className="text-sm font-bold text-blue-700 mb-2">📊 Aperçu visuel:</p>
+                            <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                              <GeometryCanvas
+                                question={question as InteractiveQuestion}
+                                onInteraction={(elementId) => console.log('Element clicked:', elementId)}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => handleEditQuestion(question)}
+                        className="ml-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-bold"
+                      >
+                        ✏️ Éditer
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </>
         )}
-      </div>
 
-      {/* Modal d'édition */}
-      {editingQuestion && (
+        {/* Modal d'édition */}
+        {editingQuestion && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-6 z-50">
           <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold mb-6">✏️ Éditer la question</h2>
-            
             <div className="space-y-4">
               <div>
                 <label htmlFor="question-input" className="block text-sm font-bold mb-2">Question</label>
                 <textarea
                   id="question-input"
-                  value={editingQuestion.question}
-                  onChange={(e) => setEditingQuestion({...editingQuestion, question: e.target.value})}
+                  value={editingQuestion?.question || ''}
+                  onChange={(e) => editingQuestion && setEditingQuestion({ ...editingQuestion, question: e.target.value })}
                   className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary focus:outline-none"
                   rows={3}
                 />
               </div>
-
-              {editingQuestion.options.map((option, idx) => (
-                <div key={`edit-option-${editingQuestion.id}-${idx}`}>
+              {editingQuestion?.options && editingQuestion.options.map((option, idx) => (
+                <div key={`edit-option-${editingQuestion.id}-${idx}`}> 
                   <label className="block text-sm font-bold mb-2">
-                    Option {idx + 1} {idx === editingQuestion.correctAnswer && '✅ (Correcte)'}
+                    Option {idx + 1} {editingQuestion && idx === editingQuestion.correctAnswer && '✅ (Correcte)'}
                   </label>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       value={option}
                       onChange={(e) => {
+                        if (!editingQuestion) return;
                         const newOptions = [...editingQuestion.options];
                         newOptions[idx] = e.target.value;
-                        setEditingQuestion({...editingQuestion, options: newOptions});
+                        setEditingQuestion({ ...editingQuestion, options: newOptions });
                       }}
                       className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary focus:outline-none"
                     />
                     <button
-                      onClick={() => setEditingQuestion({...editingQuestion, correctAnswer: idx})}
+                      onClick={() => editingQuestion && setEditingQuestion({ ...editingQuestion, correctAnswer: idx })}
                       className={`px-4 py-2 rounded-lg font-bold ${
-                        idx === editingQuestion.correctAnswer
+                        editingQuestion && idx === editingQuestion.correctAnswer
                           ? 'bg-green-500 text-white'
                           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       }`}
                     >
-                      {idx === editingQuestion.correctAnswer ? '✅' : 'Marquer'}
+                      {editingQuestion && idx === editingQuestion.correctAnswer ? '✅' : 'Marquer'}
                     </button>
                   </div>
                 </div>
               ))}
-
               <div>
                 <label htmlFor="explication-input" className="block text-sm font-bold mb-2">Explication</label>
                 <textarea
                   id="explication-input"
-                  value={editingQuestion.explanation}
-                  onChange={(e) => setEditingQuestion({...editingQuestion, explanation: e.target.value})}
+                  value={editingQuestion?.explanation || ''}
+                  onChange={(e) => editingQuestion && setEditingQuestion({ ...editingQuestion, explanation: e.target.value })}
                   className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary focus:outline-none"
                   rows={2}
                 />
               </div>
-
               <div className="flex gap-2">
                 <button
                   onClick={handleSaveEdit}
@@ -347,14 +367,14 @@ export default function AdminPanel(props: Readonly<Props>) {
                   ❌ Annuler
                 </button>
               </div>
-
               <p className="text-sm text-green-600 bg-green-50 p-3 rounded-lg">
                 ✅ Les modifications seront sauvegardées dans IndexedDB de façon permanente.
               </p>
             </div>
           </div>
         </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

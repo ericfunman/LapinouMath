@@ -134,10 +134,8 @@ export const interactiveGeometryCE2: InteractiveQuestion[] = [
       height: 280,
       grid: false,
       elements: [
-        { id: 'big-circle', type: 'circle', x: 100, y: 140, radius: 80, color: '#e74c3c', interactive: true },
-        { id: 'la-big', type: 'point', x: 100, y: 240, label: 'A (plus grand)', color: '#000' },
-        { id: 'small-circle', type: 'circle', x: 300, y: 140, radius: 50, color: '#3498db', interactive: true },
-        { id: 'lb-small', type: 'point', x: 300, y: 200, label: 'B', color: '#000' },
+        { id: 'big-circle', type: 'circle', x: 100, y: 140, radius: 80, color: '#e74c3c', interactive: true, label: 'A' },
+        { id: 'small-circle', type: 'circle', x: 300, y: 140, radius: 50, color: '#3498db', interactive: true, label: 'B' },
       ],
     },
     expectedInteraction: {
@@ -227,14 +225,10 @@ export const interactiveGeometryCE2: InteractiveQuestion[] = [
       height: 280,
       grid: false,
       elements: [
-        { id: 'tri-iso-a', type: 'polygon', points: [{ x: 60, y: 40 }, { x: 100, y: 120 }, { x: 20, y: 120 }], color: '#e74c3c' },
-        { id: 'la-iso', type: 'point', x: 60, y: 150, label: 'A', color: '#000' },
-        { id: 'tri-eq-b', type: 'polygon', points: [{ x: 200, y: 50 }, { x: 260, y: 130 }, { x: 140, y: 130 }], color: '#3498db', interactive: true },
-        { id: 'lb-iso', type: 'point', x: 200, y: 155, label: 'B (équilatéral)', color: '#000' },
-        { id: 'tri-rect-c', type: 'polygon', points: [{ x: 320, y: 40 }, { x: 380, y: 40 }, { x: 380, y: 130 }], color: '#27ae60' },
-        { id: 'lc-iso', type: 'point', x: 350, y: 150, label: 'C', color: '#000' },
-        { id: 'tri-flat-d', type: 'polygon', points: [{ x: 50, y: 200 }, { x: 150, y: 200 }, { x: 100, y: 250 }], color: '#f39c12' },
-        { id: 'ld-iso', type: 'point', x: 100, y: 270, label: 'D', color: '#000' },
+        { id: 'tri-iso-a', type: 'polygon', points: [{ x: 60, y: 40 }, { x: 100, y: 120 }, { x: 20, y: 120 }], color: '#e74c3c', label: 'A' },
+        { id: 'tri-eq-b', type: 'polygon', points: [{ x: 200, y: 50 }, { x: 260, y: 130 }, { x: 140, y: 130 }], color: '#3498db', interactive: true, label: 'B' },
+        { id: 'tri-rect-c', type: 'polygon', points: [{ x: 320, y: 40 }, { x: 380, y: 40 }, { x: 380, y: 130 }], color: '#27ae60', label: 'C' },
+        { id: 'tri-flat-d', type: 'polygon', points: [{ x: 50, y: 200 }, { x: 150, y: 200 }, { x: 100, y: 250 }], color: '#f39c12', label: 'D' },
       ],
     },
     expectedInteraction: {

@@ -196,11 +196,22 @@ const buildLevelQuestions = (): Record<string, (Question | InteractiveQuestion)[
 const levelQuestionsMap = buildLevelQuestions();
 const allLevelQuestions = Object.values(levelQuestionsMap).flat();
 
+// Dédupliquer les questions par ID
+const deduplicateQuestions = (questions: (Question | InteractiveQuestion)[]): (Question | InteractiveQuestion)[] => {
+  const seen = new Map<string, Question | InteractiveQuestion>();
+  for (const q of questions) {
+    if (!seen.has(q.id)) {
+      seen.set(q.id, q);
+    }
+  }
+  return Array.from(seen.values());
+};
+
 // Combiner toutes les questions (CE1-4ème + niveaux générés, sans l'ancien CE1 qui est maintenant dans levelQuestionsMap)
-export const allQuestions: (Question | InteractiveQuestion)[] = [
+export const allQuestions: (Question | InteractiveQuestion)[] = deduplicateQuestions([
   ...allLevelQuestions,
   ...allGeneratedQuestions,
-];
+]);
 
 // Variable pour stocker les questions chargées depuis IndexedDB
 let cachedQuestions: (Question | InteractiveQuestion)[] | null = null;

@@ -228,37 +228,33 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
     <div className="bg-white rounded-3xl shadow-xl p-6 mb-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">📊 Import/Export des Questions</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
         {/* Export buttons */}
         <div>
-          <h3 className="font-semibold text-gray-700 mb-3">📥 Exporter</h3>
-          <div className="space-y-2">
-            <button
-              onClick={handleExportExcel}
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl transition-colors"
-            >
-              📊 Exporter en Excel ({allQuestions.length} questions)
-            </button>
-            <button
-              onClick={handleExportCSV}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-xl transition-colors"
-            >
-              📄 Exporter en CSV
-            </button>
-            <p className="text-sm text-gray-600">
-              Crée un fichier avec toutes les questions actuelles, réponses et explications.
-            </p>
-          </div>
+          <button
+            onClick={handleExportExcel}
+            className="w-full bg-green-500 hover:bg-green-600 text-white text-sm py-2 px-3 rounded transition-colors"
+          >
+            📊 Excel
+          </button>
+        </div>
+
+        <div>
+          <button
+            onClick={handleExportCSV}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-3 rounded transition-colors"
+          >
+            📄 CSV
+          </button>
         </div>
 
         {/* Import button */}
         <div>
-          <h3 className="font-semibold text-gray-700 mb-3">📤 Importer</h3>
           <button
             onClick={handleImportClick}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl transition-colors mb-2"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm py-2 px-3 rounded transition-colors"
           >
-            📁 Importer un fichier Excel
+            📁 Importer
           </button>
           <input
             ref={fileInputRef}
@@ -267,30 +263,6 @@ export default function QuestionsImportExport(props: Readonly<Props>) {
             onChange={handleFileChange}
             className="hidden"
           />
-          <p className="text-sm text-gray-600">
-            Accepte les fichiers Excel (.xlsx) ou CSV au format spécifié.
-          </p>
-        </div>
-      </div>
-
-      {/* Format information */}
-      <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded">
-        <h4 className="font-semibold text-blue-900 mb-2">📋 Format attendu (Excel/CSV)</h4>
-        <div className="text-sm text-blue-800 space-y-1">
-          <p><strong>Colonnes (dans cet ordre):</strong></p>
-          <ol className="list-decimal list-inside ml-2 space-y-1">
-            <li>ID (identifiant unique)</li>
-            <li>Level (CE1, CE2, CM1, CM2, 6ème, 5ème, 4ème)</li>
-            <li>Domain (Calcul mental, Arithmétique, etc.)</li>
-            <li>Question (le texte de la question)</li>
-            <li>Option 1</li>
-            <li>Option 2</li>
-            <li>Option 3</li>
-            <li>Option 4</li>
-            <li>Correct Answer (index 0-3 de la bonne réponse)</li>
-            <li>Explanation (explication de la réponse)</li>
-            <li>Difficulty (1=Facile, 2=Moyen, 3=Difficile)</li>
-          </ol>
         </div>
       </div>
 

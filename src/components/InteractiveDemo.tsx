@@ -5,8 +5,8 @@ import {
   createCircleDiameterQuestion,
   createSymmetryQuestion,
   createAngleMeasurementQuestion,
-  InteractiveQuestionContainer,
-} from './interactive';
+} from './interactive/interactiveQuestionBuilders';
+import { InteractiveQuestionContainer } from './interactive';
 import { InteractiveQuestion } from '../types';
 
 /**

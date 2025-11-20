@@ -99,6 +99,7 @@ function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[
   // Median/altitude/bisector (21-30)
   for (let i = 0; i < 10; i++) {
     const lineType = i % 3 === 0 ? 'médiane' : i % 3 === 1 ? 'altitude' : 'bissectrice';
+    const correctIndex = i % 4; // Distribute correct answers across A, B, C, D
 
     questions.push({
       id: `${level.toLowerCase()}-geom-${String(id++).padStart(3, '0')}`,
@@ -106,11 +107,11 @@ function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[
       domain: 'Géométrie',
       question: `Identifiez la ${lineType} du triangle (question ${i + 21}).`,
       options: ['Ligne A', 'Ligne B', 'Ligne C', 'Ligne D'],
-      correctAnswer: 0,
+      correctAnswer: correctIndex,
       explanation: lineType === 'médiane' 
         ? 'La médiane relie un sommet au milieu du côté opposé.'
         : lineType === 'altitude'
-        ? 'L\'altitude est perpendiculaire au côté.'
+        ? 'L\'altitude est perpendiculaire au côté opposé.'
         : 'La bissectrice divise l\'angle en deux parties égales.',
       difficulty: Math.min(3, config.difficulty + 1) as 1 | 2 | 3,
       isInteractive: true,
@@ -120,16 +121,29 @@ function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[
         height: 280,
         grid: false,
         elements: [
+          // Triangle base
           { id: `tri-line-${i}`, type: 'polygon', points: [{ x: 80, y: 50 }, { x: 180, y: 50 }, { x: 130, y: 140 }], color: '#34495e' },
-          { id: `midpoint-${i}`, type: 'point', x: 130, y: 95, color: '#999' },
-          { id: `special-line-${i}`, type: 'line', points: [{ x: 80, y: 50 }, { x: 130, y: 95 }], color: '#e74c3c', interactive: true },
-          { id: `line-label-${i}`, type: 'point', x: 100, y: 30, label: `A (${lineType})`, color: '#000' },
+          
+          // Line A (top vertex to base midpoint) - médiane
+          { id: `line-a-${i}`, type: 'line', points: [{ x: 80, y: 50 }, { x: 130, y: 95 }], color: correctIndex === 0 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-a-${i}`, type: 'point', x: 95, y: 35, label: 'A', color: '#000' },
+          
+          // Line B (right vertex perpendicular to base) - altitude  
+          { id: `line-b-${i}`, type: 'line', points: [{ x: 180, y: 50 }, { x: 180, y: 140 }], color: correctIndex === 1 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-b-${i}`, type: 'point', x: 195, y: 95, label: 'B', color: '#000' },
+          
+          // Line C (left vertex to opposite side midpoint) - médiane alternative
+          { id: `line-c-${i}`, type: 'line', points: [{ x: 180, y: 50 }, { x: 105, y: 95 }], color: correctIndex === 2 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-c-${i}`, type: 'point', x: 165, y: 35, label: 'C', color: '#000' },
+          
+          // Line D (bottom vertex angle bisector) - bissectrice
+          { id: `line-d-${i}`, type: 'line', points: [{ x: 130, y: 140 }, { x: 130, y: 95 }], color: correctIndex === 3 ? '#e74c3c' : '#95a5a6', interactive: true },
+          { id: `label-d-${i}`, type: 'point', x: 145, y: 155, label: 'D', color: '#000' },
         ],
       },
       expectedInteraction: {
         type: 'click',
-        targetElement: `special-line-${i}`,
-        description: `Cliquez sur la ${lineType}`,
+        description: `Cliquez sur la ${lineType} correcte`,
       },
     });
   }
@@ -170,6 +184,7 @@ function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[
   // Symmetry and transformations (41-50)
   for (let i = 0; i < 10; i++) {
     const transType = i < 5 ? 'symétrie centrale' : 'rotation';
+    const correctIndex = i % 4; // Distribute correct answers across A, B, C, D
 
     questions.push({
       id: `${level.toLowerCase()}-geom-${String(id++).padStart(3, '0')}`,
@@ -177,7 +192,7 @@ function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[
       domain: 'Géométrie',
       question: `Trouvez la figure transformée par ${transType} (question ${i + 41}).`,
       options: ['A', 'B', 'C', 'D'],
-      correctAnswer: 0,
+      correctAnswer: correctIndex,
       explanation: transType === 'symétrie centrale'
         ? 'La symétrie centrale crée une image miroir par rapport à un point.'
         : 'La rotation fait tourner la figure autour d\'un point.',
@@ -189,16 +204,33 @@ function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[
         height: 280,
         grid: false,
         elements: [
-          { id: `original-shape-${i}`, type: 'polygon', points: [{ x: 100, y: 80 }, { x: 140, y: 80 }, { x: 140, y: 120 }, { x: 100, y: 120 }], color: '#e74c3c' },
+          // Original shape
+          { id: `original-shape-${i}`, type: 'polygon', points: [{ x: 100, y: 80 }, { x: 140, y: 80 }, { x: 140, y: 120 }, { x: 100, y: 120 }], color: '#34495e' },
+          { id: `original-label-${i}`, type: 'point', x: 120, y: 65, label: 'Original', color: '#000' },
+          
+          // Center point
           { id: `center-point-${i}`, type: 'point', x: 200, y: 120, color: '#999', label: 'Centre' },
-          { id: `transformed-${i}`, type: 'polygon', points: [{ x: 260, y: 100 }, { x: 300, y: 100 }, { x: 300, y: 140 }, { x: 260, y: 140 }], color: '#27ae60', interactive: true },
-          { id: `trans-label-${i}`, type: 'point', x: 280, y: 160, label: `A (${transType})`, color: '#000' },
+          
+          // Option A - correct transformation
+          { id: `transformed-a-${i}`, type: 'polygon', points: [{ x: 260, y: 100 }, { x: 300, y: 100 }, { x: 300, y: 140 }, { x: 260, y: 140 }], color: correctIndex === 0 ? '#27ae60' : '#95a5a6', interactive: true },
+          { id: `label-a-${i}`, type: 'point', x: 280, y: 155, label: 'A', color: '#000' },
+          
+          // Option B - incorrect transformation
+          { id: `transformed-b-${i}`, type: 'polygon', points: [{ x: 320, y: 80 }, { x: 360, y: 80 }, { x: 360, y: 120 }, { x: 320, y: 120 }], color: correctIndex === 1 ? '#27ae60' : '#95a5a6', interactive: true },
+          { id: `label-b-${i}`, type: 'point', x: 340, y: 135, label: 'B', color: '#000' },
+          
+          // Option C - incorrect transformation  
+          { id: `transformed-c-${i}`, type: 'polygon', points: [{ x: 260, y: 160 }, { x: 300, y: 160 }, { x: 300, y: 200 }, { x: 260, y: 200 }], color: correctIndex === 2 ? '#27ae60' : '#95a5a6', interactive: true },
+          { id: `label-c-${i}`, type: 'point', x: 280, y: 215, label: 'C', color: '#000' },
+          
+          // Option D - incorrect transformation
+          { id: `transformed-d-${i}`, type: 'polygon', points: [{ x: 320, y: 160 }, { x: 360, y: 160 }, { x: 360, y: 200 }, { x: 320, y: 200 }], color: correctIndex === 3 ? '#27ae60' : '#95a5a6', interactive: true },
+          { id: `label-d-${i}`, type: 'point', x: 340, y: 215, label: 'D', color: '#000' },
         ],
       },
       expectedInteraction: {
         type: 'click',
-        targetElement: `transformed-${i}`,
-        description: `Cliquez sur la figure transformée`,
+        description: `Cliquez sur la figure transformée par ${transType}`,
       },
     });
   }
