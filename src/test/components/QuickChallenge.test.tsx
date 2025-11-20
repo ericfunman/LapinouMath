@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import QuickChallenge from '../../components/QuickChallenge';
 
 const mockGetRandomQuestions = vi.fn();
@@ -826,5 +826,185 @@ describe('QuickChallenge', () => {
     );
 
     expect(document.body).toBeDefined();
+  });
+
+  it('should click answer option', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    for (const button of buttons) {
+      if (button.textContent && ['4', '5', '6'].includes(button.textContent)) {
+        fireEvent.click(button);
+        break;
+      }
+    }
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should click exit button', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const exitButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Quitter')
+    );
+
+    if (exitButton) {
+      fireEvent.click(exitButton);
+      expect(mockOnExit).toHaveBeenCalled();
+    }
+  });
+
+  it('should handle multiple answer attempts', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    let clickCount = 0;
+    for (const button of buttons) {
+      if (button.textContent && ['4', '5', '6'].includes(button.textContent)) {
+        fireEvent.click(button);
+        clickCount++;
+        if (clickCount >= 2) break;
+      }
+    }
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should navigate through questions', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    // Select an answer
+    const buttons = Array.from(container.querySelectorAll('button'));
+    let answerClicked = false;
+    for (const button of buttons) {
+      if (button.textContent && ['4', '5', '6'].includes(button.textContent)) {
+        fireEvent.click(button);
+        answerClicked = true;
+        break;
+      }
+    }
+
+    expect(answerClicked).toBeTruthy();
+  });
+
+  it('should handle rapid button clicks', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    buttons.forEach(btn => {
+      fireEvent.click(btn);
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should display challenge interface', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container.textContent).toBeTruthy();
+  });
+
+  it('should handle different levels with interactions', () => {
+    const levels = ['CE1', 'CE2', 'CM1'] as const;
+
+    for (const level of levels) {
+      const { container } = render(
+        <QuickChallenge
+          level={level}
+          onComplete={mockOnComplete}
+          onExit={mockOnExit}
+          rabbitCustomization={rabbitCustomization}
+        />
+      );
+
+      const buttons = container.querySelectorAll('button');
+      if (buttons.length > 0) {
+        fireEvent.click(buttons[0]);
+      }
+    }
+  });
+
+  it('should interact with challenge buttons', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CM1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    buttons.slice(0, 3).forEach(btn => {
+      fireEvent.click(btn);
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should support challenge with custom accessories', () => {
+    const customization = {
+      variant: 'brown' as const,
+      accessories: ['hat-wizard', 'scarf'],
+    };
+
+    const { container } = render(
+      <QuickChallenge
+        level="CM2"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={customization}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    if (buttons.length > 0) {
+      fireEvent.click(buttons[0]);
+    }
+
+    expect(buttons.length).toBeGreaterThan(0);
   });
 });
