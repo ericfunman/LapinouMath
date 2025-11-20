@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { UserProfile, GradeLevel, MathDomain } from '../types';
-import { getNextAccessoryToUnlock } from '../data/accessories';
 import { getAvailableDomains } from '../data/questions';
 import RabbitShop from './RabbitShop';
 import RabbitAvatar from './RabbitAvatar';
@@ -34,7 +33,6 @@ export default function Dashboard(props: Readonly<Props>) {
   const { profile, onStartQuiz, onLogout, onOpenAdmin, onOpenInteractiveDemo, onUpdateProfile } = props;
   const [showRabbitShop, setShowRabbitShop] = useState(false);
   const currentLevelProgress = profile.progress?.[profile.currentLevel];
-  const nextAccessory = getNextAccessoryToUnlock(profile.totalStars);
 
   const handleSaveRabbitCustomization = (customization: {
     variant: 'classic' | 'white' | 'gray' | 'brown';
@@ -272,45 +270,6 @@ export default function Dashboard(props: Readonly<Props>) {
             </div>
           </div>
         </div>
-
-        {/* Next Accessory Teaser */}
-        {nextAccessory && (
-          <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-4 md:p-6">
-            <div className="flex items-center gap-4">
-              <div className="text-5xl">{nextAccessory.icon}</div>
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-blue-900 mb-1">
-                  🎯 Prochain accessoire: {nextAccessory.name}
-                </h3>
-                <p className="text-sm text-blue-700 mb-2">
-                  {nextAccessory.description}
-                </p>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-semibold text-blue-900">
-                    +{Math.max(0, nextAccessory.requiredStars - profile.totalStars)} ⭐ pour débloquer
-                  </span>
-                </div>
-                <div className="w-full bg-blue-200 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="bg-gradient-to-r from-blue-400 to-indigo-500 h-full transition-all"
-                    style={{
-                      width: `${Math.min(
-                        100,
-                        (profile.totalStars / nextAccessory.requiredStars) * 100
-                      )}%`,
-                    }}
-                  />
-                </div>
-              </div>
-              <button
-                onClick={() => setShowRabbitShop(true)}
-                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold whitespace-nowrap transition-colors"
-              >
-                Voir la boutique →
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Rabbit Shop Modal */}
