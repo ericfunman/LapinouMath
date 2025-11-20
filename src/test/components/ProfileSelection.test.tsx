@@ -133,7 +133,7 @@ describe('ProfileSelection Component', () => {
     fireEvent.change(nameInput, { target: { value: 'Charlie' } });
     
     // Select level
-    const levelSelect = screen.getByDisplayValue('CE1', { selector: 'select' });
+    const levelSelect = screen.getByRole('combobox');
     fireEvent.change(levelSelect, { target: { value: 'CE2' } });
     
     // Submit form
@@ -270,7 +270,7 @@ describe('ProfileSelection Component', () => {
     fireEvent.click(screen.getByText(/Créer un nouveau profil/));
     
     await waitFor(() => {
-      const levelSelect = screen.getByDisplayValue('CE1', { selector: 'select' });
+      const levelSelect = screen.getByRole('combobox');
       const options = levelSelect.querySelectorAll('option');
       expect(options.length).toBe(7); // 7 levels
     });
