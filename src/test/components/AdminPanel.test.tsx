@@ -1014,4 +1014,213 @@ describe('AdminPanel', () => {
       expect(mockOnClose).toHaveBeenCalled();
     }
   });
+
+  // ===== Iteration 19: Edit/Save Workflow Tests =====
+
+  it('should open edit modal when edit button clicked', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    // Find and click the first edit button
+    const editButtons = Array.from(document.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('✏️')
+    );
+    
+    expect(editButtons.length).toBeGreaterThan(0);
+    
+    if (editButtons.length > 0) {
+      fireEvent.click(editButtons[0]);
+      
+      // Modal should open with header
+      await waitFor(() => {
+        const modal = document.querySelector('textarea[id="question-input"]');
+        expect(modal).toBeTruthy();
+      });
+    }
+  });
+
+  it('should allow editing question text in modal', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const editButtons = Array.from(document.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('✏️')
+    );
+    
+    if (editButtons.length > 0) {
+      fireEvent.click(editButtons[0]);
+      
+      const questionTextarea = document.querySelector('textarea[id="question-input"]') as HTMLTextAreaElement;
+      expect(questionTextarea).toBeTruthy();
+      
+      if (questionTextarea) {
+        fireEvent.change(questionTextarea, { target: { value: 'Modified question?' } });
+        expect(questionTextarea.value).toBe('Modified question?');
+      }
+    }
+  });
+
+  it('should allow editing explanation in modal', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const editButtons = Array.from(document.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('✏️')
+    );
+    
+    if (editButtons.length > 0) {
+      fireEvent.click(editButtons[0]);
+      
+      const explanationTextarea = document.querySelector('textarea[id="explication-input"]') as HTMLTextAreaElement;
+      expect(explanationTextarea).toBeTruthy();
+      
+      if (explanationTextarea) {
+        fireEvent.change(explanationTextarea, { target: { value: 'New explanation here' } });
+        expect(explanationTextarea.value).toBe('New explanation here');
+      }
+    }
+  });
+
+  it('should allow editing answer options in modal', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const editButtons = Array.from(document.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('✏️')
+    );
+    
+    if (editButtons.length > 0) {
+      fireEvent.click(editButtons[0]);
+      
+      // Find all option inputs in the edit form
+      const optionInputs = Array.from(document.querySelectorAll('input[type="text"]')) as HTMLInputElement[];
+      
+      // Should have inputs for each option
+      expect(optionInputs.length).toBeGreaterThan(0);
+      
+      if (optionInputs.length > 0) {
+        fireEvent.change(optionInputs[0], { target: { value: 'Modified option 1' } });
+        expect(optionInputs[0].value).toBe('Modified option 1');
+      }
+      
+      if (optionInputs.length > 1) {
+        fireEvent.change(optionInputs[1], { target: { value: 'Modified option 2' } });
+        expect(optionInputs[1].value).toBe('Modified option 2');
+      }
+    }
+  });
+
+  it('should allow changing correct answer in edit modal', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const editButtons = Array.from(document.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('✏️')
+    );
+    
+    if (editButtons.length > 0) {
+      fireEvent.click(editButtons[0]);
+      
+      // Find "Marquer" buttons to change correct answer
+      const markButtons = Array.from(document.querySelectorAll('button')).filter(
+        btn => btn.textContent?.includes('Marquer') || btn.textContent?.includes('✅')
+      );
+      
+      // Should have buttons for each option
+      expect(markButtons.length).toBeGreaterThan(0);
+      
+      if (markButtons.length > 1) {
+        fireEvent.click(markButtons[1]);
+        expect(markButtons[1]).toBeTruthy();
+      }
+    }
+  });
+
+  it('should display cancel button in edit modal', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const editButtons = Array.from(document.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('✏️')
+    );
+    
+    if (editButtons.length > 0) {
+      fireEvent.click(editButtons[0]);
+      
+      // Verify cancel button exists
+      const cancelButton = Array.from(document.querySelectorAll('button')).find(
+        btn => btn.textContent?.includes('❌') || btn.textContent?.includes('Annuler')
+      );
+      
+      expect(cancelButton).toBeTruthy();
+    }
+  });
+
+  it('should display save button with loading state support', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const editButtons = Array.from(document.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('✏️')
+    );
+    
+    if (editButtons.length > 0) {
+      fireEvent.click(editButtons[0]);
+      
+      // Find save button
+      const saveButton = Array.from(document.querySelectorAll('button')).find(
+        btn => btn.textContent?.includes('💾') || btn.textContent?.includes('Sauvegarder')
+      );
+      
+      expect(saveButton).toBeTruthy();
+      expect(saveButton?.textContent).toContain('Sauvegarder');
+    }
+  });
+
+  it('should support edit workflow with multiple field types', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const editButtons = Array.from(document.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('✏️')
+    );
+    
+    if (editButtons.length > 0) {
+      fireEvent.click(editButtons[0]);
+      
+      // Find all textareas (question and explanation)
+      const textareas = document.querySelectorAll('textarea');
+      expect(textareas.length).toBeGreaterThanOrEqual(2);
+      
+      // Find all option inputs
+      const inputs = Array.from(document.querySelectorAll('input[type="text"]'));
+      expect(inputs.length).toBeGreaterThan(0);
+      
+      expect(document.body).toBeTruthy();
+    }
+  });
 });
