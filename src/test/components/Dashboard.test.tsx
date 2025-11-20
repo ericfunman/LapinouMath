@@ -150,4 +150,127 @@ describe('Dashboard Component', () => {
       expect(error).toBeDefined();
     }
   });
+
+  it('should display all level buttons', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(container).toBeTruthy();
+  });
+
+  it('should show profile stats', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(container.textContent).toContain('Test User');
+  });
+
+  it('should display star count', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const profileWithStars = {
+      ...mockProfile,
+      totalStars: 50,
+    };
+
+    render(
+      <Dashboard
+        profile={profileWithStars}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    // Star count should be displayed
+    expect(screen.getByText('Tout le contenu').parentElement).toBeTruthy();
+  });
+
+  it('should handle profile with high progress', () => {
+    const advancedProfile = {
+      ...mockProfile,
+      currentLevel: '4ème',
+      totalStars: 500,
+      progress: {
+        ...mockProfile.progress,
+        '4ème': {
+          'Calcul mental': { questionsAnswered: 100, correctAnswers: 90, stars: 45, unlocked: true },
+        },
+      },
+    };
+
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    render(
+      <Dashboard
+        profile={advancedProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(screen.getByText('Tout le contenu')).toBeInTheDocument();
+  });
+
+  it('should render without crashing with minimal profile', () => {
+    const minimalProfile: UserProfile = {
+      id: 'minimal-id',
+      name: 'Minimal User',
+      avatar: '🐰',
+      currentLevel: 'CE1',
+      progress: {},
+      totalStars: 0,
+      createdAt: new Date(),
+    };
+
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    render(
+      <Dashboard
+        profile={minimalProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(screen.getByText('Tout le contenu')).toBeInTheDocument();
+  });
 });

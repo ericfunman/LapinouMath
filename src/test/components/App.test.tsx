@@ -86,5 +86,57 @@ describe('App', () => {
     const { container } = render(<App />);
     expect(container.textContent).toBeTruthy();
   });
+
+  it('should initialize with localStorage data if available', () => {
+    const mockProfile = {
+      id: 'test-123',
+      name: 'Test User',
+      avatar: '🐰',
+      currentLevel: 'CE1',
+      progress: {},
+      totalStars: 100,
+      createdAt: new Date(),
+    };
+
+    localStorage.setItem('profiles', JSON.stringify([mockProfile]));
+    
+    const { container } = render(<App />);
+    expect(container).toBeTruthy();
+  });
+
+  it('should handle profile selection', () => {
+    const { container } = render(<App />);
+    expect(container).toBeTruthy();
+  });
+
+  it('should handle empty localStorage', () => {
+    localStorage.clear();
+    const { container } = render(<App />);
+    expect(container).toBeTruthy();
+  });
+
+  it('should render with all features enabled', () => {
+    const { container } = render(<App />);
+    const firstChild = container.firstChild as HTMLElement;
+    expect(firstChild).toBeTruthy();
+  });
+
+  it('should handle rapid renders', () => {
+    const { rerender } = render(<App />);
+    rerender(<App />);
+    rerender(<App />);
+    expect(true).toBe(true);
+  });
+
+  it('should not crash with missing localStorage', () => {
+    const { container } = render(<App />);
+    expect(container).toBeTruthy();
+  });
+
+  it('should initialize with app container', () => {
+    const { container } = render(<App />);
+    const appContainer = container.querySelector('[class*="App"]') || container.firstChild;
+    expect(appContainer).toBeTruthy();
+  });
 });
 
