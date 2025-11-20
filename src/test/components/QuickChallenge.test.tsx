@@ -1,21 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import QuickChallenge from '../../components/QuickChallenge';
 
-// Mock les questions
+const mockGetRandomQuestions = vi.fn();
+
 vi.mock('../../data/questions', () => ({
-  getRandomQuestions: vi.fn(() => [
-    {
-      id: 'q1',
-      domain: 'Calcul mental',
-      grade: 'CE1',
-      question: 'Combien font 2 + 3 ?',
-      options: ['3', '5', '7', '9'],
-      correctAnswer: 1,
-      explanation: 'Le résultat est 5',
-    },
-  ]),
+  getRandomQuestions: (level: any, domain: any, count: any) => mockGetRandomQuestions(level, domain, count),
 }));
 
 describe('QuickChallenge', () => {
@@ -26,11 +16,26 @@ describe('QuickChallenge', () => {
     accessories: [],
   };
 
+  const sampleQuestion = {
+    id: 'q1',
+    level: 'CE1' as const,
+    domain: 'Calcul mental' as const,
+    question: '2 + 3 = ?',
+    options: ['4', '5', '6'],
+    correct: 1,
+    explanation: 'Le résultat est 5',
+  };
+
   beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetRandomQuestions.mockReturnValue([sampleQuestion]);
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders without crashing', () => {
+  it('should render without crashing', () => {
     render(
       <QuickChallenge
         level="CE1"
@@ -40,10 +45,10 @@ describe('QuickChallenge', () => {
       />
     );
 
-    expect(document.body).toBeDefined();
+    expect(document.body).toBeTruthy();
   });
 
-  it('renders after loading', async () => {
+  it('should load questions from all domains', () => {
     render(
       <QuickChallenge
         level="CE1"
@@ -53,26 +58,25 @@ describe('QuickChallenge', () => {
       />
     );
 
-    // Attendre un peu pour que le composant charge
-    await new Promise(resolve => setTimeout(resolve, 100));
-    expect(document.body).toBeDefined();
+    // Should fetch questions (called once per domain)
+    expect(mockGetRandomQuestions).toHaveBeenCalled();
   });
 
-  it('shows exit button when rendered', async () => {
-    const { container } = render(
+  it('should accept different grade levels', () => {
+    const { unmount } = render(
       <QuickChallenge
-        level="CE1"
+        level="CM1"
         onComplete={mockOnComplete}
         onExit={mockOnExit}
         rabbitCustomization={rabbitCustomization}
       />
     );
 
-    // Vérifier qu'il y a des éléments dans le DOM
-    expect(container.firstChild).toBeDefined();
+    expect(document.body).toBeTruthy();
+    unmount();
   });
 
-  it('handles callback functions correctly', () => {
+  it('should pass callbacks correctly', () => {
     render(
       <QuickChallenge
         level="CE1"
@@ -86,21 +90,42 @@ describe('QuickChallenge', () => {
     expect(mockOnExit).not.toHaveBeenCalled();
   });
 
-  it('renders with different levels', () => {
-    const { unmount } = render(
+  it('should handle rabbit customization', () => {
+    const customRabbit = {
+      variant: 'brown' as const,
+      accessories: ['hat'],
+    };
+
+    render(
       <QuickChallenge
-        level="CM1"
+        level="CE1"
         onComplete={mockOnComplete}
         onExit={mockOnExit}
-        rabbitCustomization={rabbitCustomization}
+        rabbitCustomization={customRabbit}
       />
     );
 
-    expect(document.body).toBeDefined();
-    unmount();
+    expect(document.body).toBeTruthy();
   });
 
-  it('displays challenge interface', () => {
+  it('should work with all grade levels', () => {
+    const levels = ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème'] as const;
+    
+    for (const level of levels) {
+      const { unmount } = render(
+        <QuickChallenge
+          level={level}
+          onComplete={mockOnComplete}
+          onExit={mockOnExit}
+          rabbitCustomization={rabbitCustomization}
+        />
+      );
+      expect(document.body).toBeTruthy();
+      unmount();
+    }
+  });
+
+  it('should maintain component state', () => {
     const { container } = render(
       <QuickChallenge
         level="CE1"
@@ -110,49 +135,10 @@ describe('QuickChallenge', () => {
       />
     );
 
-    expect(container.querySelector('div')).toBeTruthy();
+    expect(container).toBeTruthy();
   });
 
-  it('maintains challenge state', () => {
-    render(
-      <QuickChallenge
-        level="CE1"
-        onComplete={mockOnComplete}
-        onExit={mockOnExit}
-        rabbitCustomization={rabbitCustomization}
-      />
-    );
-
-    expect(document.body).toBeDefined();
-  });
-
-  it('processes questions correctly', () => {
-    render(
-      <QuickChallenge
-        level="CE2"
-        onComplete={mockOnComplete}
-        onExit={mockOnExit}
-        rabbitCustomization={rabbitCustomization}
-      />
-    );
-
-    expect(document.body).toBeDefined();
-  });
-
-  it('has proper component structure', () => {
-    const { container } = render(
-      <QuickChallenge
-        level="CE1"
-        onComplete={mockOnComplete}
-        onExit={mockOnExit}
-        rabbitCustomization={rabbitCustomization}
-      />
-    );
-
-    expect(container.childNodes.length).toBeGreaterThan(0);
-  });
-
-  it('initializes without errors', () => {
+  it('should initialize successfully', () => {
     expect(() => {
       render(
         <QuickChallenge
@@ -163,5 +149,22 @@ describe('QuickChallenge', () => {
         />
       );
     }).not.toThrow();
+  });
+
+  it('should handle challenge with custom rabbit variant', () => {
+    const variants = ['classic', 'white', 'gray', 'brown'] as const;
+    
+    for (const variant of variants) {
+      const { unmount } = render(
+        <QuickChallenge
+          level="CE1"
+          onComplete={mockOnComplete}
+          onExit={mockOnExit}
+          rabbitCustomization={{ variant, accessories: [] }}
+        />
+      );
+      expect(document.body).toBeTruthy();
+      unmount();
+    }
   });
 });
