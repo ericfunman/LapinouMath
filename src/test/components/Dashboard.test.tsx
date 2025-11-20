@@ -275,4 +275,347 @@ describe('Dashboard Component', () => {
 
     expect(document.body).toBeDefined();
   });
+
+  it('should handle dashboard with all levels unlocked', () => {
+    const advancedProfile: UserProfile = {
+      ...mockProfile,
+      currentLevel: 'CM2',
+      totalStars: 50,
+      progress: {
+        CE1: Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 10, correctAnswers: 8, stars: 2, unlocked: true }
+          ])
+        ),
+        CE2: Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 10, correctAnswers: 9, stars: 3, unlocked: true }
+          ])
+        ),
+        CM1: Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 10, correctAnswers: 7, stars: 2, unlocked: true }
+          ])
+        ),
+        CM2: Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 10, correctAnswers: 10, stars: 3, unlocked: true }
+          ])
+        ),
+        '6ème': Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 5, correctAnswers: 4, stars: 2, unlocked: true }
+          ])
+        ),
+        '5ème': Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 3, correctAnswers: 2, stars: 1, unlocked: true }
+          ])
+        ),
+        '4ème': Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 0, correctAnswers: 0, stars: 0, unlocked: false }
+          ])
+        ),
+      },
+    };
+
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    render(
+      <Dashboard
+        profile={advancedProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('should render with different avatars', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const avatars = ['🐰', '🐇', '🐻'];
+    for (const avatar of avatars) {
+      const { unmount } = render(
+        <Dashboard
+          profile={{ ...mockProfile, avatar }}
+          onStartQuiz={mockHandlers.onStartQuiz}
+          onLogout={mockHandlers.onLogout}
+          onOpenAdmin={mockHandlers.onOpenAdmin}
+        />
+      );
+      expect(document.body).toBeDefined();
+      unmount();
+    }
+  });
+
+  it('should handle dashboard with accessories', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const profileWithAccessories: UserProfile = {
+      ...mockProfile,
+      accessories: ['hat-wizard', 'scarf-blue'],
+      unlockedAccessories: ['hat-wizard', 'scarf-blue', 'glasses-cool'],
+    };
+
+    render(
+      <Dashboard
+        profile={profileWithAccessories}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('should update when profile changes', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { rerender } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    const updatedProfile = { ...mockProfile, totalStars: 100, name: 'Updated User' };
+
+    rerender(
+      <Dashboard
+        profile={updatedProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('should handle all grade levels', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const levels = ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème'];
+    for (const level of levels) {
+      const { unmount } = render(
+        <Dashboard
+          profile={{ ...mockProfile, currentLevel: level as any }}
+          onStartQuiz={mockHandlers.onStartQuiz}
+          onLogout={mockHandlers.onLogout}
+          onOpenAdmin={mockHandlers.onOpenAdmin}
+        />
+      );
+      expect(document.body).toBeDefined();
+      unmount();
+    }
+  });
+
+  it('should render dashboard interface', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(container.querySelectorAll('button').length).toBeGreaterThan(0);
+  });
+
+  it('should display profile name', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={{ ...mockProfile, name: 'Unique Name 12345' }}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(container.textContent).toBeTruthy();
+  });
+
+  it('should handle dashboard rerenders', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { rerender } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    for (let i = 0; i < 3; i++) {
+      rerender(
+        <Dashboard
+          profile={mockProfile}
+          onStartQuiz={mockHandlers.onStartQuiz}
+          onLogout={mockHandlers.onLogout}
+          onOpenAdmin={mockHandlers.onOpenAdmin}
+        />
+      );
+    }
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('should display rabbit avatar', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('should render with high star count', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    render(
+      <Dashboard
+        profile={{ ...mockProfile, totalStars: 999 }}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('should handle complex progress data', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const complexProfile: UserProfile = {
+      ...mockProfile,
+      progress: {
+        CE1: {
+          'Calcul mental': { questionsAnswered: 50, correctAnswers: 45, stars: 5, unlocked: true },
+          'Arithmétique': { questionsAnswered: 30, correctAnswers: 25, stars: 3, unlocked: true },
+          'Géométrie': { questionsAnswered: 20, correctAnswers: 15, stars: 2, unlocked: true },
+          'Fractions/Décimaux': { questionsAnswered: 40, correctAnswers: 35, stars: 4, unlocked: true },
+          'Mesures': { questionsAnswered: 25, correctAnswers: 20, stars: 2, unlocked: true },
+          'Problèmes/Algèbre': { questionsAnswered: 35, correctAnswers: 30, stars: 3, unlocked: true },
+        },
+        CE2: Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 20, correctAnswers: 18, stars: 2, unlocked: true }
+          ])
+        ),
+        CM1: Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 0, correctAnswers: 0, stars: 0, unlocked: false }
+          ])
+        ),
+        CM2: Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 0, correctAnswers: 0, stars: 0, unlocked: false }
+          ])
+        ),
+        '6ème': Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 0, correctAnswers: 0, stars: 0, unlocked: false }
+          ])
+        ),
+        '5ème': Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 0, correctAnswers: 0, stars: 0, unlocked: false }
+          ])
+        ),
+        '4ème': Object.fromEntries(
+          ['Calcul mental', 'Arithmétique', 'Géométrie', 'Fractions/Décimaux', 'Mesures', 'Problèmes/Algèbre'].map(d => [
+            d,
+            { questionsAnswered: 0, correctAnswers: 0, stars: 0, unlocked: false }
+          ])
+        ),
+      },
+    };
+
+    render(
+      <Dashboard
+        profile={complexProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
 });

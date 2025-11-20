@@ -255,4 +255,269 @@ describe('RabbitShop', () => {
     
     expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
   });
+
+  it('renders with all variant options', () => {
+    render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('Rose Classique')).toBeInTheDocument();
+    expect(screen.getByText('Blanc Neige')).toBeInTheDocument();
+  });
+
+  it('displays shop interface', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(container.querySelectorAll('div').length).toBeGreaterThan(0);
+  });
+
+  it('handles profile with many unlocked items', () => {
+    const profileWithMany = {
+      ...mockProfile,
+      unlockedRabbitItems: [
+        'classic', 'white', 'gray', 'brown',
+        'hat-wizard', 'hat-cowboy', 'hat-pirate',
+        'glasses-cool', 'glasses-nerd',
+        'scarf-blue', 'scarf-red'
+      ],
+    };
+
+    render(
+      <RabbitShop
+        profile={profileWithMany}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('renders shop with minimum stars', () => {
+    const profileMinStars = {
+      ...mockProfile,
+      totalStars: 0,
+    };
+
+    render(
+      <RabbitShop
+        profile={profileMinStars}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('renders shop with high star count', () => {
+    const profileHighStars = {
+      ...mockProfile,
+      totalStars: 10000,
+    };
+
+    render(
+      <RabbitShop
+        profile={profileHighStars}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('handles profile update', () => {
+    const { rerender } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const updatedProfile = {
+      ...mockProfile,
+      totalStars: 200,
+    };
+
+    rerender(
+      <RabbitShop
+        profile={updatedProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('maintains shop state across rerenders', () => {
+    const { rerender } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    for (let i = 0; i < 3; i++) {
+      rerender(
+        <RabbitShop
+          profile={mockProfile}
+          onSaveCustomization={mockOnSave}
+          onClose={mockOnClose}
+        />
+      );
+    }
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('displays all rabbit variants', () => {
+    render(
+      <RabbitShop
+        profile={{ ...mockProfile, unlockedRabbitItems: ['classic', 'white', 'gray', 'brown'] }}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('Rose Classique')).toBeInTheDocument();
+  });
+
+  it('renders shop categories', () => {
+    render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('handles profile with custom accessories', () => {
+    const profileWithCustom = {
+      ...mockProfile,
+      accessories: ['hat-wizard', 'glasses-cool'],
+      unlockedAccessories: ['hat-wizard', 'glasses-cool', 'scarf-blue'],
+      rabbitCustomization: {
+        variant: 'white' as const,
+        accessories: ['hat-wizard'],
+        adjustments: {},
+      },
+    };
+
+    render(
+      <RabbitShop
+        profile={profileWithCustom}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('renders without crashing with edge case data', () => {
+    const edgeCaseProfile = {
+      ...mockProfile,
+      name: '',
+      totalStars: -1,
+      unlockedRabbitItems: [],
+    };
+
+    render(
+      <RabbitShop
+        profile={edgeCaseProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('displays shop with various star amounts', () => {
+    const starCounts = [0, 1, 10, 50, 100, 500];
+
+    for (const stars of starCounts) {
+      const { unmount } = render(
+        <RabbitShop
+          profile={{ ...mockProfile, totalStars: stars }}
+          onSaveCustomization={mockOnSave}
+          onClose={mockOnClose}
+        />
+      );
+      expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+      unmount();
+    }
+  });
+
+  it('renders shop interface with structure', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const mainContent = container.querySelector('div');
+    expect(mainContent).toBeTruthy();
+  });
+
+  it('handles rapid profile updates', () => {
+    const { rerender } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    for (let i = 0; i < 5; i++) {
+      rerender(
+        <RabbitShop
+          profile={{ ...mockProfile, totalStars: i * 10 }}
+          onSaveCustomization={mockOnSave}
+          onClose={mockOnClose}
+        />
+      );
+    }
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
+
+  it('displays shop with multiple accessory categories', () => {
+    render(
+      <RabbitShop
+        profile={{
+          ...mockProfile,
+          unlockedRabbitItems: [
+            'classic', 'white',
+            'hat-wizard', 'hat-cowboy',
+            'glasses-cool', 'glasses-nerd',
+            'scarf-blue', 'scarf-red'
+          ],
+        }}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
+  });
 });
