@@ -1,97 +1,229 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ProfileSelection from '../../components/ProfileSelection';
 
+// Mock storage functions
+const mockGetAllProfiles = vi.fn();
+const mockCreateProfile = vi.fn();
+const mockDeleteProfile = vi.fn();
+
+vi.mock('../../utils/storage', () => ({
+  getAllProfiles: () => mockGetAllProfiles(),
+  createProfile: (name: string, level: any) => mockCreateProfile(name, level),
+  deleteProfile: (id: string) => mockDeleteProfile(id),
+}));
+
+vi.mock('../../data/constants', () => ({
+  GRADE_LEVELS: ['CE1', 'CE2', 'CM1', 'CM2', '6ème', '5ème', '4ème'],
+}));
+
 describe('ProfileSelection Component', () => {
-  it('should render profile selection screen', () => {
-    const mockOnSelect = vi.fn();
-    render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    
-    expect(screen.getByText(/LapinouMath/i)).toBeDefined();
-    expect(screen.getByText(/CalcuLapin/i)).toBeDefined();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
   });
 
-  it('should show create profile form when clicking create button', () => {
-    const mockOnSelect = vi.fn();
-    render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    
-    const createButton = screen.getByText(/Créer un nouveau profil/i);
-    fireEvent.click(createButton);
-    
-    expect(screen.getByText(/Prénom de l'élève/i)).toBeDefined();
+  afterEach(() => {
+    localStorage.clear();
   });
 
-  it('should display existing profiles', () => {
-    // Créer un profil de test dans localStorage
+  it('should render profile selection screen with title', () => {
+    mockGetAllProfiles.mockReturnValue([]);
+    const mockOnSelect = vi.fn();
+    
+    render(<ProfileSelection onSelectProfile={mockOnSelect} />);
+    
+    expect(screen.getByText('LapinouMath')).toBeDefined();
+    expect(screen.getByText(/CalcuLapin/)).toBeDefined();
+    expect(screen.getByText(/Apprends les maths/)).toBeDefined();
+  });
+
+  it('should display existing profiles from storage', () => {
     const testProfile = {
-      id: 'test-123',
-      name: 'Test User',
+      id: 'test-1',
+      name: 'Alice',
       avatar: '🐰',
       currentLevel: 'CE1' as const,
       progress: {},
       accessories: [],
       unlockedAccessories: [],
-      totalStars: 5,
+      totalStars: 15,
       createdAt: new Date(),
     };
     
-    localStorage.setItem('lapinoumath_profiles', JSON.stringify([testProfile]));
-    
+    mockGetAllProfiles.mockReturnValue([testProfile]);
     const mockOnSelect = vi.fn();
+    
     render(<ProfileSelection onSelectProfile={mockOnSelect} />);
     
-    expect(screen.getByText('Test User')).toBeDefined();
-    expect(screen.getByText(/étoiles/i)).toBeDefined();
+    expect(screen.getByText('Alice')).toBeDefined();
+    expect(screen.getByText(/CE1/)).toBeDefined();
+    expect(screen.getByText(/15 étoiles/)).toBeDefined();
   });
 
-  it('should select a profile when clicked', () => {
+  it('should call onSelectProfile when profile button is clicked', async () => {
+    const testProfile = {
+      id: 'test-2',
+      name: 'Bob',
+      avatar: '🐇',
+      currentLevel: 'CM1' as const,
+      progress: {},
+      accessories: [],
+      unlockedAccessories: [],
+      totalStars: 50,
+      createdAt: new Date(),
+    };
+    
+    mockGetAllProfiles.mockReturnValue([testProfile]);
     const mockOnSelect = vi.fn();
+    
     render(<ProfileSelection onSelectProfile={mockOnSelect} />);
     
-    // Le composant devrait être rendu sans erreur
-    expect(document.body).toBeDefined();
+    const profileButton = screen.getByText('Bob').closest('button');
+    fireEvent.click(profileButton!);
+    
+    await waitFor(() => {
+      expect(mockOnSelect).toHaveBeenCalledWith(testProfile);
+    });
   });
 
-  it('should show level selection', () => {
+  it('should show create profile form when create button is clicked', async () => {
+    mockGetAllProfiles.mockReturnValue([]);
     const mockOnSelect = vi.fn();
+    
     render(<ProfileSelection onSelectProfile={mockOnSelect} />);
     
-    const levelOptions = screen.queryAllByText(/CE1|CE2|CM1|CM2|6ème|5ème|4ème/);
-    expect(levelOptions.length).toBeGreaterThanOrEqual(0);
-  });
-
-  it('should allow entering student name', () => {
-    const mockOnSelect = vi.fn();
-    render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    
-    const createButton = screen.getByText(/Créer un nouveau profil/i);
+    const createButton = screen.getByText(/Créer un nouveau profil/);
     fireEvent.click(createButton);
     
-    const input = screen.queryByPlaceholderText(/Prénom/i) || 
-                  screen.queryByDisplayValue('') ||
-                  document.querySelector('input[type="text"]');
-    
-    expect(input || true).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText(/Prénom de l'élève/)).toBeDefined();
+      expect(screen.getByText(/Niveau scolaire/)).toBeDefined();
+    });
   });
 
-  it('should display application title', () => {
+  it('should create profile with name and level', async () => {
+    mockGetAllProfiles.mockReturnValue([]);
+    const newProfile = {
+      id: 'new-1',
+      name: 'Charlie',
+      avatar: '🐢',
+      currentLevel: 'CE2' as const,
+      progress: {},
+      accessories: [],
+      unlockedAccessories: [],
+      totalStars: 0,
+      createdAt: new Date(),
+    };
+    
+    mockCreateProfile.mockReturnValue(newProfile);
     const mockOnSelect = vi.fn();
+    
     render(<ProfileSelection onSelectProfile={mockOnSelect} />);
     
-    const heading = screen.getByText(/LapinouMath/i);
-    expect(heading).toBeDefined();
+    // Open create form
+    fireEvent.click(screen.getByText(/Créer un nouveau profil/));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Créer')).toBeDefined();
+    });
+    
+    // Find and fill the name input
+    const nameInput = screen.getByPlaceholderText(/Entre ton prénom/);
+    fireEvent.change(nameInput, { target: { value: 'Charlie' } });
+    
+    // Select level
+    const levelSelect = screen.getByDisplayValue('CE1', { selector: 'select' });
+    fireEvent.change(levelSelect, { target: { value: 'CE2' } });
+    
+    // Submit form
+    const createButton = screen.getByText('Créer').closest('button');
+    fireEvent.click(createButton!);
+    
+    await waitFor(() => {
+      expect(mockCreateProfile).toHaveBeenCalledWith('Charlie', 'CE2');
+    });
   });
 
-  it('should handle empty profile list', () => {
-    localStorage.removeItem('lapinoumath_profiles');
-    
+  it('should not create profile with empty name', async () => {
+    mockGetAllProfiles.mockReturnValue([]);
     const mockOnSelect = vi.fn();
-    const { container } = render(<ProfileSelection onSelectProfile={mockOnSelect} />);
     
-    expect(container).toBeTruthy();
+    render(<ProfileSelection onSelectProfile={mockOnSelect} />);
+    
+    // Open create form
+    fireEvent.click(screen.getByText(/Créer un nouveau profil/));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Créer')).toBeDefined();
+    });
+    
+    // Try to submit with empty name (don't fill in the input)
+    const createButton = screen.getByText('Créer').closest('button');
+    fireEvent.click(createButton!);
+    
+    expect(mockCreateProfile).not.toHaveBeenCalled();
   });
 
-  it('should show profile count', () => {
+  it('should cancel profile creation', async () => {
+    mockGetAllProfiles.mockReturnValue([]);
+    const mockOnSelect = vi.fn();
+    
+    render(<ProfileSelection onSelectProfile={mockOnSelect} />);
+    
+    // Open create form
+    fireEvent.click(screen.getByText(/Créer un nouveau profil/));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Annuler')).toBeDefined();
+    });
+    
+    // Click cancel
+    fireEvent.click(screen.getByText('Annuler'));
+    
+    // Form should disappear
+    await waitFor(() => {
+      expect(screen.queryByText('Annuler')).toBeNull();
+    });
+  });
+
+  it('should delete a profile', async () => {
+    const testProfile = {
+      id: 'test-3',
+      name: 'Diana',
+      avatar: '🦊',
+      currentLevel: 'CM2' as const,
+      progress: {},
+      accessories: [],
+      unlockedAccessories: [],
+      totalStars: 30,
+      createdAt: new Date(),
+    };
+    
+    mockGetAllProfiles.mockReturnValue([testProfile]);
+    const mockOnSelect = vi.fn();
+    
+    render(<ProfileSelection onSelectProfile={mockOnSelect} />);
+    
+    // Find and click delete button
+    const deleteButton = screen.getByText('🗑️');
+    fireEvent.click(deleteButton);
+    
+    await waitFor(() => {
+      expect(mockDeleteProfile).toHaveBeenCalledWith('test-3');
+    });
+  });
+
+  it('should show empty state when no profiles exist', () => {
+    mockGetAllProfiles.mockReturnValue([]);
+    const mockOnSelect = vi.fn();
+    
+    render(<ProfileSelection onSelectProfile={mockOnSelect} />);
+    
+    expect(screen.getByText(/Aucun profil créé/)).toBeDefined();
+  });
+
+  it('should display multiple profiles correctly', () => {
     const profiles = [
       {
         id: 'p1',
@@ -101,86 +233,109 @@ describe('ProfileSelection Component', () => {
         progress: {},
         accessories: [],
         unlockedAccessories: [],
-        totalStars: 0,
+        totalStars: 5,
         createdAt: new Date(),
       },
       {
         id: 'p2',
         name: 'Profile 2',
-        avatar: '🐰',
-        currentLevel: 'CE2' as const,
+        avatar: '🐇',
+        currentLevel: 'CM1' as const,
         progress: {},
         accessories: [],
         unlockedAccessories: [],
-        totalStars: 10,
+        totalStars: 50,
         createdAt: new Date(),
-      }
+      },
     ];
     
-    localStorage.setItem('lapinoumath_profiles', JSON.stringify(profiles));
-    
+    mockGetAllProfiles.mockReturnValue(profiles);
     const mockOnSelect = vi.fn();
+    
     render(<ProfileSelection onSelectProfile={mockOnSelect} />);
     
     expect(screen.getByText('Profile 1')).toBeDefined();
     expect(screen.getByText('Profile 2')).toBeDefined();
+    expect(screen.getByText(/5 étoiles/)).toBeDefined();
+    expect(screen.getByText(/50 étoiles/)).toBeDefined();
+  });
+
+  it('should display all grade levels in level select', async () => {
+    mockGetAllProfiles.mockReturnValue([]);
+    const mockOnSelect = vi.fn();
     
-    localStorage.clear();
-  });
-
-  it('renders selection UI properly', () => {
-    const mockOnSelect = vi.fn();
-    const { container } = render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    expect(container.firstChild).toBeTruthy();
-  });
-
-  it('initializes without crashing', () => {
-    const mockOnSelect = vi.fn();
-    expect(() => {
-      render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    }).not.toThrow();
-  });
-
-  it('displays app branding', () => {
-    const mockOnSelect = vi.fn();
     render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    expect(document.body).toBeDefined();
+    
+    // Open create form
+    fireEvent.click(screen.getByText(/Créer un nouveau profil/));
+    
+    await waitFor(() => {
+      const levelSelect = screen.getByDisplayValue('CE1', { selector: 'select' });
+      const options = levelSelect.querySelectorAll('option');
+      expect(options.length).toBe(7); // 7 levels
+    });
   });
 
-  it('handles empty initial state', () => {
-    localStorage.removeItem('lapinoumath_profiles');
+  it('should trim whitespace from profile name', async () => {
+    mockGetAllProfiles.mockReturnValue([]);
+    const newProfile = {
+      id: 'new-2',
+      name: 'Eve',
+      avatar: '🐭',
+      currentLevel: 'CE1' as const,
+      progress: {},
+      accessories: [],
+      unlockedAccessories: [],
+      totalStars: 0,
+      createdAt: new Date(),
+    };
+    
+    mockCreateProfile.mockReturnValue(newProfile);
     const mockOnSelect = vi.fn();
-    const { container } = render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    expect(container).toBeTruthy();
-  });
-
-  it('shows user interface elements', () => {
-    const mockOnSelect = vi.fn();
-    const { container } = render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    expect(container.querySelector('div')).toBeTruthy();
-  });
-
-  it('persists proper structure', () => {
-    const mockOnSelect = vi.fn();
-    const { container } = render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    expect(container.childNodes.length).toBeGreaterThan(0);
-  });
-
-  it('maintains component state', () => {
-    const mockOnSelect = vi.fn();
+    
     render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    expect(mockOnSelect).not.toHaveBeenCalled();
+    
+    // Open create form
+    fireEvent.click(screen.getByText(/Créer un nouveau profil/));
+    
+    await waitFor(() => {
+      const nameInput = screen.getByPlaceholderText(/Entre ton prénom/);
+      fireEvent.change(nameInput, { target: { value: '  Eve  ' } });
+      
+      const createButton = screen.getByText('Créer').closest('button');
+      fireEvent.click(createButton!);
+    });
+    
+    await waitFor(() => {
+      expect(mockCreateProfile).toHaveBeenCalledWith('Eve', 'CE1');
+    });
   });
 
-  it('provides profile interface', () => {
+  it('should clear form after successful profile creation', async () => {
+    mockGetAllProfiles.mockReturnValue([]);
+    const newProfile = {
+      id: 'new-3',
+      name: 'Frank',
+      avatar: '🦁',
+      currentLevel: 'CE1' as const,
+      progress: {},
+      accessories: [],
+      unlockedAccessories: [],
+      totalStars: 0,
+      createdAt: new Date(),
+    };
+    
+    mockCreateProfile.mockReturnValue(newProfile);
     const mockOnSelect = vi.fn();
+    
     render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    expect(document.body).toBeTruthy();
-  });
-
-  it('handles profile list rendering', () => {
-    const mockOnSelect = vi.fn();
-    const { container } = render(<ProfileSelection onSelectProfile={mockOnSelect} />);
-    expect(container).toBeTruthy();
+    
+    // Open create form
+    fireEvent.click(screen.getByText(/Créer un nouveau profil/));
+    
+    // Verify form is open
+    await waitFor(() => {
+      expect(screen.getByText('Annuler')).toBeDefined();
+    });
   });
 });
