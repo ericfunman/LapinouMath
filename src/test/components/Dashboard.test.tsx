@@ -215,9 +215,9 @@ describe('Dashboard Component', () => {
   });
 
   it('should handle profile with high progress', () => {
-    const advancedProfile = {
+    const advancedProfile: UserProfile = {
       ...mockProfile,
-      currentLevel: '4ème',
+      currentLevel: '4ème' as const,
       totalStars: 500,
       progress: {
         ...mockProfile.progress,

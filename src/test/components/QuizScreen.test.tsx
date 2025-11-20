@@ -94,7 +94,7 @@ describe('QuizScreen', () => {
   });
 
   it('handles multiple domain configurations', () => {
-    const domains = ['Calcul mental', 'Géométrie'];
+    const domains = ['Calcul mental', 'Géométrie'] as const;
     
     for (const domain of domains) {
       const { unmount } = render(
