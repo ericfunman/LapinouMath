@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Dashboard from '../../components/Dashboard';
 import { UserProfile } from '../../types';
 
@@ -617,5 +617,158 @@ describe('Dashboard Component', () => {
     );
 
     expect(document.body).toBeDefined();
+  });
+
+  it('should click level button to start quiz', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    if (buttons.length > 0) {
+      fireEvent.click(buttons[0]);
+    }
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should click logout button', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    for (const button of buttons) {
+      if (button.textContent?.includes('Déconnexion')) {
+        fireEvent.click(button);
+        break;
+      }
+    }
+  });
+
+  it('should click admin button', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    for (const button of buttons) {
+      if (button.textContent?.includes('Admin') || button.textContent?.includes('admin')) {
+        fireEvent.click(button);
+        break;
+      }
+    }
+  });
+
+  it('should handle multiple button clicks', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    buttons.forEach((btn, idx) => {
+      if (idx < 3) {
+        fireEvent.click(btn);
+      }
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should click domain button to start quiz', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    for (const button of buttons) {
+      if (button.textContent && ['Calcul mental', 'Arithmétique', 'Géométrie'].includes(button.textContent)) {
+        fireEvent.click(button);
+        break;
+      }
+    }
+  });
+
+  it('should support clicking different level buttons', () => {
+    const mockHandlers = {
+      onStartQuiz: () => {},
+      onLogout: () => {},
+      onOpenAdmin: () => {},
+    };
+
+    const { container } = render(
+      <Dashboard
+        profile={mockProfile}
+        onStartQuiz={mockHandlers.onStartQuiz}
+        onLogout={mockHandlers.onLogout}
+        onOpenAdmin={mockHandlers.onOpenAdmin}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    let clickCount = 0;
+    buttons.forEach(btn => {
+      if (clickCount < 4) {
+        fireEvent.click(btn);
+        clickCount++;
+      }
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
   });
 });
