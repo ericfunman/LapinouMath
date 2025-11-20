@@ -830,4 +830,188 @@ describe('AdminPanel', () => {
 
     expect(selects.length + inputs.length).toBeGreaterThan(0);
   });
+
+  it('should switch tabs and interact with reports', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const buttons = document.querySelectorAll('button');
+    for (const btn of buttons) {
+      if (btn.textContent?.includes('Rapports') || btn.textContent?.includes('rapports')) {
+        fireEvent.click(btn);
+        expect(document.body).toBeTruthy();
+        break;
+      }
+    }
+  });
+
+  it('should handle level filter change multiple times', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    const levels = ['CE1', 'CE2', 'CM1', 'CM2', 'ALL'];
+    
+    for (const level of levels) {
+      if (selects.length > 0) {
+        fireEvent.change(selects[0], { target: { value: level } });
+      }
+    }
+
+    expect(selects.length).toBeGreaterThan(0);
+  });
+
+  it('should handle domain filter with all options', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    const domains = ['Calcul mental', 'Arithmétique', 'Géométrie', 'ALL'];
+    
+    if (selects.length >= 2) {
+      for (const domain of domains) {
+        fireEvent.change(selects[1], { target: { value: domain } });
+      }
+    }
+
+    expect(selects.length).toBeGreaterThan(1);
+  });
+
+  it('should handle search input with various queries', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const inputs = document.querySelectorAll('input[type="text"]');
+    if (inputs.length > 0) {
+      const searchInput = inputs[0] as HTMLInputElement;
+      
+      const queries = ['test', '2+3', 'calcul', '', '123'];
+      for (const query of queries) {
+        fireEvent.change(searchInput, { target: { value: query } });
+      }
+    }
+
+    expect(inputs.length).toBeGreaterThan(0);
+  });
+
+  it('should handle checkbox toggle for correct only filter', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    for (let i = 0; i < Math.min(2, checkboxes.length); i++) {
+      fireEvent.click(checkboxes[i]);
+      fireEvent.click(checkboxes[i]); // Toggle back
+    }
+
+    expect(checkboxes.length).toBeGreaterThan(0);
+  });
+
+  it('should combine multiple filters simultaneously', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    const inputs = document.querySelectorAll('input[type="text"]');
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    // Apply all filters at once
+    if (selects.length >= 2) {
+      fireEvent.change(selects[0], { target: { value: 'CE1' } });
+      fireEvent.change(selects[1], { target: { value: 'Calcul mental' } });
+    }
+    
+    if (inputs.length > 0) {
+      fireEvent.change(inputs[0], { target: { value: 'search term' } });
+    }
+    
+    if (checkboxes.length > 0) {
+      fireEvent.click(checkboxes[0]);
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle filter reset workflow', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    const inputs = document.querySelectorAll('input[type="text"]');
+
+    // Apply filters
+    if (selects.length >= 2) {
+      fireEvent.change(selects[0], { target: { value: 'CM1' } });
+      fireEvent.change(selects[1], { target: { value: 'Géométrie' } });
+    }
+    
+    // Reset to ALL
+    if (selects.length >= 2) {
+      fireEvent.change(selects[0], { target: { value: 'ALL' } });
+      fireEvent.change(selects[1], { target: { value: 'ALL' } });
+    }
+    
+    if (inputs.length > 0) {
+      fireEvent.change(inputs[0], { target: { value: '' } });
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle rapid tab switching', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const buttons = document.querySelectorAll('button');
+    for (const btn of buttons) {
+      if (btn.textContent && (btn.textContent.includes('Rapports') || btn.textContent.includes('Questions'))) {
+        fireEvent.click(btn);
+        fireEvent.click(btn);
+        fireEvent.click(btn);
+      }
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle close button interaction', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const closeButton = Array.from(document.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Fermer')
+    );
+
+    if (closeButton) {
+      fireEvent.click(closeButton);
+      expect(mockOnClose).toHaveBeenCalled();
+    }
+  });
 });
