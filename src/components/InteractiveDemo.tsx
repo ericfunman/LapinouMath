@@ -8,6 +8,7 @@ import {
 } from './interactive/interactiveQuestionBuilders';
 import { InteractiveQuestionContainer } from './interactive';
 import { InteractiveQuestion } from '../types';
+import RabbitDemo from './RabbitDemo';
 
 /**
  * Demo Page for Interactive Geometry Questions
@@ -23,7 +24,10 @@ type QuestionType =
   | 'symmetry'
   | 'angleMeasurement';
 
+type TabType = 'geometry' | 'rabbit';
+
 export const InteractiveDemo: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<TabType>('geometry');
   const [selectedQuestion, setSelectedQuestion] = useState<QuestionType>('median');
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<QuestionType>>(
     new Set()
@@ -47,6 +51,9 @@ export const InteractiveDemo: React.FC = () => {
   const currentQuestion = questionMap[selectedQuestion];
   const isAnswered = answeredQuestions.has(selectedQuestion);
   const selectedAnswer = selectedAnswers[selectedQuestion];
+  
+  // Store tab value for rendering to avoid TypeScript narrowing issues
+  const currentTab = activeTab;
 
   const handleAnswerSelect = (index: number) => {
     if (!isAnswered) {
@@ -120,8 +127,49 @@ export const InteractiveDemo: React.FC = () => {
 
   const answeredCount = answeredQuestions.size;
 
+  // Tab Navigation Component
+  const tabNavigation = (
+    <div className="max-w-6xl mx-auto mb-6">
+      <div className="flex gap-2 bg-white rounded-lg p-2 shadow-lg">
+        <button
+          onClick={() => setActiveTab('geometry')}
+          className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+            currentTab === 'geometry'
+              ? 'bg-blue-500 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          📐 Questions Géométriques
+        </button>
+        <button
+          onClick={() => setActiveTab('rabbit')}
+          className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+            currentTab === 'rabbit'
+              ? 'bg-purple-500 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          🐰 Système de Lapins
+        </button>
+      </div>
+    </div>
+  );
+
+  // Render rabbit demo if active tab is rabbit
+  if (currentTab === 'rabbit') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-8">
+        {tabNavigation}
+        <RabbitDemo />
+      </div>
+    );
+  }
+
+  // Geometry tab content
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-8">
+      {tabNavigation}
+
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-8">
         <div className="text-center mb-8">
