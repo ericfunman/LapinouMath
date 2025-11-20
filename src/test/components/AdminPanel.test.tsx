@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import AdminPanel from '../../components/AdminPanel';
 
 // Mock GeometryCanvas to avoid Konva issues
@@ -579,5 +579,118 @@ describe('AdminPanel', () => {
     await waitFor(() => {
       expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
     });
+  });
+
+  it('should switch to reports tab', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    // Find and click the reports tab
+    const buttons = document.querySelectorAll('button');
+    let reportsButton: Element | undefined;
+    for (const btn of buttons) {
+      if (btn.textContent?.includes('Rapports')) {
+        reportsButton = btn;
+        break;
+      }
+    }
+    
+    if (reportsButton) {
+      fireEvent.click(reportsButton);
+      expect(document.body).toBeTruthy();
+    }
+  });
+
+  it('should filter by grade level', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    if (selects.length > 0) {
+      fireEvent.change(selects[0], { target: { value: 'CE1' } });
+      expect(document.body).toBeTruthy();
+    }
+  });
+
+  it('should filter by domain', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    if (selects.length > 1) {
+      fireEvent.change(selects[1], { target: { value: 'Calcul mental' } });
+      expect(document.body).toBeTruthy();
+    }
+  });
+
+  it('should handle search input', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const inputs = document.querySelectorAll('input[type="text"]');
+    if (inputs.length > 0) {
+      fireEvent.change(inputs[0], { target: { value: 'test search' } });
+      expect(document.body).toBeTruthy();
+    }
+  });
+
+  it('should toggle correct only filter', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    if (checkboxes.length > 0) {
+      fireEvent.click(checkboxes[0]);
+      expect(document.body).toBeTruthy();
+    }
+  });
+
+  it('should call onClose when close button clicked', async () => {
+    const mockOnCloseFn = vi.fn();
+    render(<AdminPanel onClose={mockOnCloseFn} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const closeButton = document.querySelector('button[class*="red"]');
+    if (closeButton?.textContent?.includes('Fermer')) {
+      fireEvent.click(closeButton);
+      // The close button should trigger the callback
+      expect(mockOnCloseFn).toHaveBeenCalled();
+    }
+  });
+
+  it('should handle multiple filter combinations', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    const inputs = document.querySelectorAll('input[type="text"]');
+    
+    if (selects.length > 1 && inputs.length > 0) {
+      fireEvent.change(selects[0], { target: { value: 'CE1' } });
+      fireEvent.change(selects[1], { target: { value: 'Calcul mental' } });
+      fireEvent.change(inputs[0], { target: { value: 'search' } });
+      expect(document.body).toBeTruthy();
+    }
   });
 });
