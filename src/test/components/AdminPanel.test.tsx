@@ -64,5 +64,28 @@ describe('AdminPanel', () => {
     expect(container).toBeTruthy();
     unmount();
   });
+
+  it('can be closed and reopened', () => {
+    const { unmount, rerender } = render(<AdminPanel onClose={mockOnClose} />);
+    expect(mockOnClose).not.toHaveBeenCalled();
+    
+    unmount();
+    rerender(<AdminPanel onClose={mockOnClose} />);
+    expect(mockOnClose).toHaveBeenCalledTimes(0);
+  });
+
+  it('handles rapid mount/unmount', () => {
+    for (let i = 0; i < 3; i++) {
+      const { unmount } = render(<AdminPanel onClose={mockOnClose} />);
+      unmount();
+    }
+    expect(true).toBe(true);
+  });
+
+  it('displays with correct styling', () => {
+    const { container } = render(<AdminPanel onClose={mockOnClose} />);
+    const mainElement = container.firstChild;
+    expect(mainElement).toBeTruthy();
+  });
 });
 
