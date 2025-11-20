@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: lapinoumath-db
+    environment:
+      POSTGRES_DB: lapinoumath
+      POSTGRES_USER: lapinou_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lapinou_user -d lapinoumath"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API Node.js
+  backend:
+    image: node:18-alpine
+    container_name: lapinoumath-backend
+    working_dir: /app
+    volumes:
+      - ../backend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run build && npm start"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://lapinou_user:${DB_PASSWORD}@postgres:5432/lapinoumath
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Cloudflare Tunnel (accès Internet sécurisé)
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: lapinoumath-tunnel
+    command: tunnel --no-autoupdate run --token ${CF_TUNNEL_TOKEN}
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  # Backup automatique (optionnel)
+  backup:
+    image: postgres:15-alpine
+    container_name: lapinoumath-backup
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data:ro
+      - ./backups:/backups
+      - ./scripts:/scripts:ro
+    environment:
+      POSTGRES_USER: lapinou_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: lapinoumath
+    entrypoint: /scripts/backup-cron.sh
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  node_modules:

@@ -1,0 +1,14 @@
+# Configuration sensible
+.env
+
+# Données
+data/
+backups/
+logs/
+
+# Docker
+.docker/
+
+# OS
+.DS_Store
+Thumbs.db
