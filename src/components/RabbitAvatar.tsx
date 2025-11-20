@@ -14,12 +14,47 @@ interface RabbitAvatarProps {
   onAnimationComplete?: () => void;
 }
 
-// Couleurs pour chaque variant de lapin
-const RABBIT_COLORS: Record<RabbitVariant, { body: string; ears: string; nose: string }> = {
-  classic: { body: '#FFB6C1', ears: '#FF69B4', nose: '#FF1493' }, // Rose
-  white: { body: '#FFFFFF', ears: '#F0F0F0', nose: '#FFB6C1' },   // Blanc
-  gray: { body: '#D3D3D3', ears: '#A9A9A9', nose: '#696969' },    // Gris
-  brown: { body: '#D2691E', ears: '#8B4513', nose: '#654321' },   // Brun
+// Couleurs pour chaque variant de lapin - Améliorées avec contours et joues
+const RABBIT_COLORS: Record<RabbitVariant, { 
+  body: string; 
+  ears: string; 
+  nose: string; 
+  outline: string;
+  innerEar: string;
+  cheeks: string;
+}> = {
+  classic: { 
+    body: '#FFB6C1', 
+    ears: '#FF69B4', 
+    nose: '#FF1493',
+    outline: '#FF69B4',
+    innerEar: '#FFE4E8',
+    cheeks: '#FF9FB4'
+  },
+  white: { 
+    body: '#FFFFFF', 
+    ears: '#F5F5F5', 
+    nose: '#FFB6C1',
+    outline: '#333333',      // Contour noir pour visibilité
+    innerEar: '#FFE4E8',
+    cheeks: '#FFB6C1'
+  },
+  gray: { 
+    body: '#C0C0C0', 
+    ears: '#A0A0A0', 
+    nose: '#696969',
+    outline: '#808080',
+    innerEar: '#E8E8E8',
+    cheeks: '#B0B0B0'
+  },
+  brown: { 
+    body: '#C19A6B', 
+    ears: '#8B7355', 
+    nose: '#654321',
+    outline: '#654321',
+    innerEar: '#E8D4B8',
+    cheeks: '#A67C52'
+  },
 };
 
 // Expressions faciales
@@ -30,13 +65,48 @@ const EXPRESSIONS: Record<RabbitExpression, { eyes: string; mouth: string }> = {
   focused: { eyes: '◐◐', mouth: '—' },
 };
 
-// Positions des accessoires selon leur type
-const ACCESSORY_POSITIONS: Record<string, React.CSSProperties> = {
-  hat: { top: '-15%', left: '50%', transform: 'translateX(-50%)', zIndex: 10 },
-  glasses: { top: '38%', left: '50%', transform: 'translateX(-50%)', zIndex: 5 },
-  bow: { top: '10%', right: '15%', zIndex: 5 },
-  scarf: { top: '65%', left: '50%', transform: 'translateX(-50%)', zIndex: 3 },
-  background: { top: '0', left: '0', width: '100%', height: '100%', zIndex: 1 },
+// Positions et tailles des accessoires selon leur type (en % de la taille du lapin)
+const ACCESSORY_CONFIG: Record<string, { 
+  top: string; 
+  left?: string; 
+  right?: string; 
+  transform?: string; 
+  zIndex: number;
+  scale: number; // Facteur de taille par rapport au lapin
+}> = {
+  hat: { 
+    top: '-8%', 
+    left: '50%', 
+    transform: 'translateX(-50%)', 
+    zIndex: 10,
+    scale: 0.45 
+  },
+  glasses: { 
+    top: '42%', 
+    left: '50%', 
+    transform: 'translateX(-50%)', 
+    zIndex: 5,
+    scale: 0.35 
+  },
+  bow: { 
+    top: '12%', 
+    right: '18%', 
+    zIndex: 5,
+    scale: 0.3 
+  },
+  scarf: { 
+    top: '68%', 
+    left: '50%', 
+    transform: 'translateX(-50%)', 
+    zIndex: 3,
+    scale: 0.38 
+  },
+  background: { 
+    top: '0', 
+    left: '0', 
+    zIndex: 1,
+    scale: 1.2 
+  },
 };
 
 // Animations variants - using type-safe approach
@@ -142,110 +212,176 @@ export default function RabbitAvatar({
       {/* Background accessories */}
       {accessories
         .filter(acc => getAccessoryType(acc) === 'background')
-        .map((accessoryId) => (
-          <div
-            key={accessoryId}
-            className="absolute opacity-20 text-4xl"
-            style={ACCESSORY_POSITIONS.background}
-          >
-            {getAccessoryEmoji(accessoryId)}
-          </div>
-        ))}
+        .map((accessoryId) => {
+          const config = ACCESSORY_CONFIG.background;
+          const fontSize = size * config.scale;
+          return (
+            <div
+              key={accessoryId}
+              className="absolute opacity-20"
+              style={{
+                top: config.top,
+                left: config.left,
+                fontSize: `${fontSize}px`,
+                zIndex: config.zIndex,
+              }}
+            >
+              {getAccessoryEmoji(accessoryId)}
+            </div>
+          );
+        })}
 
-      {/* Rabbit SVG */}
+      {/* Rabbit SVG - Design amélioré */}
       <svg
         viewBox="0 0 100 100"
         width={size}
         height={size}
         style={{ position: 'relative', zIndex: 2 }}
       >
-        {/* Oreilles */}
+        {/* Oreilles gauche - avec contour */}
         <ellipse
-          cx="30"
-          cy="25"
-          rx="8"
-          ry="25"
+          cx="28"
+          cy="22"
+          rx="9"
+          ry="28"
           fill={colors.ears}
-          transform="rotate(-20 30 25)"
+          stroke={colors.outline}
+          strokeWidth="1.5"
+          transform="rotate(-25 28 22)"
         />
+        {/* Oreilles droite - avec contour */}
         <ellipse
-          cx="70"
-          cy="25"
-          rx="8"
-          ry="25"
+          cx="72"
+          cy="22"
+          rx="9"
+          ry="28"
           fill={colors.ears}
-          transform="rotate(20 70 25)"
+          stroke={colors.outline}
+          strokeWidth="1.5"
+          transform="rotate(25 72 22)"
         />
         
-        {/* Oreilles internes */}
+        {/* Intérieur oreilles gauche */}
         <ellipse
-          cx="30"
-          cy="25"
-          rx="4"
-          ry="18"
-          fill={colors.body}
-          opacity="0.6"
-          transform="rotate(-20 30 25)"
+          cx="28"
+          cy="22"
+          rx="5"
+          ry="20"
+          fill={colors.innerEar}
+          transform="rotate(-25 28 22)"
         />
+        {/* Intérieur oreilles droite */}
         <ellipse
-          cx="70"
-          cy="25"
-          rx="4"
-          ry="18"
-          fill={colors.body}
-          opacity="0.6"
-          transform="rotate(20 70 25)"
+          cx="72"
+          cy="22"
+          rx="5"
+          ry="20"
+          fill={colors.innerEar}
+          transform="rotate(25 72 22)"
         />
 
-        {/* Tête */}
-        <circle cx="50" cy="50" r="30" fill={colors.body} />
+        {/* Corps/Tête principale - plus arrondie */}
+        <ellipse 
+          cx="50" 
+          cy="55" 
+          rx="32" 
+          ry="35" 
+          fill={colors.body}
+          stroke={colors.outline}
+          strokeWidth="2"
+        />
         
-        {/* Yeux */}
-        <text
-          x="50"
-          y="48"
-          fontSize="12"
-          textAnchor="middle"
-          fill="#000000"
-          fontWeight="bold"
-        >
-          {face.eyes}
-        </text>
+        {/* Joues roses */}
+        <circle cx="35" cy="58" r="6" fill={colors.cheeks} opacity="0.6" />
+        <circle cx="65" cy="58" r="6" fill={colors.cheeks} opacity="0.6" />
         
-        {/* Nez */}
-        <circle cx="50" cy="55" r="3" fill={colors.nose} />
+        {/* Yeux - plus grands et mignons */}
+        <ellipse cx="40" cy="50" rx="5" ry="7" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
+        <ellipse cx="60" cy="50" rx="5" ry="7" fill="#FFFFFF" stroke="#000000" strokeWidth="1" />
         
-        {/* Bouche */}
-        <text
-          x="50"
-          y="68"
-          fontSize="16"
-          textAnchor="middle"
-          fill="#000000"
-        >
-          {face.mouth}
-        </text>
+        {/* Pupilles selon l'expression */}
+        <circle cx="40" cy="51" r="3" fill="#000000" />
+        <circle cx="60" cy="51" r="3" fill="#000000" />
         
-        {/* Moustaches */}
-        <line x1="30" y1="55" x2="15" y2="53" stroke="#000000" strokeWidth="1" />
-        <line x1="30" y1="58" x2="15" y2="60" stroke="#000000" strokeWidth="1" />
-        <line x1="70" y1="55" x2="85" y2="53" stroke="#000000" strokeWidth="1" />
-        <line x1="70" y1="58" x2="85" y2="60" stroke="#000000" strokeWidth="1" />
+        {/* Reflets dans les yeux */}
+        <circle cx="41" cy="49" r="1.5" fill="#FFFFFF" />
+        <circle cx="61" cy="49" r="1.5" fill="#FFFFFF" />
+        
+        {/* Nez - plus mignon en forme de triangle */}
+        <path
+          d="M 50 60 L 47 64 L 53 64 Z"
+          fill={colors.nose}
+          stroke={colors.outline}
+          strokeWidth="0.5"
+        />
+        
+        {/* Bouche - selon l'expression */}
+        {face.mouth === '◡' && (
+          <path
+            d="M 42 67 Q 50 72 58 67"
+            stroke="#000000"
+            strokeWidth="2"
+            strokeLinecap="round"
+            fill="none"
+          />
+        )}
+        {face.mouth === '︵' && (
+          <path
+            d="M 42 71 Q 50 66 58 71"
+            stroke="#000000"
+            strokeWidth="2"
+            strokeLinecap="round"
+            fill="none"
+          />
+        )}
+        {face.mouth === 'o' && (
+          <ellipse cx="50" cy="69" rx="4" ry="5" fill="#000000" />
+        )}
+        {face.mouth === '—' && (
+          <line x1="42" y1="69" x2="58" y2="69" stroke="#000000" strokeWidth="2" strokeLinecap="round" />
+        )}
+        
+        {/* Moustaches - plus fines et élégantes */}
+        <line x1="32" y1="60" x2="18" y2="58" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="32" y1="63" x2="18" y2="65" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="32" y1="66" x2="18" y2="68" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="68" y1="60" x2="82" y2="58" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="68" y1="63" x2="82" y2="65" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="68" y1="66" x2="82" y2="68" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" />
+        
+        {/* Petites dents pour le sourire (seulement si happy) */}
+        {face.mouth === '◡' && (
+          <>
+            <rect x="48" y="70" width="2" height="3" fill="#FFFFFF" rx="1" />
+            <rect x="51" y="70" width="2" height="3" fill="#FFFFFF" rx="1" />
+          </>
+        )}
       </svg>
 
-      {/* Accessoires superposés */}
+      {/* Accessoires superposés avec taille adaptative */}
       <AnimatePresence>
         {accessories
           .filter(acc => getAccessoryType(acc) !== 'background')
           .map((accessoryId) => {
             const type = getAccessoryType(accessoryId);
-            const position = ACCESSORY_POSITIONS[type] || ACCESSORY_POSITIONS.hat;
+            const config = ACCESSORY_CONFIG[type] || ACCESSORY_CONFIG.hat;
+            const fontSize = size * config.scale;
+            
+            const positionStyle: React.CSSProperties = {
+              top: config.top,
+              left: config.left,
+              right: config.right,
+              transform: config.transform,
+              zIndex: config.zIndex,
+              fontSize: `${fontSize}px`,
+              lineHeight: '1',
+            };
             
             return (
               <motion.div
                 key={accessoryId}
-                className="absolute text-2xl"
-                style={position}
+                className="absolute"
+                style={positionStyle}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0, opacity: 0 }}
