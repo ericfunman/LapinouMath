@@ -4,15 +4,50 @@ import App from '../../App';
 
 // Mock all heavy components and dependencies
 vi.mock('../../components/ProfileSelection', () => ({
-  default: () => <div data-testid="profile-selection">Profile Selection</div>
+  default: ({ onSelectProfile }: any) => (
+    <button onClick={() => {
+      onSelectProfile({
+        id: 'test-profile-1',
+        name: 'Test User',
+        avatar: '🐰',
+        currentLevel: 'CE1',
+        progress: {
+          'CE1': {
+            'Calcul mental': { unlocked: true, stars: 0, questionsAnswered: 0, correctAnswers: 0 },
+            'Arithmétique': { unlocked: false, stars: 0, questionsAnswered: 0, correctAnswers: 0 },
+          }
+        },
+        totalStars: 0,
+        accessories: [],
+        unlockedAccessories: [],
+        createdAt: new Date(),
+      });
+    }}>
+      Profile Selection
+    </button>
+  )
 }));
 
 vi.mock('../../components/Dashboard', () => ({
-  default: () => <div data-testid="dashboard">Dashboard</div>
+  default: ({ profile, onStartQuiz }: any) => (
+    <div data-testid="dashboard" data-profile-name={profile?.name}>
+      <button onClick={() => {
+        onStartQuiz('CE1', 'Calcul mental');
+      }}>
+        Start Quiz
+      </button>
+    </div>
+  )
 }));
 
 vi.mock('../../components/QuizScreen', () => ({
-  default: () => <div data-testid="quiz-screen">Quiz</div>
+  default: ({ onComplete }: any) => (
+    <button onClick={() => {
+      onComplete(8, 10);
+    }}>
+      Complete Quiz
+    </button>
+  )
 }));
 
 vi.mock('../../components/Lesson', () => ({
@@ -20,7 +55,13 @@ vi.mock('../../components/Lesson', () => ({
 }));
 
 vi.mock('../../components/QuickChallenge', () => ({
-  default: () => <div data-testid="quick-challenge">Quick Challenge</div>
+  default: ({ onComplete }: any) => (
+    <button onClick={() => {
+      onComplete(5, 5);
+    }}>
+      Complete Challenge
+    </button>
+  )
 }));
 
 vi.mock('../../components/AdminPanel', () => ({
@@ -51,7 +92,15 @@ vi.mock('../../utils/database', () => ({
 
 vi.mock('../../data/questions', () => ({
   initializeQuestions: () => mockInitializeQuestions(),
-  getAvailableDomains: () => ['Calcul mental', 'Arithmétique'],
+  getAvailableDomains: (level: string) => {
+    const domains: Record<string, string[]> = {
+      'CE1': ['Calcul mental', 'Arithmétique', 'Bonus - Défi Rapide'],
+      'CE2': ['Calcul mental', 'Arithmétique'],
+      'CM1': ['Calcul mental', 'Arithmétique'],
+      'CM2': ['Calcul mental', 'Arithmétique'],
+    };
+    return domains[level] || [];
+  },
 }));
 
 vi.mock('../../utils/excelExport', () => ({
@@ -72,6 +121,7 @@ describe('App Component', () => {
     vi.clearAllMocks();
   });
 
+  // Initialization tests
   it('renders without crashing', async () => {
     const { container } = render(<App />);
     await waitFor(() => {
@@ -93,101 +143,7 @@ describe('App Component', () => {
     });
   });
 
-  it('shows profile selection initially when no profile selected', async () => {
-    const { getByTestId } = render(<App />);
-    await waitFor(() => {
-      expect(getByTestId('profile-selection')).toBeInTheDocument();
-    });
-  });
-
-  it('loads profile from localStorage if available', async () => {
-    const mockProfile = {
-      id: 'test-1',
-      name: 'Test User',
-      avatar: '🐰',
-      currentLevel: 'CE1' as const,
-      progress: {},
-      totalStars: 0,
-      accessories: [],
-      unlockedAccessories: [],
-      createdAt: new Date(),
-    };
-
-    mockGetProfile.mockReturnValue(mockProfile);
-    localStorage.setItem('lapinoumath_current_profile', 'test-1');
-
-    render(<App />);
-    await waitFor(() => {
-      expect(mockGetProfile).toHaveBeenCalled();
-    });
-  });
-
-  it('displays dashboard when profile is loaded', async () => {
-    const mockProfile = {
-      id: 'test-2',
-      name: 'Dashboard User',
-      avatar: '🐇',
-      currentLevel: 'CE2' as const,
-      progress: {},
-      totalStars: 50,
-      accessories: [],
-      unlockedAccessories: [],
-      createdAt: new Date(),
-    };
-
-    mockGetProfile.mockReturnValue(mockProfile);
-    localStorage.setItem('lapinoumath_current_profile', 'test-2');
-
-    render(<App />);
-    await waitFor(() => {
-      expect(mockGetProfile).toHaveBeenCalled();
-    });
-  });
-
-  it('handles profile selection workflow', async () => {
-    const { container } = render(<App />);
-    await waitFor(() => {
-      expect(container).toBeTruthy();
-    });
-  });
-
-  it('navigates to quiz screen when quiz is started', async () => {
-    const { container } = render(<App />);
-    await waitFor(() => {
-      expect(container).toBeTruthy();
-    });
-  });
-
-  it('navigates to quick challenge for bonus domain', async () => {
-    const { container } = render(<App />);
-    await waitFor(() => {
-      expect(container).toBeTruthy();
-    });
-  });
-
-  it('returns to dashboard after quiz completion', async () => {
-    const { container } = render(<App />);
-    await waitFor(() => {
-      expect(container).toBeTruthy();
-    });
-  });
-
-  it('opens admin panel when requested', async () => {
-    const { container } = render(<App />);
-    await waitFor(() => {
-      expect(container).toBeTruthy();
-    });
-  });
-
-  it('handles logout correctly', async () => {
-    const { container } = render(<App />);
-    await waitFor(() => {
-      expect(container).toBeTruthy();
-    });
-    expect(localStorage.getItem('lapinoumath_current_profile')).toBeNull();
-  });
-
-  it('recovers from initialization errors', async () => {
+  it('recovers from database initialization error', async () => {
     mockInitDB.mockRejectedValueOnce(new Error('DB Error'));
     const { container } = render(<App />);
     await waitFor(() => {
@@ -195,21 +151,161 @@ describe('App Component', () => {
     });
   });
 
-  it('applies profile migrations on load', async () => {
+  it('recovers from question initialization error', async () => {
+    mockInitializeQuestions.mockRejectedValueOnce(new Error('Questions Error'));
+    const { container } = render(<App />);
+    await waitFor(() => {
+      expect(container).toBeTruthy();
+    });
+  });
+
+  // Profile selection tests
+  it('shows profile selection screen initially', async () => {
+    const { getByText } = render(<App />);
+    await waitFor(() => {
+      expect(getByText('Profile Selection')).toBeInTheDocument();
+    });
+  });
+
+  it('saves profile id to localStorage on profile select', async () => {
+    const { getByText } = render(<App />);
+    const button = await waitFor(() => getByText('Profile Selection'));
+    button.click();
+
+    await waitFor(() => {
+      expect(localStorage.getItem('lapinoumath_current_profile')).toBe('test-profile-1');
+    });
+  });
+
+  it('applies migration on profile selection', async () => {
+    const { getByText } = render(<App />);
+    const button = await waitFor(() => getByText('Profile Selection'));
+    button.click();
+
+    await waitFor(() => {
+      expect(mockMigrateProfile).toHaveBeenCalled();
+    });
+  });
+
+  it('transitions to dashboard after profile selection', async () => {
+    const { getByText, getByTestId } = render(<App />);
+    const button = await waitFor(() => getByText('Profile Selection'));
+    button.click();
+
+    await waitFor(() => {
+      expect(getByTestId('dashboard')).toBeInTheDocument();
+    });
+  });
+
+  it('displays dashboard with profile name', async () => {
+    const { getByText, getByTestId } = render(<App />);
+    const button = await waitFor(() => getByText('Profile Selection'));
+    button.click();
+
+    await waitFor(() => {
+      const dashboard = getByTestId('dashboard');
+      expect(dashboard.dataset.profileName).toBe('Test User');
+    });
+  });
+
+  // Quiz workflow tests
+  it('starts quiz when quiz start button clicked', async () => {
+    const { getByText } = render(<App />);
+    const profileButton = await waitFor(() => getByText('Profile Selection'));
+    profileButton.click();
+
+    await waitFor(() => {
+      const quizButton = getByText('Start Quiz');
+      expect(quizButton).toBeInTheDocument();
+      quizButton.click();
+    });
+
+    await waitFor(() => {
+      expect(getByText('Complete Quiz')).toBeInTheDocument();
+    });
+  });
+
+  it('transitions to quiz screen on quiz start', async () => {
+    const { getByText } = render(<App />);
+    const profileButton = await waitFor(() => getByText('Profile Selection'));
+    profileButton.click();
+
+    await waitFor(() => {
+      const quizButton = getByText('Start Quiz');
+      quizButton.click();
+    });
+
+    await waitFor(() => {
+      expect(getByText('Complete Quiz')).toBeInTheDocument();
+    });
+  });
+
+  it('returns to dashboard after quiz completion', async () => {
+    const { getByText, getByTestId } = render(<App />);
+    const profileButton = await waitFor(() => getByText('Profile Selection'));
+    profileButton.click();
+
+    await waitFor(() => {
+      const quizButton = getByText('Start Quiz');
+      quizButton.click();
+    });
+
+    await waitFor(() => {
+      const completeButton = getByText('Complete Quiz');
+      completeButton.click();
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('dashboard')).toBeInTheDocument();
+    });
+  });
+
+  // Profile persistence tests
+  it('loads profile from localStorage on mount', async () => {
     const mockProfile = {
-      id: 'test-3',
-      name: 'Migration User',
-      avatar: '🐢',
-      currentLevel: 'CM1' as const,
-      progress: {},
-      totalStars: 100,
+      id: 'saved-profile',
+      name: 'Saved User',
+      avatar: '🐰',
+      currentLevel: 'CE1' as const,
+      progress: {
+        'CE1': {
+          'Calcul mental': { unlocked: true, stars: 0, questionsAnswered: 0, correctAnswers: 0 },
+        }
+      },
+      totalStars: 0,
       accessories: [],
       unlockedAccessories: [],
       createdAt: new Date(),
     };
 
     mockGetProfile.mockReturnValue(mockProfile);
-    localStorage.setItem('lapinoumath_current_profile', 'test-3');
+    localStorage.setItem('lapinoumath_current_profile', 'saved-profile');
+
+    render(<App />);
+    await waitFor(() => {
+      expect(mockGetProfile).toHaveBeenCalled();
+    });
+  });
+
+  it('applies migration on loaded profile', async () => {
+    const mockProfile = {
+      id: 'saved-profile',
+      name: 'Saved User',
+      avatar: '🐰',
+      currentLevel: 'CE1' as const,
+      progress: {
+        'CE1': {
+          'Calcul mental': { unlocked: true, stars: 0, questionsAnswered: 0, correctAnswers: 0 },
+        }
+      },
+      totalStars: 0,
+      accessories: [],
+      unlockedAccessories: [],
+      createdAt: new Date(),
+    };
+
+    mockGetProfile.mockReturnValue(mockProfile);
+    localStorage.setItem('lapinoumath_current_profile', 'saved-profile');
 
     render(<App />);
     await waitFor(() => {
@@ -217,67 +313,124 @@ describe('App Component', () => {
     });
   });
 
-  it('updates total stars on quiz completion', async () => {
-    const { container } = render(<App />);
+  it('shows dashboard when profile exists in localStorage', async () => {
+    const mockProfile = {
+      id: 'saved-profile',
+      name: 'Saved User',
+      avatar: '🐰',
+      currentLevel: 'CE1' as const,
+      progress: {
+        'CE1': {
+          'Calcul mental': { unlocked: true, stars: 0, questionsAnswered: 0, correctAnswers: 0 },
+        }
+      },
+      totalStars: 0,
+      accessories: [],
+      unlockedAccessories: [],
+      createdAt: new Date(),
+    };
+
+    mockGetProfile.mockReturnValue(mockProfile);
+    localStorage.setItem('lapinoumath_current_profile', 'saved-profile');
+
+    const { getByTestId } = render(<App />);
     await waitFor(() => {
-      expect(container).toBeTruthy();
+      expect(getByTestId('dashboard')).toBeInTheDocument();
     });
   });
 
-  it('saves profile updates to localStorage', async () => {
-    const { container } = render(<App />);
+  it('displays saved profile name in dashboard', async () => {
+    const mockProfile = {
+      id: 'saved-profile',
+      name: 'Saved User Name',
+      avatar: '🐰',
+      currentLevel: 'CE1' as const,
+      progress: {
+        'CE1': {
+          'Calcul mental': { unlocked: true, stars: 0, questionsAnswered: 0, correctAnswers: 0 },
+        }
+      },
+      totalStars: 0,
+      accessories: [],
+      unlockedAccessories: [],
+      createdAt: new Date(),
+    };
+
+    mockGetProfile.mockReturnValue(mockProfile);
+    localStorage.setItem('lapinoumath_current_profile', 'saved-profile');
+
+    const { getByTestId } = render(<App />);
     await waitFor(() => {
-      expect(container).toBeTruthy();
+      const dashboard = getByTestId('dashboard');
+      expect(dashboard.dataset.profileName).toBe('Saved User Name');
     });
   });
 
-  it('maintains profile state across screens', async () => {
-    const { container } = render(<App />);
+  // Multi-step workflow tests
+  it('completes full profile selection to dashboard flow', async () => {
+    const { getByText, getByTestId } = render(<App />);
+    
+    const profileButton = await waitFor(() => getByText('Profile Selection'));
+    expect(profileButton).toBeInTheDocument();
+    profileButton.click();
+
     await waitFor(() => {
-      expect(container).toBeTruthy();
+      expect(getByTestId('dashboard')).toBeInTheDocument();
     });
   });
 
-  it('handles multiple navigation transitions', async () => {
-    const { container } = render(<App />);
+  it('completes profile selection to quiz to dashboard flow', async () => {
+    const { getByText, getByTestId } = render(<App />);
+    
+    // Profile selection
+    const profileButton = await waitFor(() => getByText('Profile Selection'));
+    profileButton.click();
+
+    // Start quiz
     await waitFor(() => {
-      expect(container).toBeTruthy();
+      const quizButton = getByText('Start Quiz');
+      quizButton.click();
+    });
+
+    // Complete quiz
+    await waitFor(() => {
+      const completeButton = getByText('Complete Quiz');
+      completeButton.click();
+    });
+
+    // Back to dashboard
+    await waitFor(() => {
+      expect(getByTestId('dashboard')).toBeInTheDocument();
     });
   });
 
-  it('manages quiz with correct/incorrect answers', async () => {
-    const { container } = render(<App />);
+  // Edge cases
+  it('handles empty localStorage gracefully', async () => {
+    expect(localStorage.getItem('lapinoumath_current_profile')).toBeNull();
+    const { getByText } = render(<App />);
     await waitFor(() => {
-      expect(container).toBeTruthy();
+      expect(getByText('Profile Selection')).toBeInTheDocument();
     });
   });
 
-  it('unlocks next domain on sufficient stars', async () => {
-    const { container } = render(<App />);
+  it('does not crash with missing profile in localStorage', async () => {
+    mockGetProfile.mockReturnValue(null);
+    localStorage.setItem('lapinoumath_current_profile', 'non-existent');
+
+    const { getByText } = render(<App />);
     await waitFor(() => {
-      expect(container).toBeTruthy();
+      expect(getByText('Profile Selection')).toBeInTheDocument();
     });
   });
 
-  it('handles quick challenge bonus stars', async () => {
-    const { container } = render(<App />);
-    await waitFor(() => {
-      expect(container).toBeTruthy();
-    });
-  });
+  it('calls mock functions correctly during flow', async () => {
+    const { getByText } = render(<App />);
+    
+    const profileButton = await waitFor(() => getByText('Profile Selection'));
+    profileButton.click();
 
-  it('calculates star levels correctly', async () => {
-    const { container } = render(<App />);
     await waitFor(() => {
-      expect(container).toBeTruthy();
-    });
-  });
-
-  it('persists state through component rerenders', async () => {
-    const { rerender } = render(<App />);
-    await waitFor(() => {
-      rerender(<App />);
-      expect(true).toBe(true);
+      expect(mockMigrateProfile).toHaveBeenCalled();
     });
   });
 });
