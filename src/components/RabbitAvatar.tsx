@@ -77,27 +77,28 @@ const ACCESSORY_CONFIG: Record<string, {
   hat: { 
     top: '-8%', 
     left: '50%', 
-    transform: 'translateX(-50%)', 
+    transform: 'translate(-50%, 0)', 
     zIndex: 10,
     scale: 0.45 
   },
   glasses: { 
     top: '42%', 
     left: '50%', 
-    transform: 'translateX(-50%)', 
+    transform: 'translate(-50%, 0)', 
     zIndex: 5,
     scale: 0.35 
   },
   bow: { 
     top: '12%', 
-    right: '18%', 
+    right: '20%',
+    transform: 'translate(50%, 0)',
     zIndex: 5,
     scale: 0.3 
   },
   scarf: { 
     top: '68%', 
     left: '50%', 
-    transform: 'translateX(-50%)', 
+    transform: 'translate(-50%, 0)', 
     zIndex: 3,
     scale: 0.38 
   },
@@ -233,7 +234,7 @@ export default function RabbitAvatar({
 
       {/* Rabbit SVG - Design amélioré */}
       <svg
-        viewBox="0 0 100 100"
+        viewBox="0 -8 100 108"
         width={size}
         height={size}
         style={{ position: 'relative', zIndex: 2 }}
