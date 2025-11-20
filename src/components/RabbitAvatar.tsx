@@ -77,28 +77,28 @@ const ACCESSORY_CONFIG: Record<string, {
   hat: { 
     top: '-8%', 
     left: '50%', 
-    transform: 'translate(-50%, 0)', 
+    transform: 'translate(-52%, 0)', 
     zIndex: 10,
     scale: 0.45 
   },
   glasses: { 
     top: '42%', 
     left: '50%', 
-    transform: 'translate(-50%, 0)', 
+    transform: 'translate(-52%, 0)', 
     zIndex: 5,
     scale: 0.35 
   },
   bow: { 
     top: '12%', 
     right: '20%',
-    transform: 'translate(50%, 0)',
+    transform: 'translate(52%, 0)',
     zIndex: 5,
     scale: 0.3 
   },
   scarf: { 
     top: '68%', 
     left: '50%', 
-    transform: 'translate(-50%, 0)', 
+    transform: 'translate(-52%, 0)', 
     zIndex: 3,
     scale: 0.38 
   },
