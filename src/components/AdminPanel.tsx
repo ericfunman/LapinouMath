@@ -219,12 +219,13 @@ export default function AdminPanel(props: Readonly<Props>) {
                 <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
                   <p className="text-2xl text-gray-500">Chargement des questions...</p>
                 </div>
-              ) : filteredQuestions.length === 0 ? (
-                <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-                  <p className="text-2xl text-gray-500">Aucune question trouvée pour ce filtre</p>
-                </div>
               ) : (
-                filteredQuestions.map((question) => (
+                filteredQuestions.length === 0 ? (
+                  <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
+                    <p className="text-2xl text-gray-500">Aucune question trouvée pour ce filtre</p>
+                  </div>
+                ) : (
+                  filteredQuestions.map((question) => (
                   <div key={question.id} className="bg-white rounded-2xl shadow-xl p-6">
                     <div className="flex justify-end mb-2">
                       <span className="text-xs text-gray-500 font-mono">{question.id}</span>
@@ -291,6 +292,7 @@ export default function AdminPanel(props: Readonly<Props>) {
                     </div>
                   </div>
                 ))
+                )
               )}
             </div>
           </>
@@ -312,7 +314,7 @@ export default function AdminPanel(props: Readonly<Props>) {
                   rows={3}
                 />
               </div>
-              {editingQuestion?.options && editingQuestion.options.map((option, idx) => (
+              {editingQuestion?.options?.map((option, idx) => (
                 <div key={`edit-option-${editingQuestion.id}-${idx}`}> 
                   <label className="block text-sm font-bold mb-2">
                     Option {idx + 1} {editingQuestion && idx === editingQuestion.correctAnswer && '✅ (Correcte)'}

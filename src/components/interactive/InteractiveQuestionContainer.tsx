@@ -89,7 +89,7 @@ export const InteractiveQuestionContainer: React.FC<InteractiveQuestionContainer
       <div className="space-y-3 mb-6">
         {question.options.map((option, index) => (
           <button
-            key={index}
+            key={`option-${question.id}-${index}`}
             onClick={() => onAnswerSelect?.(index)}
             disabled={isAnswered}
             className={`w-full p-3 rounded-lg border-2 text-left font-medium transition-all ${
@@ -99,7 +99,7 @@ export const InteractiveQuestionContainer: React.FC<InteractiveQuestionContainer
             } ${isAnswered ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
             <span className="text-lg font-bold text-blue-600 mr-3">
-              {String.fromCharCode(65 + index)}.
+              {String.fromCodePoint(65 + index)}.
             </span>
             {option}
             {showCorrectness && index === question.correctAnswer && (
@@ -120,7 +120,7 @@ export const InteractiveQuestionContainer: React.FC<InteractiveQuestionContainer
               <p className="text-xs font-semibold text-gray-600 mb-1">Interactions détectées:</p>
               <ul className="text-xs text-gray-600 space-y-1">
                 {interactionLog.slice(-3).map((log, idx) => (
-                  <li key={idx} className="text-gray-600">
+                  <li key={`step-${question.id}-${idx}`} className="text-gray-600">
                     • {log.elementId}: {log.action}
                   </li>
                 ))}

@@ -138,14 +138,13 @@ CREATE TRIGGER update_progress_updated_at
 -- ============================================
 -- INITIAL DATA: Admin user (optionnel)
 -- ============================================
--- Password: admin123 (à changer immédiatement!)
--- Hash généré avec bcrypt rounds=10
-INSERT INTO users (email, password_hash, is_admin) 
-VALUES (
-    'admin@lapinoumath.local',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
-    TRUE
-) ON CONFLICT (email) DO NOTHING;
+-- ⚠️  IMPORTANT: Changer le hash du mot de passe admin!
+-- Générer un nouveau hash:
+-- node -e "console.log(require('bcryptjs').hashSync('votre-mot-de-passe', 10))"
+-- Puis l'ajouter ici dans INSERT values
+-- INSERT INTO users (email, password_hash, is_admin) 
+-- VALUES ('admin@lapinoumath.local', '<hash-bcrypt>', TRUE);
+-- ON CONFLICT (email) DO NOTHING;
 
 -- ============================================
 -- VIEW: User Statistics (pour dashboard admin)

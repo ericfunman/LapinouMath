@@ -5,11 +5,29 @@ import { InteractiveQuestion, GradeLevel } from '../types';
  * 50 questions per level
  */
 
+// Helper function to map index to line type
+function getLineTypeFromIndex(index: number): string {
+  const remainder = index % 3;
+  if (remainder === 0) return 'médiane';
+  if (remainder === 1) return 'altitude';
+  return 'bissectrice';
+}
+
+// Helper function to reduce cognitive complexity
+function getLineExplanation(lineType: string): string {
+  switch (lineType) {
+    case 'médiane': return 'La médiane relie un sommet au milieu du côté opposé.';
+    case 'altitude': return 'L\'altitude est perpendiculaire au côté opposé.';
+    default: return 'La bissectrice divise l\'angle en deux parties égales.';
+  }
+}
+
 function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[] {
   const questions: InteractiveQuestion[] = [];
   let id = 1;
 
-  const levelConfig: Record<string, { topics: string[]; difficulty: 1 | 2 | 3 }> = {
+  type LevelConfig = { topics: string[]; difficulty: 1 | 2 | 3 };
+  const levelConfig: Record<string, LevelConfig> = {
     'CM2': {
       topics: ['circles', 'polygons', 'coordinates', 'rotation', 'volume'],
       difficulty: 2,
@@ -98,7 +116,7 @@ function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[
 
   // Median/altitude/bisector (21-30)
   for (let i = 0; i < 10; i++) {
-    const lineType = i % 3 === 0 ? 'médiane' : i % 3 === 1 ? 'altitude' : 'bissectrice';
+    const lineType = getLineTypeFromIndex(i);
     const correctIndex = i % 4; // Distribute correct answers across A, B, C, D
 
     questions.push({
@@ -108,11 +126,7 @@ function generateLevelGeometryQuestions(level: GradeLevel): InteractiveQuestion[
       question: `Identifiez la ${lineType} du triangle (question ${i + 21}).`,
       options: ['Ligne A', 'Ligne B', 'Ligne C', 'Ligne D'],
       correctAnswer: correctIndex,
-      explanation: lineType === 'médiane' 
-        ? 'La médiane relie un sommet au milieu du côté opposé.'
-        : lineType === 'altitude'
-        ? 'L\'altitude est perpendiculaire au côté opposé.'
-        : 'La bissectrice divise l\'angle en deux parties égales.',
+      explanation: getLineExplanation(lineType),
       difficulty: Math.min(3, config.difficulty + 1) as 1 | 2 | 3,
       isInteractive: true,
       interactionType: 'click',

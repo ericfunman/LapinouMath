@@ -5,6 +5,25 @@ import { InteractiveQuestion } from '../types';
  * Focus: Angles, perpendicular/parallel lines, area basics, triangles, quadrilaterals
  */
 
+// Helper functions to reduce cognitive complexity
+function getTriangleExplanation(triType: string): string {
+  switch (triType) {
+    case 'rectangle': return 'Un triangle rectangle a un angle droit.';
+    case 'isocèle': return 'Un triangle isocèle a deux côtés de même longueur.';
+    case 'équilatéral': return 'Un triangle équilatéral a trois côtés de même longueur.';
+    default: return 'Un triangle scalène a trois côtés de longueurs différentes.';
+  }
+}
+
+function getQuadrilateralExplanation(quadType: string): string {
+  switch (quadType) {
+    case 'trapèze': return 'Un trapèze a au moins une paire de côtés parallèles.';
+    case 'parallélogramme': return 'Un parallélogramme a ses côtés opposés parallèles et de même longueur.';
+    case 'losange': return 'Un losange a quatre côtés de même longueur.';
+    default: return 'Un rectangle a quatre angles droits.';
+  }
+}
+
 function generateCM1Questions(): InteractiveQuestion[] {
   const questions: InteractiveQuestion[] = [];
   let id = 1;
@@ -124,13 +143,7 @@ function generateCM1Questions(): InteractiveQuestion[] {
       question: `Identifiez le triangle ${triType} (question ${i + 26}).`,
       options: ['Triangle A', 'Triangle B', 'Triangle C', 'Triangle D'],
       correctAnswer: correctIndex,
-      explanation: triType === 'rectangle' 
-        ? 'Un triangle rectangle a un angle droit.'
-        : triType === 'isocèle'
-        ? 'Un triangle isocèle a deux côtés de même longueur.'
-        : triType === 'équilatéral'
-        ? 'Un triangle équilatéral a trois côtés de même longueur.'
-        : 'Un triangle scalène a trois côtés de longueurs différentes.',
+      explanation: getTriangleExplanation(triType),
       difficulty: 2,
       isInteractive: true,
       interactionType: 'click',
@@ -176,13 +189,7 @@ function generateCM1Questions(): InteractiveQuestion[] {
       question: `Trouvez le ${quadType} (question ${i + 36}).`,
       options: ['Figure A', 'Figure B', 'Figure C', 'Figure D'],
       correctAnswer: correctIndex,
-      explanation: quadType === 'trapèze' 
-        ? 'Un trapèze a au moins une paire de côtés parallèles.'
-        : quadType === 'parallélogramme'
-        ? 'Un parallélogramme a ses côtés opposés parallèles et de même longueur.'
-        : quadType === 'losange'
-        ? 'Un losange a quatre côtés de même longueur.'
-        : 'Un rectangle a quatre angles droits.',
+      explanation: getQuadrilateralExplanation(quadType),
       difficulty: 2,
       isInteractive: true,
       interactionType: 'click',
