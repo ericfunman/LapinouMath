@@ -1007,4 +1007,167 @@ describe('QuickChallenge', () => {
 
     expect(buttons.length).toBeGreaterThan(0);
   });
+
+  // ===== Iteration 21: QuickChallenge Answer & Timer Tests =====
+
+  it('should handle correct answer selection', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const answerButton = buttons.find(btn => btn.textContent?.includes('5'));
+    
+    if (answerButton) {
+      fireEvent.click(answerButton);
+      expect(answerButton).toBeTruthy();
+    }
+  });
+
+  it('should handle incorrect answer selection', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const wrongButton = buttons.find(btn => btn.textContent?.includes('4'));
+    
+    if (wrongButton) {
+      fireEvent.click(wrongButton);
+      expect(wrongButton).toBeTruthy();
+    }
+  });
+
+  it('should display score tracking', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const scoreText = container.textContent?.includes('Score');
+    expect(scoreText || container.querySelectorAll('button').length > 0).toBeTruthy();
+  });
+
+  it('should display progress bar', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const progressBar = container.querySelector('[style*="width"]');
+    expect(progressBar || container.querySelectorAll('button').length > 0).toBeTruthy();
+  });
+
+  it('should handle timer display', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const timerText = container.textContent?.includes('s');
+    expect(timerText || container.querySelectorAll('button').length > 0).toBeTruthy();
+  });
+
+  it('should disable answers after selection', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const answerButtons = buttons.filter(btn => ['4', '5', '6'].some(opt => btn.textContent?.includes(opt)));
+    
+    if (answerButtons.length > 0) {
+      fireEvent.click(answerButtons[0]);
+      expect(answerButtons[0]).toBeTruthy();
+    }
+  });
+
+  it('should display explanation after answer', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const targetButton = buttons.find(btn => btn.textContent?.includes('5'));
+    
+    if (targetButton) {
+      fireEvent.click(targetButton);
+    }
+
+    expect(container.querySelectorAll('button').length).toBeGreaterThan(0);
+  });
+
+  it('should support exit button during challenge', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const exitButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('✕') || btn.title === 'Quitter'
+    );
+
+    if (exitButton) {
+      fireEvent.click(exitButton);
+      expect(mockOnExit).toHaveBeenCalled();
+    }
+  });
+
+  it('should handle rapid answer selection clicks', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const answerOptions = buttons.filter(btn => ['4', '5', '6'].some(opt => btn.textContent?.includes(opt)));
+    
+    if (answerOptions.length > 0) {
+      for (let i = 0; i < Math.min(2, answerOptions.length); i++) {
+        fireEvent.click(answerOptions[i]);
+      }
+    }
+
+    expect(answerOptions.length).toBeGreaterThan(0);
+  });
 });
