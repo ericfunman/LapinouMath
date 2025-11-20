@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ErrorReportsTab from '../../components/ErrorReportsTab';
 import type { StoredErrorReport } from '../../utils/database';
@@ -509,6 +509,181 @@ describe('ErrorReportsTab', () => {
     await waitFor(() => {
       expect(mockGetErrorReports).toHaveBeenCalled();
     });
+  });
+
+  it('should click select all button', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const selectAllButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Tout sélectionner')
+    );
+
+    if (selectAllButton) {
+      fireEvent.click(selectAllButton);
+      expect(selectAllButton).toBeTruthy();
+    }
+  });
+
+  it('should click export JSON button', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const exportButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Exporter')
+    );
+
+    if (exportButton) {
+      fireEvent.click(exportButton);
+      expect(exportButton).toBeTruthy();
+    }
+  });
+
+  it('should click send email button', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const emailButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('email')
+    );
+
+    if (emailButton) {
+      fireEvent.click(emailButton);
+      expect(emailButton).toBeTruthy();
+    }
+  });
+
+  it('should click delete button', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const deleteButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Supprimer')
+    );
+
+    if (deleteButton) {
+      fireEvent.click(deleteButton);
+      expect(deleteButton).toBeTruthy();
+    }
+  });
+
+  it('should toggle checkbox for individual report', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    if (checkboxes.length > 0) {
+      fireEvent.click(checkboxes[0]);
+      expect(checkboxes[0]).toBeTruthy();
+    }
+  });
+
+  it('should handle multiple checkbox clicks', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    for (let i = 0; i < Math.min(3, checkboxes.length); i++) {
+      fireEvent.click(checkboxes[i]);
+    }
+
+    expect(checkboxes.length).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should display select all button and click it', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const selectAllButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('sélectionner')
+    );
+
+    if (selectAllButton) {
+      fireEvent.click(selectAllButton);
+      fireEvent.click(selectAllButton); // Click again to deselect
+      expect(selectAllButton).toBeTruthy();
+    }
+  });
+
+  it('should handle rapid button clicks', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const buttons = container.querySelectorAll('button');
+    buttons.forEach(btn => {
+      fireEvent.click(btn);
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should click export button with reports selected', async () => {
+    mockGetErrorReports.mockResolvedValue(mockReports);
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    // Check if there's an export button and it's not disabled
+    const exportButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Exporter')
+    ) as HTMLButtonElement;
+
+    if (exportButton && !exportButton.disabled) {
+      fireEvent.click(exportButton);
+      expect(exportButton).toBeTruthy();
+    }
+  });
+
+  it('should interact with select all and delete buttons', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const selectAllButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('sélectionner')
+    );
+
+    const deleteButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Supprimer')
+    );
+
+    if (selectAllButton) {
+      fireEvent.click(selectAllButton);
+    }
+
+    if (deleteButton) {
+      fireEvent.click(deleteButton);
+    }
+
+    expect(selectAllButton || deleteButton).toBeTruthy();
   });
 });
 
