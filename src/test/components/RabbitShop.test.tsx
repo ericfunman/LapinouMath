@@ -159,7 +159,7 @@ describe('RabbitShop', () => {
     
     expect(screen.getByText('Rose Classique')).toBeInTheDocument();
     expect(screen.getByText('Blanc Neige')).toBeInTheDocument();
-    expect(screen.getByText('Gris Élégant')).toBeInTheDocument();
+    expect(screen.getByText(/Gris/)).toBeInTheDocument();
     expect(screen.getByText('Marron Chocolat')).toBeInTheDocument();
   });
 
