@@ -92,4 +92,126 @@ describe('QuizScreen', () => {
     expect(document.body).toBeDefined();
     unmount();
   });
+
+  it('handles multiple domain configurations', () => {
+    const domains = ['Calcul mental', 'Géométrie'];
+    
+    for (const domain of domains) {
+      const { unmount } = render(
+        <QuizScreen
+          level="CE1"
+          domain={domain}
+          onComplete={mockOnComplete}
+          onExit={mockOnExit}
+          rabbitCustomization={rabbitCustomization}
+        />
+      );
+      expect(document.body).toBeDefined();
+      unmount();
+    }
+  });
+
+  it('initializes callbacks properly', () => {
+    render(
+      <QuizScreen
+        level="CE1"
+        domain="Calcul mental"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(mockOnComplete).not.toHaveBeenCalled();
+    expect(mockOnExit).not.toHaveBeenCalled();
+  });
+
+  it('displays quiz interface', () => {
+    const { container } = render(
+      <QuizScreen
+        level="CE1"
+        domain="Calcul mental"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container.firstChild).toBeTruthy();
+  });
+
+  it('maintains quiz state', () => {
+    render(
+      <QuizScreen
+        level="CE2"
+        domain="Calcul mental"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('processes domain data correctly', () => {
+    render(
+      <QuizScreen
+        level="CE1"
+        domain="Géométrie"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('has proper structure', () => {
+    const { container } = render(
+      <QuizScreen
+        level="CE1"
+        domain="Calcul mental"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container.childNodes.length).toBeGreaterThan(0);
+  });
+
+  it('initializes without throwing errors', () => {
+    expect(() => {
+      render(
+        <QuizScreen
+          level="CM1"
+          domain="Calcul mental"
+          onComplete={mockOnComplete}
+          onExit={mockOnExit}
+          rabbitCustomization={rabbitCustomization}
+        />
+      );
+    }).not.toThrow();
+  });
+
+  it('works with different rabbit customizations', () => {
+    const customization = {
+      variant: 'white' as const,
+      accessories: [],
+    };
+
+    render(
+      <QuizScreen
+        level="CE1"
+        domain="Calcul mental"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={customization}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
 });

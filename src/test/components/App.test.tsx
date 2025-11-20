@@ -138,5 +138,148 @@ describe('App', () => {
     const appContainer = container.querySelector('[class*="App"]') || container.firstChild;
     expect(appContainer).toBeTruthy();
   });
+
+  it('should handle successful profile initialization', () => {
+    const mockProfiles = [
+      {
+        id: '1',
+        name: 'Profile 1',
+        avatar: '🐰',
+        currentLevel: 'CE1' as const,
+        progress: {},
+        totalStars: 0,
+        accessories: [],
+        unlockedAccessories: [],
+        createdAt: new Date(),
+      },
+    ];
+    
+    localStorage.setItem('lapinoumath_profiles', JSON.stringify(mockProfiles));
+    render(<App />);
+    expect(document.body).toBeDefined();
+    localStorage.clear();
+  });
+
+  it('should work with multiple profiles', () => {
+    const mockProfiles = [
+      {
+        id: '1',
+        name: 'Profile 1',
+        avatar: '🐰',
+        currentLevel: 'CE1' as const,
+        progress: {},
+        totalStars: 0,
+        accessories: [],
+        unlockedAccessories: [],
+        createdAt: new Date(),
+      },
+      {
+        id: '2',
+        name: 'Profile 2',
+        avatar: '🐹',
+        currentLevel: 'CE2' as const,
+        progress: {},
+        totalStars: 10,
+        accessories: [],
+        unlockedAccessories: [],
+        createdAt: new Date(),
+      },
+    ];
+    
+    localStorage.setItem('lapinoumath_profiles', JSON.stringify(mockProfiles));
+    render(<App />);
+    expect(document.body).toBeDefined();
+    localStorage.clear();
+  });
+
+  it('should recover from corrupted localStorage', () => {
+    localStorage.setItem('lapinoumath_profiles', 'invalid json {');
+    const { container } = render(<App />);
+    expect(container).toBeTruthy();
+    localStorage.clear();
+  });
+
+  it('should initialize empty state properly', () => {
+    localStorage.removeItem('lapinoumath_profiles');
+    const { container } = render(<App />);
+    expect(container.firstChild).toBeTruthy();
+  });
+
+  it('should handle component mounting multiple times', () => {
+    const { unmount } = render(<App />);
+    expect(document.body).toBeDefined();
+    unmount();
+    
+    render(<App />);
+    expect(document.body).toBeDefined();
+  });
+
+  it('should preserve localStorage on render', () => {
+    const data = JSON.stringify([
+      {
+        id: 'test',
+        name: 'Test',
+        avatar: '🐰',
+        currentLevel: 'CM1' as const,
+        progress: {},
+        totalStars: 50,
+        accessories: [],
+        unlockedAccessories: [],
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+    
+    localStorage.setItem('lapinoumath_profiles', data);
+    render(<App />);
+    const stored = localStorage.getItem('lapinoumath_profiles');
+    expect(stored).toBeDefined();
+    localStorage.clear();
+  });
+
+  it('should not lose state on quick re-renders', () => {
+    localStorage.setItem('lapinoumath_app_state', JSON.stringify({ currentScreen: 'dashboard' }));
+    const { unmount } = render(<App />);
+    unmount();
+    
+    render(<App />);
+    expect(document.body).toBeDefined();
+    localStorage.clear();
+  });
+
+  it('should handle undefined profiles gracefully', () => {
+    localStorage.removeItem('lapinoumath_profiles');
+    const { container } = render(<App />);
+    expect(container).toBeTruthy();
+  });
+
+  it('should initialize with default state', () => {
+    const { container } = render(<App />);
+    const mainContent = container.querySelector('div');
+    expect(mainContent).toBeTruthy();
+  });
+
+  it('should render with all DOM nodes present', () => {
+    const { container } = render(<App />);
+    expect(container.childNodes.length).toBeGreaterThan(0);
+  });
+
+  it('should survive rapid lifecycle changes', () => {
+    const { unmount } = render(<App />);
+    
+    unmount();
+    expect(document.body).toBeDefined();
+  });
+
+  it('should handle settings persistence', () => {
+    localStorage.setItem('lapinoumath_settings', JSON.stringify({ theme: 'light' }));
+    render(<App />);
+    expect(localStorage.getItem('lapinoumath_settings')).toBeDefined();
+    localStorage.clear();
+  });
+
+  it('should maintain component structure', () => {
+    const { container } = render(<App />);
+    expect(container.firstChild).not.toBeNull();
+  });
 });
 

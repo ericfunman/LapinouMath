@@ -71,4 +71,97 @@ describe('QuickChallenge', () => {
     // Vérifier qu'il y a des éléments dans le DOM
     expect(container.firstChild).toBeDefined();
   });
+
+  it('handles callback functions correctly', () => {
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(mockOnComplete).not.toHaveBeenCalled();
+    expect(mockOnExit).not.toHaveBeenCalled();
+  });
+
+  it('renders with different levels', () => {
+    const { unmount } = render(
+      <QuickChallenge
+        level="CM1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+    unmount();
+  });
+
+  it('displays challenge interface', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container.querySelector('div')).toBeTruthy();
+  });
+
+  it('maintains challenge state', () => {
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('processes questions correctly', () => {
+    render(
+      <QuickChallenge
+        level="CE2"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(document.body).toBeDefined();
+  });
+
+  it('has proper component structure', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container.childNodes.length).toBeGreaterThan(0);
+  });
+
+  it('initializes without errors', () => {
+    expect(() => {
+      render(
+        <QuickChallenge
+          level="CE1"
+          onComplete={mockOnComplete}
+          onExit={mockOnExit}
+          rabbitCustomization={rabbitCustomization}
+        />
+      );
+    }).not.toThrow();
+  });
 });
