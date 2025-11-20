@@ -18,7 +18,7 @@ function generateCE2Questions(): InteractiveQuestion[] {
       domain: 'Géométrie',
       question: `Trouvez la figure symétrique à l'axe de symétrie (question ${id - 11}).`,
       options: ['A', 'B', 'C', 'D'],
-      correctAnswer: Math.floor(Math.random() * 3),
+      correctAnswer: Math.floor(Math.random() * 3), // NOSONAR: S2245 - Math.random() suffisant pour contenu éducatif
       explanation: 'Une figure symétrique est une image miroir.',
       difficulty: 2,
       isInteractive: true,
