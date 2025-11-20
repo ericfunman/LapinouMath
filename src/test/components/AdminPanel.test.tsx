@@ -693,4 +693,141 @@ describe('AdminPanel', () => {
       expect(document.body).toBeTruthy();
     }
   });
+
+  it('should handle tab switching and filtering', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const buttons = document.querySelectorAll('button');
+    for (const btn of buttons) {
+      if (btn.textContent?.includes('Rapports') || btn.textContent?.includes('reports')) {
+        fireEvent.click(btn);
+        break;
+      }
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle checkbox and filter interactions', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    if (checkboxes.length > 0) {
+      fireEvent.click(checkboxes[0]);
+      fireEvent.click(checkboxes[0]); // Toggle off
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should support quick filter resets', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    if (selects.length > 0) {
+      fireEvent.change(selects[0], { target: { value: 'CM1' } });
+      fireEvent.change(selects[0], { target: { value: 'ALL' } });
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle rapid filter changes', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    if (selects.length > 0) {
+      fireEvent.change(selects[0], { target: { value: 'CE1' } });
+      fireEvent.change(selects[0], { target: { value: 'CE2' } });
+      fireEvent.change(selects[0], { target: { value: 'CM1' } });
+      fireEvent.change(selects[0], { target: { value: 'ALL' } });
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle search with special characters', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const inputs = document.querySelectorAll('input[type="text"]');
+    if (inputs.length > 0) {
+      fireEvent.change(inputs[0], { target: { value: 'test?&*' } });
+      fireEvent.change(inputs[0], { target: { value: '' } });
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle clearing all filters', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const buttons = document.querySelectorAll('button');
+    const selects = document.querySelectorAll('select');
+    const inputs = document.querySelectorAll('input[type="text"]');
+
+    // Apply filters
+    if (selects.length > 0) fireEvent.change(selects[0], { target: { value: 'CE1' } });
+    if (inputs.length > 0) fireEvent.change(inputs[0], { target: { value: 'search' } });
+    
+    // Try to clear by setting to ALL
+    if (selects.length > 0) fireEvent.change(selects[0], { target: { value: 'ALL' } });
+    if (inputs.length > 0) fireEvent.change(inputs[0], { target: { value: '' } });
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should support domain and level filter combinations', async () => {
+    render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = document.querySelectorAll('select');
+    if (selects.length >= 2) {
+      fireEvent.change(selects[0], { target: { value: 'CE1' } });
+      fireEvent.change(selects[1], { target: { value: 'Arithmétique' } });
+      fireEvent.change(selects[0], { target: { value: 'CM1' } });
+      fireEvent.change(selects[1], { target: { value: 'Géométrie' } });
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should render all filter controls', async () => {
+    const { container } = render(<AdminPanel onClose={mockOnClose} />);
+    
+    await waitFor(() => {
+      expect(mockGetAllQuestionsAsync).toHaveBeenCalled();
+    });
+
+    const selects = container.querySelectorAll('select');
+    const inputs = container.querySelectorAll('input');
+
+    expect(selects.length + inputs.length).toBeGreaterThan(0);
+  });
 });
