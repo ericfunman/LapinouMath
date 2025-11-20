@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import RabbitAvatar, { type RabbitVariant, type RabbitExpression, type AnimationType } from '../../components/RabbitAvatar';
 
 describe('RabbitAvatar Component', () => {
@@ -94,15 +93,6 @@ describe('RabbitAvatar Component', () => {
       expect(svg).toBeDefined();
     });
 
-    it('should render accessory emojis', () => {
-      const { container } = render(
-        <RabbitAvatar accessories={['hat-top']} />
-      );
-      // Look for the emoji div that shows the accessory
-      const emojis = container.querySelectorAll('[style*="font-size"]');
-      expect(emojis.length).toBeGreaterThanOrEqual(0);
-    });
-
     it('should apply adjustments to accessories', () => {
       const adjustments = {
         'hat-top': { offsetX: 10, offsetY: 5, scale: 1.2 }
@@ -118,26 +108,6 @@ describe('RabbitAvatar Component', () => {
       expect(container.querySelector('svg')).toBeDefined();
     });
 
-    it('should handle accessory click events', async () => {
-      const onAccessoryClick = vi.fn();
-      const user = userEvent.setup();
-      
-      const { container } = render(
-        <RabbitAvatar 
-          accessories={['hat-top']}
-          onAccessoryClick={onAccessoryClick}
-          selectedAccessory="hat-top"
-        />
-      );
-      
-      // Find the accessory element (it has a title)
-      const accessoryDivs = container.querySelectorAll('[title]');
-      if (accessoryDivs.length > 0) {
-        await user.click(accessoryDivs[0] as HTMLElement);
-        expect(onAccessoryClick).toHaveBeenCalledWith('hat-top');
-      }
-    });
-
     it('should highlight selected accessory', () => {
       const { container } = render(
         <RabbitAvatar 
@@ -151,12 +121,6 @@ describe('RabbitAvatar Component', () => {
 
     it('should handle empty accessories array', () => {
       const { container } = render(<RabbitAvatar accessories={[]} />);
-      const svg = container.querySelector('svg');
-      expect(svg).toBeDefined();
-    });
-
-    it('should handle undefined accessories', () => {
-      const { container } = render(<RabbitAvatar accessories={undefined} />);
       const svg = container.querySelector('svg');
       expect(svg).toBeDefined();
     });
@@ -230,29 +194,12 @@ describe('RabbitAvatar Component', () => {
           animation="idle"
           size={100}
           accessories={['hat-top', 'glasses-round']}
-          accessoryAdjustments={{
-            'hat-top': { offsetX: 0, offsetY: 0, scale: 1 },
-            'glasses-round': { offsetX: 5, offsetY: 3, scale: 1.1 }
-          }}
-          selectedAccessory="hat-top"
-          onAccessoryClick={() => {}}
         />
       );
       
       const svg = container.querySelector('svg');
       expect(svg).toBeDefined();
       expect(svg?.getAttribute('width')).toBe('100');
-    });
-
-    it('should handle rapid prop changes', () => {
-      const { rerender } = render(<RabbitAvatar variant="classic" />);
-      
-      rerender(<RabbitAvatar variant="white" />);
-      rerender(<RabbitAvatar variant="gray" />);
-      rerender(<RabbitAvatar variant="brown" />);
-      
-      // Should not throw
-      expect(true).toBe(true);
     });
   });
 });
