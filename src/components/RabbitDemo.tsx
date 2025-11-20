@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import RabbitAvatar, { RabbitVariant, RabbitExpression, AnimationType } from './RabbitAvatar';
+import RabbitAvatar, { RabbitVariant, RabbitExpression, AnimationType, AccessoryAdjustment } from './RabbitAvatar';
 
 export default function RabbitDemo() {
   const [variant, setVariant] = useState<RabbitVariant>('classic');
@@ -8,10 +8,22 @@ export default function RabbitDemo() {
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([]);
   const [size, setSize] = useState(150);
   
-  // Contrôles d'ajustement des accessoires (valeur par défaut -7px pour corriger décalage)
-  const [accessoryOffsetX, setAccessoryOffsetX] = useState(-7);
-  const [accessoryOffsetY, setAccessoryOffsetY] = useState(0);
-  const [accessoryScale, setAccessoryScale] = useState(1);
+  // Système d'ajustements individuels par accessoire
+  const [accessoryAdjustments, setAccessoryAdjustments] = useState<Record<string, AccessoryAdjustment>>({});
+  const [selectedAccessory, setSelectedAccessory] = useState<string | null>(null);
+  
+  // Ajustements temporaires pour l'accessoire sélectionné
+  const [tempOffsetX, setTempOffsetX] = useState(0);
+  const [tempOffsetY, setTempOffsetY] = useState(0);
+  const [tempScale, setTempScale] = useState(1);
+  
+  // Presets sauvegardés
+  const [savedPresets, setSavedPresets] = useState<Array<{
+    name: string;
+    variant: RabbitVariant;
+    accessories: string[];
+    adjustments: Record<string, AccessoryAdjustment>;
+  }>>([]);
 
   // Liste complète des accessoires disponibles
   const allAccessories = {
@@ -29,6 +41,48 @@ export default function RabbitDemo() {
       }
       return [...prev, accessoryId];
     });
+  };
+
+  const handleAccessoryClick = (accessoryId: string) => {
+    setSelectedAccessory(accessoryId);
+    // Charger les ajustements existants ou valeurs par défaut
+    const existing = accessoryAdjustments[accessoryId];
+    setTempOffsetX(existing?.offsetX || 0);
+    setTempOffsetY(existing?.offsetY || 0);
+    setTempScale(existing?.scale || 1);
+  };
+
+  const applyAdjustment = () => {
+    if (selectedAccessory) {
+      setAccessoryAdjustments(prev => ({
+        ...prev,
+        [selectedAccessory]: {
+          offsetX: tempOffsetX,
+          offsetY: tempOffsetY,
+          scale: tempScale,
+        },
+      }));
+    }
+  };
+
+  const savePreset = () => {
+    const name = prompt('Nom du preset:');
+    if (name) {
+      setSavedPresets(prev => [...prev, {
+        name,
+        variant,
+        accessories: selectedAccessories,
+        adjustments: accessoryAdjustments,
+      }]);
+      alert(`Preset "${name}" sauvegardé !`);
+    }
+  };
+
+  const loadPreset = (preset: typeof savedPresets[0]) => {
+    setVariant(preset.variant);
+    setSelectedAccessories(preset.accessories);
+    setAccessoryAdjustments(preset.adjustments);
+    setSelectedAccessory(null);
   };
 
   const handleAnimationComplete = () => {
@@ -89,9 +143,9 @@ export default function RabbitDemo() {
                 size={size}
                 animation={animation}
                 onAnimationComplete={handleAnimationComplete}
-                accessoryOffsetX={accessoryOffsetX}
-                accessoryOffsetY={accessoryOffsetY}
-                accessoryScale={accessoryScale}
+                accessoryAdjustments={accessoryAdjustments}
+                onAccessoryClick={handleAccessoryClick}
+                selectedAccessory={selectedAccessory || undefined}
               />
             </div>
 
@@ -110,25 +164,40 @@ export default function RabbitDemo() {
               />
             </div>
 
-            {/* Accessory Adjustment Controls */}
+            {/* Accessory Selection Info */}
             {selectedAccessories.length > 0 && (
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg border-2 border-blue-300">
+                <h3 className="text-sm font-bold text-blue-800 mb-2">
+                  👆 Cliquez sur un accessoire pour l'ajuster
+                </h3>
+                <p className="text-xs text-blue-700">
+                  Les accessoires cliquables ont une lueur dorée
+                </p>
+              </div>
+            )}
+
+            {/* Individual Accessory Adjustment Controls */}
+            {selectedAccessory && (
               <div className="mt-6 p-4 bg-yellow-50 rounded-lg border-2 border-yellow-300">
                 <h3 className="text-sm font-bold text-gray-800 mb-3">
-                  ⚙️ Ajustement des Accessoires
+                  ⚙️ Ajustement: {selectedAccessory}
                 </h3>
                 
                 <div className="space-y-3">
                   {/* Horizontal Offset */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Position Horizontale: {accessoryOffsetX}px
+                      Position Horizontale: {tempOffsetX}px
                     </label>
                     <input
                       type="range"
                       min="-100"
                       max="100"
-                      value={accessoryOffsetX}
-                      onChange={(e) => setAccessoryOffsetX(Number(e.target.value))}
+                      value={tempOffsetX}
+                      onChange={(e) => {
+                        setTempOffsetX(Number(e.target.value));
+                        applyAdjustment();
+                      }}
                       className="w-full"
                     />
                   </div>
@@ -136,14 +205,17 @@ export default function RabbitDemo() {
                   {/* Vertical Offset */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Position Verticale: {accessoryOffsetY}px
+                      Position Verticale: {tempOffsetY}px
                     </label>
                     <input
                       type="range"
                       min="-100"
                       max="100"
-                      value={accessoryOffsetY}
-                      onChange={(e) => setAccessoryOffsetY(Number(e.target.value))}
+                      value={tempOffsetY}
+                      onChange={(e) => {
+                        setTempOffsetY(Number(e.target.value));
+                        applyAdjustment();
+                      }}
                       className="w-full"
                     />
                   </div>
@@ -151,15 +223,18 @@ export default function RabbitDemo() {
                   {/* Scale */}
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Taille Accessoires: {accessoryScale.toFixed(2)}x
+                      Taille: {tempScale.toFixed(2)}x
                     </label>
                     <input
                       type="range"
                       min="0.5"
                       max="2.0"
                       step="0.1"
-                      value={accessoryScale}
-                      onChange={(e) => setAccessoryScale(Number(e.target.value))}
+                      value={tempScale}
+                      onChange={(e) => {
+                        setTempScale(Number(e.target.value));
+                        applyAdjustment();
+                      }}
                       className="w-full"
                     />
                   </div>
@@ -167,15 +242,55 @@ export default function RabbitDemo() {
                   {/* Reset Button */}
                   <button
                     onClick={() => {
-                      setAccessoryOffsetX(0);
-                      setAccessoryOffsetY(0);
-                      setAccessoryScale(1);
+                      setTempOffsetX(0);
+                      setTempOffsetY(0);
+                      setTempScale(1);
+                      applyAdjustment();
                     }}
                     className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded-lg transition-colors text-xs"
                   >
-                    🔄 Réinitialiser Position
+                    🔄 Réinitialiser cet accessoire
+                  </button>
+
+                  <button
+                    onClick={() => setSelectedAccessory(null)}
+                    className="w-full bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 rounded-lg transition-colors text-xs"
+                  >
+                    ✓ Terminé
                   </button>
                 </div>
+              </div>
+            )}
+
+            {/* Save/Load Presets */}
+            {selectedAccessories.length > 0 && (
+              <div className="mt-6 p-4 bg-green-50 rounded-lg border-2 border-green-300">
+                <h3 className="text-sm font-bold text-green-800 mb-3">
+                  💾 Presets
+                </h3>
+                
+                <button
+                  onClick={savePreset}
+                  className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-lg transition-colors text-xs mb-3"
+                >
+                  💾 Sauvegarder cette combinaison
+                </button>
+
+                {savedPresets.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-gray-700">Presets sauvegardés:</p>
+                    {savedPresets.map((preset) => (
+                      <button
+                        key={preset.name}
+                        onClick={() => loadPreset(preset)}
+                        className="w-full bg-white hover:bg-green-100 text-gray-800 font-medium py-2 px-3 rounded-lg transition-colors text-xs text-left flex justify-between items-center"
+                      >
+                        <span>{preset.name}</span>
+                        <span className="text-gray-500">{preset.accessories.length} acc.</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
@@ -343,20 +458,19 @@ export default function RabbitDemo() {
             </div>
           </div>
 
-          {/* Afficher les valeurs d'ajustement si modifiées */}
-          {(accessoryOffsetX !== 0 || accessoryOffsetY !== 0 || accessoryScale !== 1) && (
+          {/* Afficher les ajustements actuels */}
+          {Object.keys(accessoryAdjustments).length > 0 && (
             <div className="bg-orange-50 border-2 border-orange-300 rounded-lg p-4 mt-4">
               <h4 className="text-sm font-bold text-orange-800 mb-2">
-                🔧 Valeurs d'ajustement (pour copier dans le code)
+                🔧 Ajustements appliqués
               </h4>
-              <pre className="bg-white p-3 rounded text-xs overflow-x-auto">
-                {`accessoryOffsetX={${accessoryOffsetX}}
-accessoryOffsetY={${accessoryOffsetY}}
-accessoryScale={${accessoryScale}}`}
-              </pre>
-              <p className="text-xs text-orange-700 mt-2">
-                💡 Ces valeurs peuvent être appliquées directement dans RabbitAvatar
-              </p>
+              <div className="space-y-1 text-xs">
+                {Object.entries(accessoryAdjustments).map(([id, adj]) => (
+                  <div key={id} className="bg-white p-2 rounded">
+                    <span className="font-semibold">{id}:</span> X:{adj.offsetX} Y:{adj.offsetY} Scale:{adj.scale.toFixed(2)}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

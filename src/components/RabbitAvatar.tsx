@@ -5,6 +5,12 @@ export type RabbitVariant = 'classic' | 'white' | 'gray' | 'brown';
 export type RabbitExpression = 'happy' | 'sad' | 'surprised' | 'focused';
 export type AnimationType = 'idle' | 'correct' | 'wrong' | 'celebrate';
 
+export interface AccessoryAdjustment {
+  offsetX: number;
+  offsetY: number;
+  scale: number;
+}
+
 interface RabbitAvatarProps {
   variant?: RabbitVariant;
   expression?: RabbitExpression;
@@ -12,9 +18,15 @@ interface RabbitAvatarProps {
   size?: number;
   animation?: AnimationType;
   onAnimationComplete?: () => void;
-  accessoryOffsetX?: number; // Décalage horizontal en pixels
-  accessoryOffsetY?: number; // Décalage vertical en pixels
-  accessoryScale?: number;   // Multiplicateur de taille (1.0 = normal)
+  // Ajustements globaux (legacy, pour compatibilité)
+  accessoryOffsetX?: number;
+  accessoryOffsetY?: number;
+  accessoryScale?: number;
+  // Nouveaux ajustements par accessoire
+  accessoryAdjustments?: Record<string, AccessoryAdjustment>;
+  // Callbacks pour la sélection
+  onAccessoryClick?: (accessoryId: string) => void;
+  selectedAccessory?: string;
 }
 
 // Couleurs pour chaque variant de lapin - Améliorées avec contours et joues
@@ -157,6 +169,9 @@ export default function RabbitAvatar({
   accessoryOffsetX = 0,
   accessoryOffsetY = 0,
   accessoryScale = 1,
+  accessoryAdjustments = {},
+  onAccessoryClick,
+  selectedAccessory,
 }: Readonly<RabbitAvatarProps>) {
   const colors = RABBIT_COLORS[variant];
   const face = EXPRESSIONS[expression];
@@ -374,9 +389,17 @@ export default function RabbitAvatar({
             const config = ACCESSORY_CONFIG[type] || ACCESSORY_CONFIG.hat;
             const fontSize = size * config.scale;
             
-            const adjustedFontSize = fontSize * accessoryScale;
+            // Utiliser les ajustements individuels si disponibles, sinon globaux
+            const adjustment = accessoryAdjustments[accessoryId] || {
+              offsetX: accessoryOffsetX,
+              offsetY: accessoryOffsetY,
+              scale: accessoryScale,
+            };
             
-            // Construire le style avec les offsets appliqués via CSS calc
+            const adjustedFontSize = fontSize * adjustment.scale;
+            const isSelected = selectedAccessory === accessoryId;
+            
+            // Construire le style avec les offsets appliqués via margin
             const positionStyle: React.CSSProperties = {
               top: config.top,
               left: config.left,
@@ -385,9 +408,11 @@ export default function RabbitAvatar({
               zIndex: config.zIndex,
               fontSize: `${adjustedFontSize}px`,
               lineHeight: '1',
-              // Appliquer les offsets via margin
-              marginLeft: `${accessoryOffsetX}px`,
-              marginTop: `${accessoryOffsetY}px`,
+              marginLeft: `${adjustment.offsetX}px`,
+              marginTop: `${adjustment.offsetY}px`,
+              cursor: onAccessoryClick ? 'pointer' : 'default',
+              // Highlight si sélectionné
+              filter: isSelected ? 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.8))' : 'none',
             };
             
             return (
@@ -399,6 +424,11 @@ export default function RabbitAvatar({
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0, opacity: 0 }}
                 transition={{ duration: 0.3 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAccessoryClick?.(accessoryId);
+                }}
+                title={`Ajuster ${accessoryId}`}
               >
                 {getAccessoryEmoji(accessoryId)}
               </motion.div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { GradeLevel, Question, InteractiveQuestion } from '../types';
 import { getRandomQuestions } from '../data/questions';
+import RabbitAvatar, { AnimationType } from './RabbitAvatar';
 
 interface Props {
   readonly level: GradeLevel;
@@ -31,6 +32,7 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState<number>(0);
   const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [rabbitAnimation, setRabbitAnimation] = useState<AnimationType>('idle');
 
   useEffect(() => {
     const allDomains = ['Calcul mental', 'Arithmétique', 'Fractions/Décimaux', 'Mesures', 'Géométrie', 'Problèmes/Algèbre', 'Kangourou'] as const;
@@ -96,6 +98,12 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
   }
 
   const currentQuestion = questions[currentQuestionIndex];
+  
+  // Expression du lapin selon l'état
+  const getRabbitExpression = () => {
+    if (selectedAnswer === null) return 'focused';
+    return selectedAnswer === correctAnswerIndex ? 'happy' : 'sad';
+  };
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null) return;
@@ -111,6 +119,10 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
       correct: newCorrect,
       total: newTotal
     });
+    
+    // Animation du lapin selon la réponse
+    setRabbitAnimation(isCorrect ? 'correct' : 'wrong');
+    setTimeout(() => setRabbitAnimation('idle'), 1500);
     
     // Auto-avance après 1.5s
     const timer = setTimeout(() => {
@@ -155,6 +167,17 @@ export default function QuickChallenge({ level, onComplete, onExit }: Readonly<P
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 via-orange-400 to-red-500 p-4">
+      {/* Rabbit Avatar */}
+      <div className="fixed top-4 right-4 z-50">
+        <RabbitAvatar
+          variant="classic"
+          expression={getRabbitExpression()}
+          animation={rabbitAnimation}
+          accessories={['hat-party', 'glasses-star']}
+          size={100}
+        />
+      </div>
+
       <div className="max-w-2xl mx-auto">
         {/* En-tête */}
         <div className="bg-white rounded-3xl shadow-2xl p-6 mb-4">

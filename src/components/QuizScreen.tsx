@@ -4,6 +4,7 @@ import { getRandomQuestions } from '../data/questions';
 import { reportQuestionError } from '../utils/database';
 import GeometryCanvas from './interactive/GeometryCanvas';
 import emailjs from '@emailjs/browser';
+import RabbitAvatar, { AnimationType } from './RabbitAvatar';
 
 interface Props {
   level: GradeLevel;
@@ -34,6 +35,7 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState<number>(0);
   const [reportedQuestions, setReportedQuestions] = useState<Set<string>>(new Set());
   const [showReportSuccess, setShowReportSuccess] = useState(false);
+  const [rabbitAnimation, setRabbitAnimation] = useState<AnimationType>('idle');
 
   useEffect(() => {
     const quizQuestions = getRandomQuestions(level, domain, 10);
@@ -76,6 +78,12 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
 
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
+  
+  // Expression du lapin selon l'état
+  const getRabbitExpression = () => {
+    if (selectedAnswer === null) return 'focused';
+    return selectedAnswer === correctAnswerIndex ? 'happy' : 'sad';
+  };
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null) return;
@@ -88,16 +96,22 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
       correct: prev.correct + (isCorrect ? 1 : 0),
       total: prev.total + 1
     }));
+    
+    // Animation du lapin selon la réponse
+    setRabbitAnimation(isCorrect ? 'correct' : 'wrong');
+    setTimeout(() => setRabbitAnimation('idle'), 2000);
   };
 
   const handleNext = () => {
     if (isLastQuestion) {
-      onComplete(score.correct, score.total);
+      setRabbitAnimation('celebrate');
+      setTimeout(() => onComplete(score.correct, score.total), 1500);
     } else {
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setShowExplanation(false);
       setShowLesson(false);
+      setRabbitAnimation('idle');
     }
   };
 
@@ -151,6 +165,17 @@ export default function QuizScreen({ level, domain, onComplete, onExit }: Readon
 
   return (
     <div className="min-h-screen p-4 md:p-8">
+      {/* Rabbit Avatar */}
+      <div className="fixed top-4 right-4 z-50">
+        <RabbitAvatar
+          variant="classic"
+          expression={getRabbitExpression()}
+          animation={rabbitAnimation}
+          accessories={['hat-wizard']}
+          size={120}
+        />
+      </div>
+
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-xl p-4 mb-6 flex items-center justify-between">
