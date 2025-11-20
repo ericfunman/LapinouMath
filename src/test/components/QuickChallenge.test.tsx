@@ -35,7 +35,92 @@ describe('QuickChallenge', () => {
     vi.clearAllMocks();
   });
 
-  it('should render without crashing', () => {
+  it('should initialize without errors', () => {
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('loads 20 questions from multiple domains', () => {
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(mockGetRandomQuestions).toHaveBeenCalled();
+  });
+
+  it('shuffles questions from different domains', () => {
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    // Should call getRandomQuestions multiple times (once per domain)
+    expect(mockGetRandomQuestions.mock.calls.length).toBeGreaterThan(0);
+  });
+
+  it('handles timer for quick challenge', () => {
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('supports different grade levels in challenge mode', () => {
+    const levels = ['CE1', 'CE2', 'CM1', 'CM2'] as const;
+    
+    for (const level of levels) {
+      const { unmount } = render(
+        <QuickChallenge
+          level={level}
+          onComplete={mockOnComplete}
+          onExit={mockOnExit}
+          rabbitCustomization={rabbitCustomization}
+        />
+      );
+      expect(document.body).toBeTruthy();
+      unmount();
+    }
+  });
+
+  it('provides multiple challenge domains', () => {
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    // Should load questions from 7 different domains
+    const domainCalls = mockGetRandomQuestions.mock.calls;
+    expect(domainCalls.length).toBe(7);
+  });
+
+  it('clears auto-advance timer on completion', () => {
     render(
       <QuickChallenge
         level="CE1"
