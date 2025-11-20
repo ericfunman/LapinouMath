@@ -376,30 +376,18 @@ export default function RabbitAvatar({
             
             const adjustedFontSize = fontSize * accessoryScale;
             
-            // Parser le transform de base pour extraire les valeurs
-            let baseTranslateX = 0;
-            let baseTranslateY = 0;
-            
-            if (config.transform) {
-              const regex = /translate\((-?\d+(?:\.\d+)?)%,\s*(-?\d+(?:\.\d+)?)\)/;
-              const match = regex.exec(config.transform);
-              if (match) {
-                baseTranslateX = Number.parseFloat(match[1]);
-                baseTranslateY = Number.parseFloat(match[2]);
-              }
-            }
-            
-            // Combiner les transforms en un seul
-            const finalTransform = `translate(${baseTranslateX}%, ${baseTranslateY}px) translate(${accessoryOffsetX}px, ${accessoryOffsetY}px)`;
-            
+            // Construire le style avec les offsets appliqués via CSS calc
             const positionStyle: React.CSSProperties = {
               top: config.top,
               left: config.left,
               right: config.right,
-              transform: finalTransform,
+              transform: config.transform,
               zIndex: config.zIndex,
               fontSize: `${adjustedFontSize}px`,
               lineHeight: '1',
+              // Appliquer les offsets via margin
+              marginLeft: `${accessoryOffsetX}px`,
+              marginTop: `${accessoryOffsetY}px`,
             };
             
             return (
