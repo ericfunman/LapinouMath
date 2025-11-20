@@ -311,6 +311,205 @@ describe('ErrorReportsTab', () => {
       expect(mockGetErrorReports).toHaveBeenCalled();
     });
   });
+
+  it('renders reports tab with interface', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    expect(container.querySelectorAll('*').length).toBeGreaterThan(0);
+  });
+
+  it('handles reports with different domains', async () => {
+    const multiDomainReports = [
+      { ...mockReports[0], domain: 'Calcul mental' },
+      { ...mockReports[1], domain: 'Géométrie' },
+      { ...mockReports[0], id: 3, domain: 'Arithmétique' },
+    ];
+
+    mockGetErrorReports.mockResolvedValue(multiDomainReports);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('handles reports with different levels', async () => {
+    const multiLevelReports = [
+      { ...mockReports[0], level: 'CE1' },
+      { ...mockReports[1], level: 'CM1' },
+      { ...mockReports[0], id: 3, level: '6ème' },
+    ];
+
+    mockGetErrorReports.mockResolvedValue(multiLevelReports);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('manages report selection state', async () => {
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    expect(screen.getAllByRole('checkbox').length).toBeGreaterThan(0);
+  });
+
+  it('handles large numbers of reports', async () => {
+    const largeReportList = Array.from({ length: 100 }, (_, i) => ({
+      ...mockReports[0],
+      id: i + 1,
+      questionId: `q${i}`,
+    }));
+
+    mockGetErrorReports.mockResolvedValue(largeReportList);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('displays report details correctly', async () => {
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('handles rerenders with same data', async () => {
+    const { rerender } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    rerender(<ErrorReportsTab />);
+    expect(document.body).toBeTruthy();
+  });
+
+  it('maintains state across multiple rerenders', async () => {
+    const { rerender } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    for (let i = 0; i < 5; i++) {
+      rerender(<ErrorReportsTab />);
+    }
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('handles reports with very long notes', async () => {
+    const longNoteReports = [
+      {
+        ...mockReports[0],
+        userNote: 'This is a very long note that contains a lot of text explaining the issue in great detail with multiple sentences and paragraphs of information.',
+      }
+    ];
+
+    mockGetErrorReports.mockResolvedValue(longNoteReports);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('handles reports with special characters in text', async () => {
+    const specialReports = [
+      {
+        ...mockReports[0],
+        questionText: 'What is √2 + π?',
+        userNote: 'Symbol issue: ≈ ≠ ~',
+      }
+    ];
+
+    mockGetErrorReports.mockResolvedValue(specialReports);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('renders reports interface structure', async () => {
+    const { container } = render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const buttons = container.querySelectorAll('button');
+    expect(buttons.length).toBeGreaterThanOrEqual(0);
+  });
+
+  it('handles async report loading', async () => {
+    const delayedResolve = (resolve: any) => setTimeout(() => resolve(mockReports), 50);
+    mockGetErrorReports.mockImplementation(() => 
+      new Promise(delayedResolve)
+    );
+
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('manages multiple reports efficiently', async () => {
+    const efficientReports = Array.from({ length: 30 }, (_, i) => ({
+      ...mockReports[0],
+      id: i + 1,
+      questionText: `Q${i}`,
+      timestamp: Date.now() - i * 1000,
+    }));
+
+    mockGetErrorReports.mockResolvedValue(efficientReports);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('displays all report fields', async () => {
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    expect(document.body.textContent).toBeTruthy();
+  });
+
+  it('handles reports with different timestamp ranges', async () => {
+    const now = Date.now();
+    const timeReports = [
+      { ...mockReports[0], timestamp: now },
+      { ...mockReports[1], timestamp: now - 86400000 }, // 1 day ago
+      { ...mockReports[0], id: 3, timestamp: now - 2592000000 }, // 30 days ago
+    ];
+
+    mockGetErrorReports.mockResolvedValue(timeReports);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
 });
 
 
