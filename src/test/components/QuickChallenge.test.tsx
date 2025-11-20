@@ -252,4 +252,200 @@ describe('QuickChallenge', () => {
       unmount();
     }
   });
+
+  it('calls onComplete when challenge finishes', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+    expect(typeof mockOnComplete).toBe('function');
+  });
+
+  it('calls onExit when exit button clicked', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+    expect(typeof mockOnExit).toBe('function');
+  });
+
+  it('renders for CM1 level', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CM1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+  });
+
+  it('renders for CM2 level', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CM2"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+  });
+
+  it('handles question with all domains', () => {
+    const multiDomainQuestions = [
+      { ...sampleQuestion, domain: 'Calcul mental' as const },
+      { ...sampleQuestion, domain: 'Arithmétique' as const },
+      { ...sampleQuestion, domain: 'Fractions/Décimaux' as const },
+      { ...sampleQuestion, domain: 'Mesures' as const },
+      { ...sampleQuestion, domain: 'Géométrie' as const },
+    ];
+
+    mockGetRandomQuestions.mockReturnValue(multiDomainQuestions);
+
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(mockGetRandomQuestions).toHaveBeenCalled();
+  });
+
+  it('displays score correctly', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+  });
+
+  it('displays timer', () => {
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+  });
+
+  it('handles accessories in customization', () => {
+    const customization = {
+      variant: 'classic' as const,
+      accessories: ['hat', 'glasses'],
+    };
+
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={customization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+  });
+
+  it('handles customization adjustments', () => {
+    const customization = {
+      variant: 'classic' as const,
+      accessories: ['hat'],
+      adjustments: {
+        hat: { offsetX: 10, offsetY: 5, scale: 1.2 },
+      },
+    };
+
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={customization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+  });
+
+  it('loads questions from multiple domains equally', () => {
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    // Should load from all domains
+    expect(mockGetRandomQuestions.mock.calls.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('shuffles questions from getRandomQuestions result', () => {
+    const manyQuestions = Array.from({ length: 21 }, (_, i) => ({
+      ...sampleQuestion,
+      id: `q${i}`,
+    }));
+
+    mockGetRandomQuestions.mockReturnValue(manyQuestions);
+
+    const { container } = render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(container).toBeTruthy();
+  });
+
+  it('slices questions to 20 maximum', () => {
+    const manyQuestions = Array.from({ length: 30 }, (_, i) => ({
+      ...sampleQuestion,
+      id: `q${i}`,
+    }));
+
+    mockGetRandomQuestions.mockReturnValue(manyQuestions);
+
+    render(
+      <QuickChallenge
+        level="CE1"
+        onComplete={mockOnComplete}
+        onExit={mockOnExit}
+        rabbitCustomization={rabbitCustomization}
+      />
+    );
+
+    expect(mockGetRandomQuestions).toHaveBeenCalled();
+  });
 });

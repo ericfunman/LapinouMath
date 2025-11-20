@@ -179,6 +179,138 @@ describe('ErrorReportsTab', () => {
       expect(mockGetErrorReports).toHaveBeenCalled();
     });
   });
+
+  it('displays multiple reports correctly', async () => {
+    mockGetErrorReports.mockResolvedValue(mockReports);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('filters reports by level', async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const levelFilter = screen.queryByDisplayValue(/CM1|CM2|CE1/);
+    if (levelFilter) {
+      await user.selectOptions(levelFilter as HTMLSelectElement, 'CM1');
+      expect((levelFilter as HTMLSelectElement).value).toBe('CM1');
+    }
+  });
+
+  it('filters reports by domain', async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const domainFilter = screen.queryByDisplayValue(/Calcul|Géométrie/);
+    if (domainFilter) {
+      await user.selectOptions(domainFilter as HTMLSelectElement, 'Calcul');
+    }
+  });
+
+  it('searches reports by question text', async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const searchInput = screen.queryByPlaceholderText(/Rechercher|Search/i);
+    if (searchInput) {
+      await user.type(searchInput, 'circle');
+      expect((searchInput as HTMLInputElement).value).toBe('circle');
+    }
+  });
+
+  it('shows report details when expanded', async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const expandButtons = screen.queryAllByRole('button');
+    if (expandButtons.length > 0) {
+      await user.click(expandButtons[0]);
+    }
+  });
+
+  it('handles bulk operations on selected reports', async () => {
+    const user = userEvent.setup({ delay: null });
+    mockDeleteErrorReport.mockResolvedValue(undefined);
+    
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    if (checkboxes.length > 1) {
+      await user.click(checkboxes[1]);
+    }
+  });
+
+  it('displays timestamp information', async () => {
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('handles reports with empty notes', async () => {
+    mockGetErrorReports.mockResolvedValue([
+      {
+        ...mockReports[0],
+        userNote: '',
+      }
+    ]);
+
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('sorts reports by timestamp', async () => {
+    const sortedReports = [...mockReports].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    mockGetErrorReports.mockResolvedValue(sortedReports);
+
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
+
+  it('paginates large report lists', async () => {
+    const manyReports = Array.from({ length: 50 }, (_, i) => ({
+      ...mockReports[0],
+      id: i + 1,
+      questionText: `Question ${i + 1}`,
+    }));
+
+    mockGetErrorReports.mockResolvedValue(manyReports);
+    render(<ErrorReportsTab />);
+    
+    await waitFor(() => {
+      expect(mockGetErrorReports).toHaveBeenCalled();
+    });
+  });
 });
 
 

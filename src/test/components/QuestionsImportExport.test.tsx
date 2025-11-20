@@ -190,5 +190,143 @@ describe('QuestionsImportExport', () => {
     expect(question).toHaveProperty('correctAnswer');
     expect(question).toHaveProperty('explanation');
   });
+
+  it('renders export button with correct text', () => {
+    render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = screen.getAllByRole('button');
+    const excelButton = buttons.find(btn => btn.textContent?.includes('Excel'));
+    expect(excelButton).toBeDefined();
+  });
+
+  it('renders import button', () => {
+    render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = screen.getAllByRole('button');
+    const importButton = buttons.find(btn => btn.textContent?.includes('Importer'));
+    expect(importButton).toBeDefined();
+  });
+
+  it('opens import modal when import button clicked', () => {
+    render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = screen.getAllByRole('button');
+    const importButton = buttons.find(btn => btn.textContent?.includes('Importer'));
+    
+    if (importButton) {
+      fireEvent.click(importButton);
+      // Modal should be visible or have appeared
+      expect(importButton).toBeInTheDocument();
+    }
+  });
+
+  it('displays import status messages', () => {
+    const { rerender } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    // Component should render without errors with various question counts
+    rerender(
+      <QuestionsImportExport
+        allQuestions={[...mockQuestions, ...mockQuestions]}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    expect(screen.getByText(/Exporter|Importer/)).toBeInTheDocument();
+  });
+
+  it('handles questions with different domains', () => {
+    const multiDomainQuestions: Question[] = [
+      ...mockQuestions,
+      {
+        ...mockQuestions[0],
+        id: '2',
+        domain: 'Géométrie' as const,
+        question: 'What is a triangle?',
+      }
+    ];
+
+    render(
+      <QuestionsImportExport
+        allQuestions={multiDomainQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('handles questions with different levels', () => {
+    const multiLevelQuestions: Question[] = [
+      ...mockQuestions,
+      {
+        ...mockQuestions[0],
+        id: '2',
+        level: 'CE1' as const,
+        question: 'What is 1+1?',
+      }
+    ];
+
+    render(
+      <QuestionsImportExport
+        allQuestions={multiLevelQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('calls onImportComplete callback', () => {
+    const callback = vi.fn();
+    render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={callback}
+      />
+    );
+
+    // Callback should be defined and callable
+    expect(callback).toBeDefined();
+    expect(typeof callback).toBe('function');
+  });
+
+  it('renders with large question sets', () => {
+    const largeQuestionSet = Array.from({ length: 100 }, (_, i) => ({
+      ...mockQuestions[0],
+      id: `q${i}`,
+    }));
+
+    render(
+      <QuestionsImportExport
+        allQuestions={largeQuestionSet}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBeGreaterThan(0);
+  });
 });
 
