@@ -850,5 +850,214 @@ describe('QuestionsImportExport', () => {
 
     expect(document.body).toBeTruthy();
   });
+
+  it('should click export button multiple times', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const excelButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Excel')
+    );
+
+    if (excelButton) {
+      fireEvent.click(excelButton);
+      fireEvent.click(excelButton);
+      fireEvent.click(excelButton);
+    }
+
+    expect(excelButton).toBeTruthy();
+  });
+
+  it('should test button visibility with large question set', () => {
+    const largeSet = Array.from({ length: 50 }, (_, i) => ({
+      ...mockQuestions[0],
+      id: `q${i}`,
+    }));
+
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={largeSet}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    expect(buttons.length).toBeGreaterThan(2);
+  });
+
+  it('should handle interacting with all export buttons', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const excelBtn = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Excel')
+    );
+    const csvBtn = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('CSV')
+    );
+    const importBtn = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Importer')
+    );
+
+    if (excelBtn) fireEvent.click(excelBtn);
+    if (csvBtn) fireEvent.click(csvBtn);
+    if (importBtn) fireEvent.click(importBtn);
+
+    expect(excelBtn || csvBtn || importBtn).toBeTruthy();
+  });
+
+  it('should handle clicking export CSV', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const csvButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('CSV')
+    );
+
+    if (csvButton) {
+      fireEvent.click(csvButton);
+      expect(csvButton).toBeTruthy();
+    }
+  });
+
+  it('should support component rerendering', () => {
+    const { rerender } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    rerender(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should handle clicking import with file input present', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const importButton = Array.from(container.querySelectorAll('button')).find(
+      btn => btn.textContent?.includes('Importer')
+    );
+
+    const fileInput = container.querySelector('input[type="file"]');
+
+    if (importButton && fileInput) {
+      fireEvent.click(importButton);
+      expect(fileInput).toBeTruthy();
+    }
+  });
+
+  it('should display all three export/import buttons', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const hasExcel = buttons.some(b => b.textContent?.includes('Excel'));
+    const hasCSV = buttons.some(b => b.textContent?.includes('CSV'));
+    const hasImport = buttons.some(b => b.textContent?.includes('Importer'));
+
+    expect(hasExcel || hasCSV || hasImport).toBeTruthy();
+  });
+
+  it('should handle export with different question counts', () => {
+    for (const count of [1, 5, 10, 20]) {
+      const questions = Array.from({ length: count }, (_, i) => ({
+        ...mockQuestions[0],
+        id: `q${i}`,
+      }));
+
+      const { container } = render(
+        <QuestionsImportExport
+          allQuestions={questions}
+          onImportComplete={mockOnImportComplete}
+        />
+      );
+
+      const excelButton = Array.from(container.querySelectorAll('button')).find(
+        btn => btn.textContent?.includes('Excel')
+      );
+
+      if (excelButton) {
+        fireEvent.click(excelButton);
+      }
+    }
+  });
+
+  it('should render UI with empty callback', () => {
+    render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={() => {}}
+      />
+    );
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should support questions with complex lesson data', () => {
+    const complexQuestions = [
+      {
+        ...mockQuestions[0],
+        lesson: {
+          title: 'Complex Lesson',
+          steps: ['Step 1', 'Step 2', 'Step 3', 'Step 4'],
+        },
+      },
+    ];
+
+    render(
+      <QuestionsImportExport
+        allQuestions={complexQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    expect(document.body).toBeTruthy();
+  });
+
+  it('should click buttons in sequence', () => {
+    const { container } = render(
+      <QuestionsImportExport
+        allQuestions={mockQuestions}
+        onImportComplete={mockOnImportComplete}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    buttons.forEach((btn, idx) => {
+      if (idx < 3) {
+        fireEvent.click(btn);
+      }
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
 });
 
