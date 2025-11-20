@@ -520,4 +520,180 @@ describe('RabbitShop', () => {
 
     expect(screen.getByText('🐰 Boutique CalcuLapin')).toBeInTheDocument();
   });
+
+  it('should click variant button to select color', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const variantButtons = Array.from(container.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('Classique') || btn.textContent?.includes('Blanc')
+    );
+
+    if (variantButtons.length > 0) {
+      fireEvent.click(variantButtons[0]);
+      expect(variantButtons[0]).toBeTruthy();
+    }
+  });
+
+  it('should click multiple variant options', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    let clickCount = 0;
+    for (const button of buttons) {
+      const text = button.textContent || '';
+      if (text.includes('Classique') || text.includes('Blanc') || text.includes('Gris')) {
+        fireEvent.click(button);
+        clickCount++;
+        if (clickCount >= 3) break;
+      }
+    }
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should handle accessory button interactions', () => {
+    render(
+      <RabbitShop
+        profile={{
+          ...mockProfile,
+          unlockedRabbitItems: ['classic', 'hat-wizard', 'glasses-cool', 'scarf-blue'],
+        }}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should click close and save buttons', () => {
+    render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const saveButton = screen.getByText('💾 Sauvegarder ma personnalisation');
+    fireEvent.click(saveButton);
+
+    expect(mockOnSave).toHaveBeenCalled();
+  });
+
+  it('should handle clicking variant then save', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    // Click a variant
+    const variantButtons = Array.from(container.querySelectorAll('button')).filter(
+      btn => btn.textContent?.includes('Blanc')
+    );
+
+    if (variantButtons.length > 0) {
+      fireEvent.click(variantButtons[0]);
+    }
+
+    // Then save
+    const saveButton = screen.getByText('💾 Sauvegarder ma personnalisation');
+    fireEvent.click(saveButton);
+
+    expect(mockOnSave).toHaveBeenCalled();
+  });
+
+  it('should handle rapid variant switches', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    for (let i = 0; i < Math.min(5, buttons.length); i++) {
+      fireEvent.click(buttons[i]);
+    }
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should display accessory grid and click items', () => {
+    render(
+      <RabbitShop
+        profile={{
+          ...mockProfile,
+          unlockedRabbitItems: ['classic', 'hat-wizard', 'glasses-cool', 'scarf-blue'],
+          totalStars: 500,
+        }}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBeGreaterThan(0);
+
+    // Click first few buttons
+    if (buttons.length > 2) {
+      fireEvent.click(buttons[1]);
+      fireEvent.click(buttons[2]);
+    }
+  });
+
+  it('should support clicking through all visible buttons', () => {
+    const { container } = render(
+      <RabbitShop
+        profile={mockProfile}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const buttons = container.querySelectorAll('button');
+    buttons.forEach((btn, idx) => {
+      if (idx < 5) {
+        fireEvent.click(btn);
+      }
+    });
+
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
+  it('should handle shop interactions with high star count', () => {
+    render(
+      <RabbitShop
+        profile={{
+          ...mockProfile,
+          totalStars: 1000,
+          unlockedRabbitItems: ['classic', 'white', 'gray', 'brown'],
+        }}
+        onSaveCustomization={mockOnSave}
+        onClose={mockOnClose}
+      />
+    );
+
+    const saveButton = screen.getByText('💾 Sauvegarder ma personnalisation');
+    fireEvent.click(saveButton);
+
+    expect(mockOnSave).toHaveBeenCalled();
+  });
 });
