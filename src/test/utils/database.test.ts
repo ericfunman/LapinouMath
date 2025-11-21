@@ -14,7 +14,8 @@ import {
 } from '../../utils/database';
 import { Question, UserProfile } from '../../types';
 
-// Mock IndexedDB for testing
+// Mock IndexedDB for testing (kept for potential future mock testing)
+// @ts-ignore - kept for potential future mock testing
 class MockIDBObjectStore {
   private data: Record<string, any> = {};
   
@@ -71,7 +72,7 @@ class MockIDBObjectStore {
     };
   }
   
-  index(name: string) {
+  index(_name: string) {
     return {
       getAll: () => ({
         onsuccess: null as any,
@@ -79,47 +80,6 @@ class MockIDBObjectStore {
         result: Object.values(this.data)
       })
     };
-  }
-}
-
-class MockIDBTransaction {
-  private stores: Record<string, MockIDBObjectStore> = {};
-  
-  objectStore(name: string) {
-    if (!this.stores[name]) {
-      this.stores[name] = new MockIDBObjectStore();
-    }
-    return this.stores[name];
-  }
-  
-  oncomplete: null | (() => void) = null;
-  onerror: null | (() => void) = null;
-}
-
-class MockIDBDatabase {
-  private stores: Record<string, MockIDBObjectStore> = {
-    profiles: new MockIDBObjectStore(),
-    questions: new MockIDBObjectStore(),
-    errorReports: new MockIDBObjectStore()
-  };
-  
-  objectStoreNames = {
-    contains: (name: string) => name in this.stores
-  };
-  
-  transaction(storeNames: string[], mode: string) {
-    const tx = new MockIDBTransaction();
-    for (const storeName of Array.isArray(storeNames) ? storeNames : [storeNames]) {
-      if (!this.stores[storeName]) {
-        this.stores[storeName] = new MockIDBObjectStore();
-      }
-    }
-    return tx;
-  }
-  
-  createObjectStore(name: string, config?: any) {
-    this.stores[name] = new MockIDBObjectStore();
-    return this.stores[name];
   }
 }
 
@@ -138,18 +98,24 @@ describe('Database Utils', () => {
         {
           id: 'profile-1',
           name: 'User 1',
-          level: 'CE1',
-          totalScore: 100,
-          sessionsPlayed: 5,
-          accessories: []
+          avatar: '🐵',
+          currentLevel: 'CE1',
+          progress: {} as any,
+          accessories: [],
+          unlockedAccessories: [],
+          totalStars: 0,
+          createdAt: new Date()
         },
         {
           id: 'profile-2',
           name: 'User 2',
-          level: 'CE2',
-          totalScore: 200,
-          sessionsPlayed: 10,
-          accessories: []
+          avatar: '🐵',
+          currentLevel: 'CE2',
+          progress: {} as any,
+          accessories: [],
+          unlockedAccessories: [],
+          totalStars: 0,
+          createdAt: new Date()
         }
       ];
 
@@ -166,10 +132,13 @@ describe('Database Utils', () => {
       const mockProfile: UserProfile = {
         id: 'profile-to-delete',
         name: 'Delete Me',
-        level: 'CE1',
-        totalScore: 0,
-        sessionsPlayed: 0,
-        accessories: []
+        avatar: '🐵',
+        currentLevel: 'CE1',
+        progress: {} as any,
+        accessories: [],
+        unlockedAccessories: [],
+        totalStars: 0,
+        createdAt: new Date()
       };
 
       try {
@@ -196,10 +165,13 @@ describe('Database Utils', () => {
       const mockProfile: UserProfile = {
         id: 'profile-with-accessories',
         name: 'User With Accessories',
-        level: 'CM1',
-        totalScore: 500,
-        sessionsPlayed: 20,
-        accessories: ['hat-1', 'glasses-1', 'ears-2']
+        avatar: '🐵',
+        currentLevel: 'CM1',
+        progress: {} as any,
+        accessories: ['hat-1', 'glasses-1', 'ears-2'],
+        unlockedAccessories: ['hat-1', 'glasses-1', 'ears-2'],
+        totalStars: 0,
+        createdAt: new Date()
       };
 
       try {
@@ -315,7 +287,7 @@ describe('Database Utils', () => {
           options: ['a', 'b', 'c', 'd'],
           correctAnswer: i % 4,
           explanation: `Explication ${i}`,
-          difficulty: (i % 5) + 1
+          difficulty: ((i % 3) + 1) as 1 | 2 | 3
         });
       }
 
